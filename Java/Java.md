@@ -280,17 +280,13 @@ public class ReferenceExample {
 
 In this example, `date1` and `date2` both reference the same `Date` object. Modifying the object through `date2` also affects `date1`, as they share the same memory address.
 
-## 4. Casting
+## 4. Numbers, Strings, and Arrays
 
-
-
-## 5. Numbers, Strings, and Arrays
-
-#### 5.1 Working with Strings
+#### 4.1 Working with Strings
 
 Strings in Java are reference types that are imported by default, so no import statement is needed. Strings are used to store sequences of characters and provide a rich set of methods for manipulating text.
 
-###### 5.1.1 Defining String Variables
+###### 4.1.1 Defining String Variables
 
 To define a string variable, you use the `String` keyword, followed by the variable name, the assignment operator, and the `new` keyword to allocate memory. However, Java allows a more concise way to declare a string variable by directly assigning a string literal without explicitly using the `new` keyword.
 
@@ -309,7 +305,7 @@ public class StringExample {
 }
 ```
 
-###### 5.1.2 String Concatenation
+###### 4.1.2 String Concatenation
 
 You can concatenate strings using the `+` operator. This allows you to join multiple strings together.
 
@@ -325,7 +321,7 @@ public class StringConcatenationExample {
 }
 ```
 
-###### 5.1.3 String Methods
+###### 4.1.3 String Methods
 
 Java's `String` class provides numerous methods for string manipulation. You can use the dot operator (`.`) on a string variable to access these methods.
 
@@ -340,7 +336,7 @@ Java's `String` class provides numerous methods for string manipulation. You can
 | `toUpperCase()` | Converts all characters in the string to uppercase.                                             |
 | `trim()`        | Removes leading and trailing whitespace from the string.                                        |
 
-###### 5.1.4 Including Escape Characters in Strings
+###### 4.1.4 Including Escape Characters in Strings
 
 In Java, strings can include special characters known as escape characters. These characters allow you to include characters in a string that would otherwise be difficult or impossible to include, such as:
 
@@ -354,11 +350,11 @@ In Java, strings can include special characters known as escape characters. Thes
   
   - `\t` corresponds to a tab character, which inserts a horizontal tab space.
 
-#### 5.2 Working with Arrays
+#### 4.2 Working with Arrays
 
 Arrays in Java are used to store a list of items of the same type. They provide a way to manage multiple values in a single variable, which can be accessed by their index.
 
-###### 5.2.1 Defining Arrays
+###### 4.2.1 Defining Arrays
 
 To convert a type variable into an array of that type, the type is defined with square brackets, followed by the variable name, assignment operator, `new` keyword to allocate memory, and the type defined with square brackets again. The length of the array is specified between the square brackets.
 
@@ -384,7 +380,7 @@ public class ArrayInitializationExample {
 
 One fixed property of arrays in Java is their length, which is set at the time of creation and cannot be changed.
 
-###### 5.2.2 Accessing Array Elements
+###### 4.2.2 Accessing Array Elements
 
 You can index the items of an array using square brackets after the variable name and indicate the item's index. Arrays in Java are zero-indexed, meaning the first element is at index 0.
 
@@ -405,7 +401,7 @@ public class ArrayAccessExample {
 }
 ```
 
-###### 5.2.3 Useful Methods for Arrays
+###### 4.2.3 Useful Methods for Arrays
 
 There are some useful methods that you can use on arrays, some of the methods require to import the `Arrays` class from the `java.util` package.
 
@@ -415,8 +411,247 @@ There are some useful methods that you can use on arrays, some of the methods re
 | `Arrays.sort()`     | Sort the array.                                                                                                                                                                                                                                                                      |
 | `Arrays.toString()` | In Java, you cannot simply print the array variable to see the elements of the array. Doing so will display the memory location of the array transformed as a string instead of the actual elements. To properly print the elements of an array, use the `Arrays.toString()` method. |
 
+###### 4.2.4 Defining Multi-Dimensional Arrays
 
+In Java, you can create and manipulate multi-dimensional arrays to represent data in a matrix-like structure. To declare a multi-dimensional array, define the type with a double pair of square brackets during the variable declaration. Then, use the `new` keyword to allocate memory and define the dimensions of rows and columns.
 
-## 6. Read input
+```java
+public class MultiDimensionalArrayExample {
+    public static void main(String[] args) {
+        // Define a 2D array with 3 rows and 4 columns
+        int[][] matrix = new int[3][4];
+    }
+}
+```
 
+If the items are known upfront, you can initialize a multi-dimensional array using nested curly braces.
 
+```java
+public class MultiDimensionalArrayInitializationExample {
+    public static void main(String[] args) {
+        // Initialize a 2D array with predefined values
+        int[][] matrix = {
+            {1, 2, 3, 4},
+            {5, 6, 7, 8},
+            {9, 10, 11, 12}
+        };
+    }
+}
+```
+
+To access the elements of a multi-dimensional array, use the double pair of square brackets notation, specifying the row and column indices.
+
+To print the items from a multi-dimensional array, use the `Arrays.deepToString()` method from the `java.util.Arrays` class.
+
+#### 4.3 Constants
+
+In Java, you can treat a variable as a constant by adding the `final` keyword before the type of the variable during its declaration. This ensures that the value assigned to the variable cannot be changed later on. By convention, constants' names are written entirely in uppercase letters to distinguish them from regular variables.
+
+```java
+public class ConstantsExample {
+    public static void main(String[] args) {
+        // Declare a constant
+        final int MAX_USERS = 100;
+
+        // Uncommenting the following line would cause a compilation error
+        // MAX_USERS = 200;
+
+        System.out.println("Maximum number of users: " + MAX_USERS); // Output: Maximum number of users: 100
+    }
+}
+```
+
+#### 4.4 Working with Numbers
+
+###### 4.4.1 Basic Arithmetic Operations
+
+In Java, arithmetic operations include addition (`+`), subtraction (`-`), multiplication (`*`), division (`/`), and modulus (`%`). Understanding how to perform these operations and handle different data types is fundamental for effective programming.
+
+```java
+public class ArithmeticOperationsExample {
+    public static void main(String[] args) {
+        int a = 10;
+        int b = 5;
+
+        // Basic operations
+        int sum = a + b;
+        int difference = a - b;
+        int product = a * b;
+        int quotient = a / b;
+        int remainder = a % b;
+
+        System.out.println("Sum: " + sum);         // Output: Sum: 15
+        System.out.println("Difference: " + difference); // Output: Difference: 5
+        System.out.println("Product: " + product); // Output: Product: 50
+        System.out.println("Quotient: " + quotient); // Output: Quotient: 2
+        System.out.println("Remainder: " + remainder); // Output: Remainder: 0
+    }
+}
+```
+
+###### 4.4.2 Increment and Augmented Assignment Operators
+
+Java provides the increment operator (`++`) to increase the value of a variable by one and augmented assignment operators (e.g., `+=`, `-=`, `*=`, `/=`, `%=`) to combine arithmetic operations with assignment.
+
+```java
+public class IncrementAndAugmentedAssignmentExample {
+    public static void main(String[] args) {
+        int a = 10;
+
+        // Increment operator
+        a++;
+        System.out.println("After increment: " + a); // Output: After increment: 11
+
+        // Augmented assignment operators
+        a += 5;
+        System.out.println("After += 5: " + a); // Output: After += 5: 16
+
+        a *= 2;
+        System.out.println("After *= 2: " + a); // Output: After *= 2: 32
+    }
+}
+```
+
+###### 4.4.3 Operator Precedence and Parentheses
+
+Different arithmetic operators have different precedence levels in Java, which can affect the result of computations if not properly ordered. To manipulate the order of operations, use parentheses to group expressions.
+
+```java
+public class OperatorPrecedenceExample {
+    public static void main(String[] args) {
+        int result1 = 10 + 5 * 2; // Without parentheses
+        int result2 = (10 + 5) * 2; // With parentheses
+
+        System.out.println("Without parentheses: " + result1); // Output: Without parentheses: 20
+        System.out.println("With parentheses: " + result2); // Output: With parentheses: 30
+    }
+}
+```
+
+###### 4.4.4 Mathematical Operations
+
+The `Math` class in the `java.lang` package provides a collection of methods for performing various mathematical operations in Java. Here are some useful methods from the `Math` class:
+
+| Method          | Description                                                               |
+| --------------- | ------------------------------------------------------------------------- |
+| `Math.round()`  | Rounds a floating-point number to the nearest integer                     |
+| `Math.ceil()`   | Rounds a floating-point number up to the nearest integer                  |
+| `Math.floor()`  | Rounds a floating-point number down to the nearest integer                |
+| `Math.max()`    | Returns the greater of two values                                         |
+| `Math.min()`    | Returns the smaller of two values                                         |
+| `Math.random()` | Returns a random double value between 0.0 (inclusive) and 1.0 (exclusive) |
+| `Math.pow()`    | Return the first number to the power of the second number                 |
+
+#### 4.5 Formatting Numbers
+
+The `NumberFormat` class in the `java.text` package provides utilities to format numbers in Java according to different locales and styles. Since `NumberFormat` is an abstract class, you cannot directly instantiate it using the `new` keyword. Instead, you use static factory methods provided by the class, such as `getCurrencyInstance()`, `getNumberInstance()`, `getPercentInstance()`, etc. These methods return concrete instances of `NumberFormat` that you can use to format numbers based on your requirements. Once you have a `NumberFormat` instance, you can use its `format()` method to format numbers into strings according to the style and locale of the instance.
+
+```java
+import java.text.NumberFormat;
+import java.util.Locale;
+
+public class NumberFormattingExample {
+    public static void main(String[] args) {
+        double number = 12345.678;
+
+        // Create a NumberFormat instance for currency formatting
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
+
+        // Format the number using the created instance
+        String formattedCurrency = currencyFormat.format(number);
+
+        System.out.println("Formatted currency: " + formattedCurrency); // Output: Formatted currency: $12,345.68
+    }
+}
+```
+
+## 5. Type Casting
+
+Type casting in Java is the process of converting a variable from one data type to another. This is a common operation that can be performed implicitly or explicitly.
+
+#### 5.1 Implicit Casting
+
+Implicit casting, also known as widening conversion, occurs when a smaller data type is converted to a larger data type without the risk of data loss. This type of casting is handled automatically by the Java compiler.
+
+```java
+public class ImplicitCastingExample {
+    public static void main(String[] args) {
+        byte byteValue = 10;
+        short shortValue = byteValue; // byte to short
+        int intValue = shortValue;    // short to int
+        long longValue = intValue;    // int to long
+        float floatValue = longValue; // long to float
+        double doubleValue = floatValue; // float to double
+
+        System.out.println("Double value: " + doubleValue); // Output: Double value: 10.0
+    }
+}
+```
+
+#### 5.2 Explicit Casting
+
+Explicit casting, also known as narrowing conversion, is required when converting a larger data type to a smaller data type. This type of casting can result in data loss, and thus it must be done explicitly by the programmer.
+
+```java
+public class ExplicitCastingExample {
+    public static void main(String[] args) {
+        double doubleValue = 10.99;
+        float floatValue = (float) doubleValue; // double to float
+        long longValue = (long) floatValue;     // float to long
+        int intValue = (int) longValue;         // long to int
+        short shortValue = (short) intValue;    // int to short
+        byte byteValue = (byte) shortValue;     // short to byte
+
+        System.out.println("Byte value: " + byteValue); // Output: Byte value: 10
+    }
+}
+```
+
+#### 5.3 Parsing Strings to Numbers
+
+Java provides methods in the `java.lang.Integer` class and other wrapper classes to convert string literals to numbers. These methods parse a string representation of a number into its corresponding primitive type.
+
+```java
+public class ParsingExample {
+    public static void main(String[] args) {
+        String intString = "123";
+        String shortString = "123";
+        String byteString = "123";
+
+        int intValue = Integer.parseInt(intString);
+        short shortValue = Short.parseShort(shortString);
+        byte byteValue = Byte.parseByte(byteString);
+
+        System.out.println("Parsed int value: " + intValue);       // Output: Parsed int value: 123
+        System.out.println("Parsed short value: " + shortValue);   // Output: Parsed short value: 123
+        System.out.println("Parsed byte value: " + byteValue);     // Output: Parsed byte value: 123
+    }
+}
+```
+
+## 6. Read Input
+
+In Java, you can read input from the user using the `Scanner` class from the `java.util` package. To start reading input from the terminal, you first need to create an instance of the `Scanner` class and associate it with the standard input stream (`System.in`). The `Scanner` class provides methods to read different types of data depending on what you expect from the user. Some commonly used methods include `nextLine()` for strings, `nextInt()` for integers, `nextDouble()` for floating-point numbers, and so on. These methods wait for user input and return the appropriate data type after parsing the input.
+
+```java
+import java.util.Scanner;
+
+public class InputTypesExample {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Read an integer from the user
+        System.out.print("Enter your age: ");
+        int age = scanner.nextInt();
+        System.out.println("Your age is: " + age);
+
+        // Read a double from the user
+        System.out.print("Enter your height (in meters): ");
+        double height = scanner.nextDouble();
+        System.out.println("Your height is: " + height + " meters");
+
+        // Close the Scanner when done (optional but recommended)
+        scanner.close();
+    }
+}
+```
