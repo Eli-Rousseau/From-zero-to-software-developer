@@ -491,7 +491,7 @@ public class ArithmeticOperationsExample {
 
 ###### 4.4.2 Increment and Augmented Assignment Operators
 
-Java provides the increment operator (`++`) to increase the value of a variable by one and augmented assignment operators (e.g., `+=`, `-=`, `*=`, `/=`, `%=`) to combine arithmetic operations with assignment.
+Java provides the increment or decrement operator (`++` or `--`) to increase or decrease the value of a variable by one and augmented assignment operators (e.g., `+=`, `-=`, `*=`, `/=`, `%=`) to combine arithmetic operations with assignment.
 
 ```java
 public class IncrementAndAugmentedAssignmentExample {
@@ -652,6 +652,274 @@ public class InputTypesExample {
 
         // Close the Scanner when done (optional but recommended)
         scanner.close();
+    }
+}
+```
+
+## 7. Comparison Operators
+
+Comparison operators in Java are used to compare primitive values, resulting in a boolean expression. These operators evaluate relationships between two values and return `true` or `false` based on the outcome of the comparison. 
+
+| Operator | Description              | Example  | Result                                                      |
+| -------- | ------------------------ | -------- | ----------------------------------------------------------- |
+| `==`     | Equal to                 | `a == b` | `true` if `a` is equal to `b`, else `false`                 |
+| `!=`     | Not equal to             | `a != b` | `true` if `a` is not equal to `b`, else `false`             |
+| `>`      | Greater than             | `a > b`  | `true` if `a` is greater than `b`, else `false`             |
+| `<`      | Less than                | `a < b`  | `true` if `a` is less than `b`, else `false`                |
+| `>=`     | Greater than or equal to | `a >= b` | `true` if `a` is greater than or equal to `b`, else `false` |
+| `<=`     | Less than or equal to    | `a <= b` | `true` if `a` is less than or equal to `b`, else `false`    |
+
+## 8. Logical Operators
+
+Logical operators in Java are used to combine multiple boolean expressions. These operators allow you to build complex conditions that can control the flow of your program. The result of a logical operation is a boolean value: `true` or `false`.
+
+| Operator | Description | Example               | Result                                                   |
+| -------- | ----------- | --------------------- | -------------------------------------------------------- |
+| `&&`     | Logical AND | `(a > b) && (a < c)`  | `true` if both expressions are true, else `false`        |
+| `\||`    | Logical OR  | `(a > b) && (a < c)`` | `true` if one of both expressions are true, else `false` |
+| `!`      | Logical NOT | `!(a > b)`            | `true` if the expression is false, else `false`          |
+
+## 9. Conditional Statements
+
+In Java, `if`, `else if`, and `else` statements are used to execute different blocks of code based on certain conditions. These conditional statements allow your program to make decisions and perform different actions based on different inputs.
+
+#### 9.1 if Statement
+
+The `if` statement executes a block of code if its condition evaluates to `true`. 
+
+```java
+if (condition) {
+    // Code to execute if condition is true
+}
+```
+
+#### 9.2 else if Statement
+
+The `else if` statement allows you to check multiple conditions sequentially. If the first condition is false, the program will check the next condition, and so on.
+
+```java
+if (condition1) {
+    // Code to execute if condition1 is true
+} else if (condition2) {
+    // Code to execute if condition2 is true
+}
+```
+
+#### 9.3 else Statement
+
+The `else` statement executes a block of code if none of the previous conditions were true.
+
+```java
+if (condition) {
+    // Code to execute if condition is true
+} else {
+    // Code to execute if condition is false
+}
+```
+
+Curly braces `{}` are required when there are multiple statements within an `if`, `else if`, or `else` block. However, for a single statement, the braces can be omitted. It is generally a good practice to always use curly braces to improve readability and reduce errors.
+
+#### 9.4 Variable Scope in Conditional Statements
+
+When declaring a variable inside an `if`, `else if`, or `else` statement, the variable is only accessible within the curly braces of that specific statement block. This scope limitation means that the variable cannot be accessed outside of the block in which it was declared. To avoid this limitation, variables are often declared outside the conditional blocks and then assigned values within them.
+
+```java
+public class ScopeExample {
+    public static void main(String[] args) {
+        int number = 10;
+
+        if (number > 5) {
+            int greater = number;  // Variable 'greater' is only accessible within this block
+            System.out.println("Number is greater than 5: " + greater);
+        }
+
+        // System.out.println(greater);  // This will cause a compilation error
+    }
+}
+```
+
+To ensure that a variable is accessible outside the conditional block, you should declare the variable before the conditional statement and then assign its value within the block.
+
+```java
+public class ScopeExample {
+    public static void main(String[] args) {
+        int number = 10;
+        int result;  // Declare the variable outside the conditional blocks
+
+        if (number > 5) {
+            result = number;
+            System.out.println("Number is greater than 5: " + result);
+        } else {
+            result = -1;
+            System.out.println("Number is 5 or less: " + result);
+        }
+
+        // Variable 'result' is accessible here
+        System.out.println("Final result: " + result);
+    }
+}
+```
+
+#### 9.5 Ternary Operator
+
+In some cases, you can simplify an `if-else` statement by using a ternary operator. This allows you to initialize a variable based on a condition in a single line.
+
+```java
+public class TernaryExample {
+    public static void main(String[] args) {
+        int number = 10;
+
+        // Simplify if-else statement using a ternary operator
+        int result = (number > 5) ? number : -1;
+
+        System.out.println("Result: " + result);
+    }
+}
+```
+
+In this example, the ternary operator `? :` is used to assign the value of `number` to `result` if `number` is greater than 5, otherwise, it assigns `-1` to `result`.
+
+#### 9.6 Switch Statement
+
+In Java, a `switch` statement is used to compare the value of an expression against a list of `case` values, executing the block of code associated with the matching `case`. The `switch` statement can make your code more readable and efficient when dealing with multiple possible values for a single variable. It also includes a `default` block that is executed if none of the `case` values match the expression.
+
+```java
+switch (expression) {
+    case value1:
+        // Code to execute if expression equals value1
+        break;
+    case value2:
+        // Code to execute if expression equals value2
+        break;
+    // Add more cases as needed
+    default:
+        // Code to execute if no cases match
+}
+```
+
+## 10. Loops
+
+Java provides several looping constructs to execute a block of code multiple times based on certain conditions. The main types of loops are `for`, `for-each`, `while`, and `do-while`. Additionally, `break` and `continue` statements can be used to control the flow within these loops.
+
+#### 10.1 for Loop
+
+The `for` loop is used when you know in advance how many times you want to execute a statement or a block of statements.
+
+**Syntax:**
+
+```java
+for (initialization; condition; update) {
+    // Code to be executed
+}
+```
+
+**Example:**
+
+```java
+public class ForLoopExample {
+    public static void main(String[] args) {
+        for (int i = 0; i < 5; i++) {
+            System.out.println("Iteration: " + i);
+        }
+    }
+}
+```
+
+#### 10.2 for-each Loop
+
+The `for-each` loop, also known as the enhanced `for` loop, is used to iterate over arrays or collections.
+
+**Syntax:**
+
+```java
+for (type variable : array) {
+    // Code to be executed
+}
+```
+
+**Example:**
+
+```java
+public class ForEachExample {
+    public static void main(String[] args) {
+        int[] numbers = {1, 2, 3, 4, 5};
+        for (int number : numbers) {
+            System.out.println("Number: " + number);
+        }
+    }
+}
+```
+
+#### 10.3 while Loop
+
+The `while` loop is used to repeat a block of code as long as a specified condition is true. The condition is evaluated before the execution of the loop's body.
+
+**Syntax:**
+
+```java
+while (condition) {
+    // Code to be executed
+}
+```
+
+**Example:**
+
+```java
+public class WhileLoopExample {
+    public static void main(String[] args) {
+        int i = 0;
+        while (i < 5) {
+            System.out.println("Iteration: " + i);
+            i++;
+        }
+    }
+}
+```
+
+#### 10.4 do-while Loop
+
+The `do-while` loop is similar to the `while` loop, but it evaluates the condition after executing the loop's body, ensuring that the body is executed at least once.
+
+**Syntax:**
+
+```java
+do {
+    // Code to be executed
+} while (condition);
+```
+
+**Example:**
+
+```java
+public class DoWhileLoopExample {
+    public static void main(String[] args) {
+        int i = 0;
+        do {
+            System.out.println("Iteration: " + i);
+            i++;
+        } while (i < 5);
+    }
+}
+```
+
+#### 10.5 Break and Continue Statements
+
+The `break` statement is used to exit a loop prematurely, while the `continue` statement skips the current iteration and proceeds to the next iteration of the loop.
+
+**Example:**
+
+```java
+public class BreakExample {
+    public static void main(String[] args) {
+        for (int i = 0; i < 10; i++) {
+            if (i == 5) {
+                break;  // Exit the loop when i is 5
+            }
+            if (i == 3) {
+                continue; // Skip the rest of the loop body when i is 3
+            }
+            System.out.println("Iteration: " + i);
+        }
     }
 }
 ```
