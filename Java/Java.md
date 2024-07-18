@@ -64,6 +64,27 @@ Java has specific naming conventions for classes and methods to maintain consist
   }
   ```
 
+###### 1.5 Organizing Code in Java with Methods
+
+In Java, the `Main` class contains the `main` method, which serves as the entry point for your program. While it's possible to write all your code within the `main` method, this approach is only suitable for very small programs. For larger programs, it's preferable to break down the code into smaller, reusable subpieces called methods. Methods help avoid code repetition and make your programs more modular and manageable.
+
+Here is an example of a simple method:
+
+```java
+public class Main {
+
+    public static void main(String[] args) {
+        String message = greetUser("Eli", "Rousseau");
+    }
+
+    public static String greetUser(String firstName, String lastName) {
+        return "Hello " + firstName + " " + lastName; 
+    }
+}
+```
+
+To create clean code, it is important to divide the code into manageable chunks, making them reusable in other programs. This approach enhances maintainability and makes the code easier to extend. Refactoring, which involves changing the structure of the code without altering its behavior, is essential for maintaining code quality. Ideally, methods should contain between 15 to 20 lines of code to keep them concise and focused.
+
 #### 1.2 Creating a Java Program
 
 ###### 1.2.1 Java Package Statements and Code Structure
@@ -673,11 +694,11 @@ Comparison operators in Java are used to compare primitive values, resulting in 
 
 Logical operators in Java are used to combine multiple boolean expressions. These operators allow you to build complex conditions that can control the flow of your program. The result of a logical operation is a boolean value: `true` or `false`.
 
-| Operator | Description | Example               | Result                                                   |
-| -------- | ----------- | --------------------- | -------------------------------------------------------- |
-| `&&`     | Logical AND | `(a > b) && (a < c)`  | `true` if both expressions are true, else `false`        |
-| `\||`    | Logical OR  | `(a > b) && (a < c)`` | `true` if one of both expressions are true, else `false` |
-| `!`      | Logical NOT | `!(a > b)`            | `true` if the expression is false, else `false`          |
+| Operator | Description | Example              | Result                                            |
+| -------- | ----------- | -------------------- | ------------------------------------------------- |
+| `&&`     | Logical AND | `(a > b) && (a < c)` | `true` if both expressions are true, else `false` |
+| `\|      | `           | Logical OR           | `(a > b) && (a < c)``                             |
+| `!`      | Logical NOT | `!(a > b)`           | `true` if the expression is false, else `false`   |
 
 ## 9. Conditional Statements
 
@@ -923,3 +944,70 @@ public class BreakExample {
     }
 }
 ```
+
+## 11. Understanding Errors and Debugging
+
+#### 11.1 Types of Errors
+
+In Java, errors can be broadly categorized into two types:
+
+1. **Compile-time errors**: Occur when the program fails to compile due to syntax or grammatical mistakes in the code. These errors are known as syntax errors. They are relatively easy to identify and resolve, especially with the help of modern IDEs, which highlight these errors as you write your code.
+
+2. **Run-time errors**: Do not appear until the program is executed. These errors are more challenging to diagnose because they require examining the program's behavior during its execution. To find and fix run-time errors, developers often use a debugger, a tool that allows for detailed inspection of the code execution process.
+
+#### 11.2 Debugging tools
+
+Most IDEs come equipped with a variety of debugging tools that aid in the error identification process:
+
+1. **Breakpoints**: By placing a breakpoint at a specific line of code, you can pause the execution at that point to examine the state of the program.
+2. **Step-over Tool**: This tool lets you execute the code line by line, allowing you to see which line may be causing the error.
+3. **Step-into Tool**: This tool allows you to dive into the execution of a method to investigate its inner workings.
+4. **Step-out Tool**: This tool helps you exit the current method and return to the calling method, which is useful for resuming the investigation at a higher level.
+5. **Variable Window**: During debugging, this window displays the current values of declared variables, providing insight into the state of the program.
+6. **Watch Tool**: This feature allows you to monitor the value of a specific variable, making it easier to track changes over time.
+7. **Call Stack Window**: This window provides an overview of all the methods that have been called up to the current execution point, helping you understand the flow of execution and how you arrived at a particular line.
+
+## 12. Deploying Java Applications with JAR Files
+
+To deploy Java applications for other users, packaging the code into a JAR (Java ARchive) file format is a common and effective method. A JAR file can be used by anyone with the Java Runtime Environment (JRE) installed. 
+
+#### 12.1 Creating a JAR File in IntelliJ IDEA
+
+To create a JAR file in IntelliJ IDEA, follow these steps:
+
+1. **Open Project Structure Settings**: Go to the `File` menu and select `Project Structure`.
+2. **Add Artifacts**: Navigate to the `Artifacts` section, which is an assembly of all project assets.
+3. **Create JAR Artifact**: Add a new JAR artifact by including modules and dependencies required for your project.
+4. **Build the Project**: Go to the `Build` menu and select `Build Artifacts`. This action will generate the JAR file.
+5. **Locate the JAR File**: The JAR file will be available in the `out` directory of your project, under the `artifacts` folder.
+
+#### 12.2 Running the JAR File
+
+To execute the JAR file, follow these steps:
+
+1. **Open Terminal**: Navigate to the folder where the JAR file is located.
+2. **Run the JAR File**: Use the command `java -jar [name_of_jar_file].jar` in the terminal, replacing `[name_of_jar_file]` with the actual name of your JAR file.
+
+By following these steps, you can package your Java application into a JAR file and distribute it to other users who can run it on any system with a JRE installed. This method ensures that your application is portable and easy to deploy.
+
+## 13. Programming Paradigms in Computer Science
+
+#### 13.1 Programming Paradigms
+
+In computer science, there are various programming paradigms or styles, including procedural, event-driven, functional, logic, object-oriented, and aspect-oriented programming. Among these, functional and object-oriented paradigms are the most popular. A programming language can support one or more paradigms, depending on its design.
+
+1. **Object-Oriented Programming (OOP):** Revolves around the concept of objects. Objects encapsulate data (state) and methods (behavior). This paradigm emphasizes bundling the data and methods that operate on the data within singular objects. Objects can interact with each other, making it easier to manage and reduce complexity in software systems. OOP facilitates code reuse, maintenance, and faster development.
+
+2. **Functional Programming (FP)**: Treats data and behavior as fundamentally different entities and keeps them separate. This paradigm focuses on the use of functions, avoiding mutable data and side effects.
+
+#### 13.2 Choosing the Right Paradigm
+
+The choice between OOP and FP often depends on the specific problem being solved. Problem-solving in programming involves defining the problem, identifying and comparing different solutions, and selecting the best one given the context and constraints. No single paradigm is universally better for all problems; each has its strengths and ideal use cases. The key is to understand the nature of the problem and select the paradigm that best addresses it.
+
+## 14. Classes
+
+## 15. Refactoring Towards Object-oriented code
+
+## 16. Inheritance and Polymorphism
+
+## 17. Interfaces
