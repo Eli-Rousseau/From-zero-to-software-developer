@@ -1004,10 +1004,733 @@ In computer science, there are various programming paradigms or styles, includin
 
 The choice between OOP and FP often depends on the specific problem being solved. Problem-solving in programming involves defining the problem, identifying and comparing different solutions, and selecting the best one given the context and constraints. No single paradigm is universally better for all problems; each has its strengths and ideal use cases. The key is to understand the nature of the problem and select the paradigm that best addresses it.
 
+#### 13.3 Procedural Programming
+
+Procedural programming involves implementing numerous methods with many parameters and declaring variables primarily within the `Main` class and the `main` method. This approach often neglects many of the features provided by object-oriented programming, resulting in saturated classes and methods. Such programs are difficult to maintain because small changes in one part of the program can create problems elsewhere. Additionally, procedural code is often characterized by a lack of reusability and is frequently referred to as "spaghetti code" due to its tangled and complex structure.
+
 ## 14. Classes
 
-## 15. Refactoring Towards Object-oriented code
+#### 14.1 Classes and Objects
 
-## 16. Inheritance and Polymorphism
+A class in Java serves as a blueprint for creating objects. An object is an instance of a class, containing fields (variables) and methods (functions) that define its behavior. While all objects of a class share the same fields and methods, each object has its own state, stored separately in memory.
 
-## 17. Interfaces
+UML (Unified Modeling Language) is a visual language used to describe classes and their relationships. It's a useful tool for designing and understanding the structure of your code.
+
+###### 14.1.1 Creating and Organizing Classes in Java
+
+In Java, each class should be declared in a separate file to improve code clarity. This practice involves several steps and conventions to ensure the code is well-structured and maintainable:
+
+1. **Create a New Class File:** Open the directory in which the `Main` file is saved and create a new class file inside that directory. Name the class file using Pascal naming convention, where each word starts with a capital letter.
+   
+   ```java
+   // Person.java
+   public class Person {
+       // Fields and methods will be defined here
+   }
+   ```
+
+2. **Define Access Modifiers:** Start by defining an access modifier, which determines if other classes can access the current class. The class keyword follows this, along with the class name and curly braces.
+   
+   ```java
+   public class Person {
+       // Class content goes here
+   }
+   ```
+
+3. **Declare Fields:** To declare fields in a class, define the access modifier, the type, and the name of the field. You can also assign default values to fields using the assignment operator. Otherwise, fields will refer to a null object by default.
+   
+   ```java
+   public class Person {
+       private String name;
+       private int age = 0; // Default value
+   }
+   ```
+
+4. **Declare Methods:** To declare methods in a class, define the access modifier, the return type, and the name of the method. Inside parentheses, list the parameters of the method separated by commas. End with curly braces.
+   
+   ```java
+   public class Person {
+       private String name;
+       private int age = 0; // Default value
+   
+       // Method to introduce the person
+       public void introduce() {
+           System.out.println("Hello, my name is " + this.name + " and I am " + this.age + " years old.");
+       }
+   }
+   ```
+
+5. **Using the `this` Keyword:**
+   The `this` keyword references the current object's members (fields and methods) within a method. This is particularly useful when parameters of a method have the same name as the object's fields.
+   
+   ```java
+   public class Person {
+       private String name;
+       private int age = 0; // Default value
+   
+       public void introduce() {
+           System.out.println("Hello, my name is " + this.name + " and I am " + this.age + " years old.");
+       }
+   }
+   ```
+
+###### 14.1.2 Declaring and Using a Class
+
+To illustrate, here is an example of declaring and using the `Person` class in a Java project:
+
+1. **Create the `Person` Class:**
+   
+   ```java
+   // Person.java
+   public class Person {
+       private String name;
+       private int age  = 0; // Default value;
+   
+       public void introduce() {
+           System.out.println("Hello, my name is " + this.name + " and I am " + this.age + " years old.");
+       }
+   }
+   ```
+
+2. **Use the `Person` Class in the `Main` Class:**
+   
+   ```java
+   // Main.java
+   public class Main {
+       public static void main(String[] args) {
+           var person = new Person("Alice", 30); // Use the var operator to refer to the class type
+           person.introduce();
+       }
+   }
+   ```
+
+###### 14.1.3 Memory Management
+
+Java manages memory in two areas: the heap and the stack. Objects are stored in the heap, while short-lived variables, primitive types, and references to objects are stored on the stack. Reference types store the address of the object rather than the object itself. Java's garbage collection automatically removes objects from the heap that no longer have references.
+
+#### 14.2 Encapsulation
+
+Encapsulation in Object-Oriented Programming (OOP) involves bundling the data and the methods that operate on that data into a single unit, or object. Instead of passing values around between various parts of a program, you encapsulate these values along with their associated methods within a single class instance.
+
+```java
+// Person.java
+public class Person {
+    // Fields
+    private String name;
+    private int age;
+
+    // Method to display person details
+    public void displayPerson() {
+        System.out.println("Name: " + this.name + ", Age: " + this.age);
+    }
+}
+```
+
+In this example, the `Person` class encapsulates the `name` and `age` fields, along with methods that implement these variables.
+
+#### 14.3 Getters & Setters
+
+In Object-Oriented Programming, setters and getters are methods used to control access to the fields of a class. These methods are essential for implementing encapsulation, which helps in maintaining the integrity and security of the data within an object.
+
+###### 14.3.1 Setters
+
+Setters are used to validate and set the value of a particular field. By defining a field as private, it becomes accessible only within the class it is declared in. This restriction ensures that the field cannot be modified directly from outside the class. Instead, a setter method is provided to control how values are assigned to the field. This method typically includes validation logic to ensure that only acceptable values are assigned. If an invalid value is passed, an exception can be thrown to indicate the error. The `IllegalArgumentException` class is commonly used for this purpose.
+
+```java
+// Person.java
+public class Person {
+    // Private fields
+    private String name;
+    private int age;
+
+    // Setter for name with validation
+    public void setName(String name) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be null or empty");
+        }
+        this.name = name;
+    }
+
+    // Setter for age with validation
+    public void setAge(int age) {
+        if (age < 0 || age > 150) {
+            throw new IllegalArgumentException("Age must be between 0 and 150");
+        }
+        this.age = age;
+    }
+
+    // Method to display person details
+    public void displayPerson() {
+        System.out.println("Name: " + name + ", Age: " + age);
+    }
+}
+```
+
+###### 14.3.2 Getters
+
+Getters, also known as accessor methods, are used to retrieve the value of a particular field. They provide a controlled way to access the field's value, ensuring that the encapsulation principle is maintained. Getters simply return the value of the field without modifying it.
+
+```java
+// Getter for name
+public String getName() {
+    return name;
+}
+
+// Getter for age
+public int getAge() {
+    return age;
+}
+```
+
+#### 14.4 Abstraction and Coupling
+
+###### 14.4.1 Abstraction
+
+Abstraction in Object-Oriented Programming (OOP) is a concept used to reduce complexity by hiding unnecessary details within classes. The main idea is to focus on what an object does rather than how it does it. By concealing the implementation details, a class is treated as a "black box," where the internal workings are hidden from the outside world. This allows developers to interact with the class through a simple and well-defined interface, promoting easier maintenance and understanding of the code.
+
+To achieve abstraction, one can define public methods that provide necessary functionalities while keeping the implementation details private. Here's an example demonstrating abstraction:
+
+```java
+// BankAccount.java
+public class BankAccount {
+    private double balance;
+
+    public BankAccount(double initialBalance) {
+        this.balance = initialBalance;
+    }
+
+    // Public method to deposit money
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+        }
+    }
+
+    // Public method to withdraw money
+    public void withdraw(double amount) {
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;
+        }
+    }
+
+    // Public method to check the balance
+    public double getBalance() {
+        return balance;
+    }
+
+    // Private method to log transactions (implementation detail)
+    private void logTransaction(String message) {
+        // Log transaction details (hidden from outside)
+        System.out.println("Transaction: " + message);
+    }
+}
+```
+
+In this example, the `BankAccount` class provides public methods to interact with the balance (deposit, withdraw, and getBalance) while keeping the `logTransaction` method private. The details of logging transactions are hidden from the outside world, demonstrating the principle of abstraction.
+
+###### 14.4.2 Coupling
+
+Coupling in OOP refers to the level of dependency between classes. High coupling means that a class relies heavily on another class, making the code more interdependent. This can lead to increased maintenance costs, as changes in one class might necessitate changes in another class that is heavily coupled to it.
+
+To reduce coupling, it is essential to minimize dependencies between classes. One way to achieve this is by ensuring that each class has only the necessary methods and fields exposed publicly. Unnecessary methods should be removed or made private to avoid exposing too much detail and creating unnecessary dependencies.
+
+```java
+// PaymentProcessor.java
+public class PaymentProcessor {
+    private BankAccount bankAccount;
+
+    public PaymentProcessor(BankAccount bankAccount) {
+        this.bankAccount = bankAccount;
+    }
+
+    public void processPayment(double amount) {
+        bankAccount.withdraw(amount);
+    }
+}
+
+// BankAccount.java
+public class BankAccount {
+    private double balance;
+
+    public BankAccount(double initialBalance) {
+        this.balance = initialBalance;
+    }
+
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+        }
+    }
+
+    public void withdraw(double amount) {
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;
+        }
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+}
+```
+
+In this example, the `PaymentProcessor` class is coupled to the `BankAccount` class because it relies on the `withdraw` method to process payments. To reduce coupling, the `PaymentProcessor` could interact with a more abstract interface, ensuring that changes in `BankAccount` have minimal impact on `PaymentProcessor`.
+
+By focusing on abstraction and managing coupling, developers can create more maintainable, flexible, and robust applications. Abstraction helps in hiding unnecessary details, while proper coupling management ensures that classes remain as independent as possible, facilitating easier modifications and extensions.
+
+#### 14.5 Constructors
+
+###### 14.5.1 Defining a Constructor
+
+Constructors are special class methods that are called when a new class object is created. They ensure that an object is initialized in a valid state. Unlike other methods, constructors do not have a return type, not even `void`. The name of the constructor must exactly match the name of the class.
+
+Here is an example demonstrating how to define and use a constructor:
+
+```java
+// Person.java
+public class Person {
+    private String name;
+    private int age;
+
+    // Constructor
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    // Getter for name
+    public String getName() {
+        return name;
+    }
+
+    // Getter for age
+    public int getAge() {
+        return age;
+    }
+}
+```
+
+In the `Person` class, the constructor `Person(String name, int age)` initializes the `name` and `age` fields of the object. When a new `Person` object is created, this constructor ensures the object is in a valid state:
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        // Creating a new Person object
+        Person person = new Person("Alice", 30);
+
+        // Accessing the object's fields
+        System.out.println("Name: " + person.getName());
+        System.out.println("Age: " + person.getAge());
+    }
+}
+```
+
+###### 14.5.2 Default Constructor
+
+If no constructor is explicitly defined, Java provides a default constructor that initializes the object with default values (e.g., `null` for objects, `0` for numeric types). However, once a constructor with parameters is defined, the default constructor is no longer provided automatically.
+
+#### 14.6 Method Overloading
+
+Method overloading in Java allows multiple methods in the same class to have the same name but different parameters. This can be achieved by varying the number of parameters, the type of parameters, or both. Overloading increases the flexibility of your code, enabling different ways to call the same method based on different input parameters.
+
+```java
+public class Calculator {
+    // Method to add two integers
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    // Overloaded method to add three integers
+    public int add(int a, int b, int c) {
+        return a + b + c;
+    }
+
+    // Overloaded method to add two doubles
+    public double add(double a, double b) {
+        return a + b;
+    }
+}
+```
+
+While method overloading can be a powerful tool, overusing it can make your code difficult to maintain. Too many variations of a method with different parameters can lead to confusion and increase the complexity of the codebase.
+
+#### 14.7 Instance and Static Members
+
+In Object-Oriented Programming, classes can have two types of members: instance members and static members.
+
+###### 14.7.1 Instance Members
+
+Instance members are fields and methods that belong to individual instances (or objects) of a class. Each object created from the class has its own copy of these instance members. Instance members are accessed through the object reference.
+
+```java
+public class Car {
+    // Instance member
+    private String model;
+
+    // Instance method
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public String getModel() {
+        return model;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Car car1 = new Car();
+        car1.setModel("Toyota");
+        System.out.println(car1.getModel()); // Output: Toyota
+
+        Car car2 = new Car();
+        car2.setModel("Honda");
+        System.out.println(car2.getModel()); // Output: Honda
+    }
+}
+```
+
+In this example, the `model` field and `setModel` method are instance members of the `Car` class. Each `Car` object has its own `model` field.
+
+###### 14.7.2 Static Members
+
+Static members belong to the class itself rather than any particular instance. They can be accessed directly through the class name. Static members can be both fields and methods. It's important to note that static methods can only access static fields and other static methods, not instance members.
+
+```java
+public class MathUtil {
+    // Static field
+    public static final double PI = 3.14159;
+
+    // Static method
+    public static int add(int a, int b) {
+        return a + b;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Accessing static members through the class name
+        System.out.println("PI: " + MathUtil.PI); // Output: PI: 3.14159
+        System.out.println("Sum: " + MathUtil.add(5, 10)); // Output: Sum: 15
+    }
+}
+```
+
+In the `MathUtil` class, `PI` and `add` are static members. They can be accessed without creating an instance of `MathUtil`.
+
+###### 14.7.3 Main Method as a Static Member
+
+The `main` method in Java is typically declared as static. This allows the Java Runtime Environment (JRE) to call the `main` method without creating an instance of the class. This is essential for the program to start execution.
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}
+```
+
+## 15. Inheritance and Polymorphism
+
+#### 15.1 Inheritance in Java
+
+Inheritance is a fundamental concept in Object-Oriented Programming (OOP) that allows for code reuse by extending fields and methods from one class to another. This is achieved using the `extends` keyword, followed by the name of the class to inherit from. When a class extends another, it inherits all the fields and methods of the parent class, enabling code reuse and reducing redundancy.
+
+```java
+// Parent class
+public class Vehicle {
+    private String brand;
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+}
+
+// Child class
+public class Car extends Vehicle {
+    private String model;
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public String getModel() {
+        return model;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Car car = new Car();
+        car.setBrand("Toyota");
+        car.setModel("Corolla");
+        System.out.println(car.getBrand() + " " + car.getModel()); // Output: Toyota Corolla
+    }
+}
+```
+
+In this example, the `Car` class extends the `Vehicle` class, inheriting its fields and methods. The `Car` class can then use the `getBrand` and `setBrand` methods defined in the `Vehicle` class.
+
+###### 15.1.1 Avoiding Deep Inheritance Hierarchies
+
+When designing class hierarchies in object-oriented programming, it's crucial to avoid creating excessively deep inheritance structures. Deep hierarchies can lead to significant maintenance challenges because changes made to a class at the top of the hierarchy may require modifications across all derived classes. This not only includes recompiling and redeploying the entire hierarchy but also affects any classes that depend on these hierarchies. Additionally, changes such as introducing new fields or methods in a base class might inadvertently affect subclasses in ways that are not intended or useful. This can lead to complications where inherited properties or behaviors don't make sense in the derived classes, thereby creating more maintenance overhead and potential for bugs. As a general guideline, try to limit inheritance hierarchies to one or two levels. 
+
+###### 15.1.2 Multiple Inheritance
+
+Java does not support multiple inheritance of classes, which is the ability for a class to inherit from more than one parent class. This restriction is in place primarily to avoid complications that can arise from multiple inheritance, such as the "diamond problem." The diamond problem occurs when a class inherits from two classes that both inherit from a common base class, leading to ambiguity in the inheritance hierarchy about which methods or properties should be inherited. By not supporting multiple inheritance, Java simplifies the class hierarchy and reduces potential conflicts and ambiguities
+
+#### 15.2 The Object Class
+
+The `Object` class in the `java.lang` package is the root of the class hierarchy in Java. Every class implicitly extends the `Object` class, which provides several methods that are common to all objects. Some of the most important methods in the `Object` class are:
+
+| Method              | Description                                                                                                                                                           |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `toString()`        | Provides a string representation of the object, including the package name and a hexadecimal representation of the object's memory address, separated by an `@` sign. |
+| `obj1.equals(obj2)` | Compares the memory addresses of two objects to determine if they are the same instance.                                                                              |
+| `hashCode()`        | Returns an integer hash code representing the memory address of the object.                                                                                           |
+
+#### 15.2 Constructors and Inheritance
+
+In Java, constructors are special methods called when an object is instantiated. When dealing with inheritance, constructors play a crucial role in ensuring that the parent class's fields are properly initialized before the child class's fields. The `super` keyword is used within a child class's constructor to call the parent class's constructor. This ensures that the parent class's initialization code runs before the child class's initialization code.
+
+```java
+public class Vehicle {
+    private String brand;
+
+    public Vehicle(String brand) {
+        this.brand = brand;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+}
+
+public class Car extends Vehicle {
+    private String model;
+
+    public Car(String brand, String model) {
+        super(brand); // Calls the constructor of the Vehicle class
+        this.model = model;
+    }
+
+    public String getModel() {
+        return model;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Car car = new Car("Toyota", "Corolla");
+        System.out.println(car.getBrand() + " " + car.getModel()); // Output: Toyota Corolla
+    }
+}
+```
+
+In this example, the `Vehicle` class has a constructor that initializes the `brand` field. The `Car` class extends `Vehicle` and adds a `model` field. The `Car` constructor calls the `Vehicle` constructor using `super(brand)` to ensure the `brand` field is initialized before initializing the `model` field.
+
+#### 15.3 Access Modifiers
+
+In Java, access modifiers define the visibility and accessibility of classes, methods, and fields within a program. There are four main types of access modifiers: `public`, `private`, `protected`, and default (no modifier).
+
+1. The `public` access modifier makes class members accessible from any other class, regardless of the package they are in. This is useful for methods and fields that need to be accessed globally throughout the application.
+
+2. The `private` access modifier restricts the access of class members to within the same class. Private members cannot be accessed or modified by any other class, including subclasses.
+
+3. The `protected` access modifier allows class members to be accessible within the same package and by subclasses, even if they are in different packages. However, using `protected` can be confusing because it introduces complexities when classes are extended across packages. It is generally considered better practice to use `public` and `private` modifiers to avoid such confusion.
+
+4. When no access modifier is specified, the class members have default (package-private) access. This means the members are accessible only within the same package. They are private to any classes outside the package but public within the package.
+
+#### 15.4 Overriding Methods
+
+Method overriding in Java is a feature that allows a subclass to provide a specific implementation for a method that is already defined in its parent class. This is useful when you want to change the behavior of an inherited method to suit the needs of the subclass. To override a method, you use the `@Override` annotation above the method in the subclass. This annotation helps to ensure that you are actually overriding a method from the parent class and not accidentally creating a new method.
+
+```java
+class Animal {
+    public void sound() {
+        System.out.println("Animal makes a sound");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    public void sound() {
+        System.out.println("Dog barks");
+    }
+}
+```
+
+In this example the `Animal` class has a method called `sound`. The `Dog` class extends the `Animal` class and overrides the `sound` method. The `@Override` annotation ensures that the `sound` method in the `Dog` class is indeed overriding the method from the `Animal` class.
+
+#### 15.5 Upcasting and Downcasting
+
+###### 15.5.1 Upcasting
+
+Upcasting in Java refers to the process of casting an object to one of its super types. This occurs automatically when you assign a subclass object to a superclass reference. Since the subclass inherits from the superclass, the compiler automatically performs the upcasting.
+
+```java
+class Animal {
+    public void sound() {
+        System.out.println("Animal makes a sound");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    public void sound() {
+        System.out.println("Dog barks");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Animal myDog = new Dog(); // Upcasting
+        myDog.sound(); // Outputs: Dog barks
+    }
+}
+```
+
+In this example, the `Dog` object is upcast to an `Animal` reference. The `sound` method called on the `Animal` reference will still invoke the `Dog` class's overridden method.
+
+###### 15.5.2 Downcasting
+
+Downcasting is the process of casting a superclass reference back to a subclass reference. This is necessary when you need to access methods or fields that are specific to the subclass. However, downcasting requires an explicit cast and should be done with caution, as it can lead to a `ClassCastException` if the object is not actually an instance of the subclass.
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        Animal myAnimal = new Dog(); // Upcasting
+        Dog myDog = (Dog) myAnimal; // Downcasting
+        myDog.sound(); // Outputs: Dog barks
+    }
+}
+```
+
+In this example, the `Animal` reference is downcast back to a `Dog` reference, allowing access to the `Dog` class's specific methods.
+
+#### 15.5 Comparing Objects
+
+In Java, reference type variables refer to the memory location where an object is stored, rather than the object itself. This distinction is crucial when comparing objects. If you compare two reference type variables using the `==` operator, you are comparing their memory addresses, not the actual data within the objects. To compare the data of the objects, it is common practice to override the `equals` and `hashCode` methods in the class definition.
+
+By default, the `equals` method in the `Object` class compares the memory addresses of objects, leading to incorrect results when comparing the content of objects. To address this, you can override the `equals` method to compare the data fields of the objects. Similarly, the `hashCode` method should also be overridden to maintain the general contract for the `hashCode` method, which states that equal objects must have equal hash codes.
+
+Here's an example of how to override these methods:
+
+```java
+public class Person {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) { // Compares the objects references
+            return true;
+        }
+        if (!(obj instanceof Person)) { // Checks for subcasting issues
+            return false;
+        }
+        Person person = (Person) obj;
+        return age == person.age && name.equals(person.name); // Compares the objects values
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age);
+    }
+}
+```
+
+In this example, the `equals` method is overridden to compare the `name` and `age` fields of `Person` objects. The `hashCode` method is overridden to generate a hash code based on these fields.
+
+#### 15.6 Polymorphisms
+
+Polymorphism in Object-Oriented Programming refers to the ability of objects to take on multiple forms. This powerful concept allows methods to behave differently based on the object type they are acting upon, even if the methods share the same name. Polymorphism is mainly achieved through method overriding and method overloading (see earlier).
+
+Polymorphism allows for more flexible and reusable code. For instance, you can write code that operates on the superclass type but works correctly with any subclass object. This makes the code easier to extend and maintain.
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        Animal myAnimal = new Dog();
+        myAnimal.makeSound();  // Outputs: Dog barks
+
+        myAnimal = new Cat();
+        myAnimal.makeSound();  // Outputs: Cat meows
+    }
+}
+```
+
+In this example, the `myAnimal` reference can point to any object that is a subclass of `Animal`, demonstrating polymorphic behavior by invoking the overridden `makeSound` method appropriate to the actual object type.
+
+#### 15.7 Abstract Classes and Methods
+
+Abstract classes are used when you want to create a class that should not be directly instantiated. Instead, they serve as templates for other classes, representing abstract concepts that depend on concrete subclasses to function. These classes provide a common base with shared properties and methods, which concrete subclasses must implement and build upon, ensuring consistent behavior across related classes.
+
+###### 15.7.1 Defining Abstract Classes
+
+To create an abstract class, use the `abstract` keyword before the class declaration. This indicates that the class is incomplete and meant to be extended by other classes. Abstract classes can contain both abstract methods, which have no implementation, and concrete methods, which have full implementations.
+
+```java
+public abstract class Animal {
+    // Concrete method
+    public void breathe() {
+        System.out.println("Animal is breathing");
+    }
+
+    // Abstract method
+    public abstract void makeSound();
+}
+```
+
+###### 15.7.2 Implementing Abstract Methods
+
+Abstract methods are defined using the `abstract` keyword in the abstract class. These methods do not have a body and must be implemented by subclasses. This ensures that subclasses provide specific behaviors for the abstract methods defined in the abstract class.
+
+```java
+public class Dog extends Animal {
+    @Override
+    public void makeSound() {
+        System.out.println("Dog barks");
+    }
+}
+
+public class Cat extends Animal {
+    @Override
+    public void makeSound() {
+        System.out.println("Cat meows");
+    }
+}
+```
+
+Here, `Dog` and `Cat` are concrete subclasses of `Animal`, and both provide implementations for the `makeSound` method.
+
+#### 15.8 Final Classes and Methods
+
+In Java, final classes are used to prevent inheritance, meaning that no other class can extend or inherit from a final class. This restriction ensures that the class remains unchanged and cannot be modified by subclasses. Final classes are useful when you want to prevent the modification of certain classes and ensure that their implementation remains intact. To declare a final class, use the `final` keyword before the `class` keyword in the class declaration.
+
+```java
+public final class ImmutableClass {
+    // Class members and methods
+}
+```
+
+Similarly, final methods within a class are methods that cannot be overridden by subclasses. To declare a final method, use the `final` keyword before the method's return type.
+
+```java
+public class BaseClass {
+    public final void show() {
+        System.out.println("This method cannot be overridden.");
+    }
+}
+```
+
+## 16. Interfaces
