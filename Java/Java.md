@@ -1734,3 +1734,72 @@ public class BaseClass {
 ```
 
 ## 16. Interfaces
+
+#### 16.1 What are Interfaces
+
+When classes are tightly coupled, changes in one class can affect its dependent classes, requiring recompilation and redeployment, which complicates maintenance. To minimize coupling, use abstraction to hide implementation details and expose only necessary members. Interfaces are key to this process, as they define method contracts without implementations, specifying what methods a class must implement. By programming against interfaces, classes interact through defined contracts, making the system more flexible and easier to extend. This approach enhances maintainability and scalability in complex applications.
+
+#### 16.2 Using Interfaces in Java
+
+To use an interface in Java, you must first declare it. This process resembles class declaration and includes the `public` access modifier, the `interface` keyword, and the name of the interface, followed by curly braces. Inside these braces, you declare the methods that need to be implemented, without providing the implementations themselves.
+
+```java
+public interface PaymentProcessor {
+    void processPayment(double amount);
+}
+```
+
+#### 16.3 Implementing an Interface
+
+To use the interface in a class, you use the `implements` keyword followed by the interface name after the class name. Every class that implements an interface must provide implementations for all the methods declared by the interface. As a best practice, apply the `@Override` annotation above the methods declared by the interface. This ensures that if a method declaration is removed from the interface, the change will be detected during the compilation of the implementing class.
+
+```java
+public class CreditCardProcessor implements PaymentProcessor {
+    @Override
+    public void processPayment(double amount) {
+        System.out.println("Processing credit card payment of $" + amount);
+    }
+}
+```
+
+#### 16.4 Dependency Injection
+
+According to the interface concept, classes should not instantiate their dependencies. Instead, a class should only use its dependencies, which promotes the separation of concerns. This is achieved through dependency injection, where another class is responsible for creating and passing an object to the dependent class.
+
+There are different types of dependency injection: constructor injection, setter injection, and method injection. For example, an object can be injected inside the constructor method of a class. Object instantiation and injection can be handled in the `main` method of the `Main` class. While the `main` method is suitable for a few dependencies, frameworks are often used to manage a large number of dependencies.
+
+```java
+public class PaymentService {
+    private PaymentProcessor processor;
+
+    public PaymentService(PaymentProcessor processor) {
+        this.processor = processor;
+    }
+
+    public void makePayment(double amount) {
+        processor.processPayment(amount);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        PaymentProcessor ccProcessor = new CreditCardProcessor();
+        PaymentService service = new PaymentService(ccProcessor);
+        service.makePayment(100.00);
+    }
+}
+```
+
+#### 16.5 Interface Segregation
+
+Interface segregation involves dividing a large interface into smaller, more specific ones. This ensures that implementing classes are only required to implement the methods relevant to them. If needed, multiple smaller interfaces can be combined into a single general interface, which will inherit the methods of the smaller interfaces. Unlike classes, which can only extend a single other class, interfaces can extend multiple other interfaces.
+
+```java
+public interface OnlinePaymentProcessor extends PaymentProcessor {
+    void processOnlinePayment(double amount);
+}
+
+public interface OfflinePaymentProcessor extends PaymentProcessor {
+    void processOfflinePayment(double amount);
+}
+```
