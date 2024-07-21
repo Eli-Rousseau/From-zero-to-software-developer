@@ -80,7 +80,7 @@ Arrays are fundamental data structures used to store lists of data sequentially.
 
 ###### 2.1.3 Adding Items to an Array
 
-In many programming languages, arrays are static, meaning their size is fixed upon declaration. If the exact size needed is not known in advance, one must estimate the size, potentially leading to errors if the array length is too large or too small. Extending an array to accommodate more items involves creating a new, larger array and copying all the elements from the original array, resulting in a runtime complexity of O(n).
+In many programming languages, arrays are static, meaning their size is fixed upon declaration. If the exact size needed is not known in advance, one must estimate the size, potentially leading to errors if the array length is too large or too small. Extending an array to accommodate more items involves creating a new, larger array and copying all the elements from the original array, resulting in a runtime complexity of O(n). This copy operation will often ensure that the array doubles in size which will affect the memory storage for that array.
 
 ###### 2.1.4 Removing Items from an Array
 
@@ -172,4 +172,77 @@ Certainly! Here is a table summarizing the methods and functionalities of the `L
 | `size()`        | Returns the number of elements in the linked list.                |
 | `toArray()`     | Converts the linked list to an array.                             |
 
+###### 3.2.3 Singly and Doubly LinkedList
 
+There are two main types of linked lists: singly linked lists and doubly linked lists. In a singly linked list, each node contains a pointer to the next node, facilitating straightforward traversal from the head to the tail. In contrast, a doubly linked list includes pointers to both the previous and next nodes in each node. This bidirectional linking offers advantages, such as reducing the time complexity to O(1) for deleting the last node, as it eliminates the need to traverse the entire list. However, this comes at the cost of increased memory usage due to the additional pointers.
+
+The `LinkedList` class in Java is an implementation of a doubly linked list. These doubly linked lists can also be circular, where the last node references the first node as its next node, creating a continuous loop.
+
+## 4. Stacks
+
+#### 4.1 Stacks in Algorithmics
+
+Stacks are fundamental data structures in algorithmics. The best way to visualize a stack is by imagining a stack of books: you can build a pile by placing books one on top of the other, but you can only remove the top book without disturbing the rest. To access a book at the bottom, you must first remove all the books above it. This concept is known as the Last In, First Out (LIFO) principle. This LIFO nature of stacks makes them ideal for implementing features like undo operations, where the most recently added action is the first to be undone.
+
+#### 4.2 Stacks in Java
+
+###### 4.2.1 Declaring Stacks
+
+Java provides its own `Stack` class in the `java.lang` package. This class requires a generic parameter to specify the type of items stored in the stack, typically using wrapper classes for primitive types. If no generic parameter is specified, the stack can store different types of objects.
+
+```java
+Stack<Integer> stack = new Stack<>();
+```
+
+###### 4.2.2 Useful Methods
+
+In practice, a stack is often implemented as a wrapper around a static array, providing a different way of storing and accessing objects compared to regular arrays. The main operations on a stack include:
+
+| Method      | Description                                                   |
+| ----------- | ------------------------------------------------------------- |
+| `push()`    | Adds an item to the top of the stack.                         |
+| `pop()`     | Removes the item from the top of the stack.                   |
+| `peek()`    | Returns the item at the top of the stack without removing it. |
+| `isEmpty()` | Checks whether the stack is empty.                            |
+
+All these operations on a stack typically run in O(1) time complexity, making them very efficient. However, stacks are not designed for lookup operations and are not suitable for storing lists where random access is required, such as a list of products.
+
+## 5. Queues
+
+#### 5.1 Queues in Algorithmics
+
+Queues are data structures commonly used to process tasks in the order they are received. Unlike stacks, where the last item added is the first one removed (LIFO), queues operate on a first-in, first-out (FIFO) principle. This means that the first item added to the queue is also the first one to leave it. Queues are ideal for situations where maintaining the order of tasks or elements is crucial, such as in task scheduling, managing requests in a service, or handling asynchronous data processing.
+
+#### 5.2 Queues in Java
+
+###### 5.2.1 Declaring Queues
+
+In Java, the `Queue` refers to an interface rather than a class. An interface represents a contract for the classes that implement `Queue` objects, providing method declarations without their implementations. These implementations are provided by the classes that adhere to the interface. Two important implementations of the `Queue` interface in Java are the `LinkedList` class and the `ArrayDeque` class, both found in the `java.util` package.
+
+To create a queue in Java, you can use the `Queue` interface to initialize an object with an implementation like `ArrayDeque` from the `java.util` package. This interface requires a generic parameter that specifies the type of items in the queue, typically using wrapper classes for primitive types. If no generic parameter is provided, the queue can store different types of objects.
+
+```java
+Queue<Integer> queue = new ArrayDeque<>();
+```
+
+###### 5.2.2 Usefull Methods
+
+In practice, a queue is often implemented as a wrapper around a static array, providing a different way of storing and accessing objects compared to regular arrays. The main operations include:
+
+| Method      | Description                                                       |
+| ----------- | ----------------------------------------------------------------- |
+| `enqueue()` | Adds an item to the end of the queue                              |
+| `dequeue()` | Removes an item from the front of the queue.                      |
+| `peek()`    | Retrieves the item at the front of the queue without removing it. |
+| `isEmpty()` | Checks whether the queue has any items.                           |
+| `isFull()`  | Checks whether the queue is full.                                 |
+
+All these operations on a queue typically run in O(1) time complexity, making them very efficient. However, queues are not designed for lookup operations and are not suitable for storing lists where random access is required, such as a list of products.
+
+#### 5.3 Priority Queues
+
+In priority queues, objects are processed based on their priority rather than the order in which they enter the queue. In Java, priority queues are implemented using the `PriorityQueue` class from the `java.util` package. This class requires a generic parameter to specify the type of items stored in the priority queue, often using wrapper classes for primitive types. If no generic parameter is specified, the priority queue can store different types of objects.
+
+```java
+PriorityQueue<Integer> priorityQueue = new PriorityQueue<>();
+```
