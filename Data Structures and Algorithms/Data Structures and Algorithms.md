@@ -246,3 +246,92 @@ In priority queues, objects are processed based on their priority rather than th
 ```java
 PriorityQueue<Integer> priorityQueue = new PriorityQueue<>();
 ```
+
+## 6. Hashtables
+
+#### 6.1 Hash Tables in Algorithms
+
+Hash tables, also known as dictionaries, provide extremely fast lookups and can significantly optimize many algorithms. Nearly all programming languages support hash tables under various names. In Java, they are called `HashMap`. The core concept of hash tables is to store key-value pairs. A hash table uses a hash function to determine the memory address where the value associated with a key is stored. Since the hash function is deterministic, the same input will always produce the same output, allowing for efficient storage and retrieval of objects with a time complexity of O(1).
+
+###### 6.1.1 Hash Functions
+
+Internally, a hash table uses a key to pass through a hash function, which determines the memory location where the associated value will be stored. These locations are mapped onto an array, another data structure that stores values sequentially in memory. Essentially, hash tables use a hash function to map a key to a specific index in an array. 
+
+For example, a simple implementation for integer keys involves dividing the key by the length of the storage array and using the remainder (modulo) as the index to store the value. When the keys are strings, each character can first be converted to its numerical representation. These numbers are then summed to create a unique representation of the string key, and the modulo operation is applied to find the appropriate index in the array for storing the value.
+
+###### 6.1.2 Collisions
+
+When generating hash values with a hash function, it is possible for two distinct keys to produce the same hash value, resulting in a collision where their values would be stored at the same memory location. There are two main methods to handle collisions:
+
+1. **Chaining**: Each cell in the storage array points to a linked list. When a collision occurs, the value is added to the linked list at the corresponding array index. This method involves appending the new value to the tail of the linked list.
+
+2. **Open Addressing**: This method finds a different free slot in the storage array through probing. Various probing algorithms can be used to handle collisions:
+
+###### 6.1.3 Probing Solutions
+
+| Probing Method        | Description                                                                                                                   | Formula                                               | Pros                                                           | Cons                                                                                         |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| **Linear Probing**    | Start from the current slot and move to the next slot, checking each slot sequentially until an open slot is found.           | slot = (hash(key) + i) % array_size (i = 1 to n)      | Simple implementation.                                         | Prone to clustering, reducing performance.                                                   |
+| **Quadratic Probing** | Generate locations that are more spread out by using a quadratic function to find the next slot, helping to avoid clustering. | slot = (hash(key) + i^2) % array_size (i = 1 to n)    | Reduces clustering compared to linear probing.                 | May result in infinite loops due to repeated slot checks.                                    |
+| **Double Hashing**    | Use a second, independent hash function to calculate the step size, generating a new sequence of slots for each collision.    | index = (hash1 + i * hash2) % array_size (i = 1 to n) | Minimizes clustering and provides a more uniform distribution. | More complex implementation and may still encounter performance issues in certain scenarios. |
+
+#### 6.2 Hash Tables in Java
+
+###### 6.2.1 Declaring Hash Tables
+
+In Java, the `Map` interface represents a contract for creating hash tables rather than a class. This interface provides method declarations without implementations, which are supplied by classes adhering to the interface. One crucial implementation of the `Map` interface in Java is the `HashMap` class, found in the `java.util` package. 
+
+To create a hash map, you can use the `Map` interface and initialize an object with an implementation like `HashMap`. The `Map` interface requires two generic parameters to specify the types of keys and values, typically using wrapper classes for primitive types.
+
+```java
+Map<Integer, String> hashMap = new HashMap<>();
+```
+
+###### 6.2.2 Useful Methods
+
+Internally, a hash table uses an array to store objects. The operations supported by hash tables include:
+
+| Method     | Description                            |
+| ---------- | -------------------------------------- |
+| `put()`    | Inserts an item into the hash table.   |
+| `get()`    | Retrieves an item from the hash table. |
+| `remove()` | Removes an item from the hash table.   |
+
+These operations run with a time complexity of O(1) because the hash function directly determines the memory location of the object, eliminating the need to iterate over an entire array of objects. Additionally:
+
+| Method            | Description                                                                                                                                |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `containsKey()`   | Checks if the hash table contains a specific key, also running in O(1) time as it uses the hash function to find the key's position.       |
+| `containsValue()` | Checks if the hash table contains a specific value, running in O(n) time because it must traverse all the values stored in the hash table. |
+
+###### 6.2.3 Iterating over Hash Tables
+
+To iterate over the values of a `HashMap` in Java with a for-each loop, you can use the `entrySet()` or `keySet()` methods of the `HashMap` class. The `entrySet()` method allows access to key-value pairs and provides additional methods like `getValue()`, `getKey()`, and `setValue()`. These methods facilitate efficient traversal and manipulation of the key-value pairs stored in the hash map.
+
+#### 6.3 Sets in Java
+
+###### 6.3 Declaring Sets
+
+Sets are similar data structures similar to hash tables that only contains keys and no values. They don't allow duplicate keys. In Java, the `Set` interface represents a contract for creating sets rather than a class. This interface provides method declarations without implementations, which are supplied by classes adhering to the interface. One crucial implementation of the `Set` interface in Java is the `HashSet` class, found in the `java.util` package.
+
+To create a hash map, you can use the `Set` interface and initialize an object with an implementation like `HashSet`. The `Set` interface requires a generic parameters to specify the key type, typically using wrapper classes for primitive types.
+
+```java
+Set<Integer> set = new HashSet<>();
+```
+
+## 7. Binary Trees
+
+#### 7.1 Binary Trees in Algorithmics
+
+Arrays, LinkedLists, Stacks, Queues, and Hash Tables are all examples of linear data structures, which can be visualized as sequences of items arranged one after another. However, computer science also includes non-linear data structures, with one of the most common being trees. A tree is a data structure that organizes items hierarchically. These elements are referred to as nodes, and the connections between them are called edges. Each node contains a value, and the top node is known as the root. Nodes connected to the root or other nodes are called child nodes, and their connecting nodes are the parent nodes. Nodes without any children are referred to as leaves. Trees are particularly useful for representing hierarchical data.
+
+In a binary tree, each parent node has up to two child nodes. A special type of binary tree is the binary search tree, where the left child node is always smaller than the parent node, and the right child node is always larger. Binary trees support several efficient operations:
+
+| Methods    | Description                                                 |
+| ---------- | ----------------------------------------------------------- |
+| `lookup()` | This operation allows for quick value searches.             |
+| `insert()` | This operation enables quick insertion of values.           |
+| `delete()` | This operation allows for the efficient deletion of values. |
+
+In all of these operations at each step half of the potential search items are discarded, resulting in a logarithmic time complexity of O(log n). These operations make binary trees more efficient than arrays and linked lists, particularly for dynamic data sets where frequent insertions, deletions, and lookups are required.
