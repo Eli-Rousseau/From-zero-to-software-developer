@@ -335,3 +335,75 @@ In a binary tree, each parent node has up to two child nodes. A special type of 
 | `delete()` | This operation allows for the efficient deletion of values. |
 
 In all of these operations at each step half of the potential search items are discarded, resulting in a logarithmic time complexity of O(log n). These operations make binary trees more efficient than arrays and linked lists, particularly for dynamic data sets where frequent insertions, deletions, and lookups are required.
+
+#### 7.2 Tree Traversal Strategies
+
+Tree traversal strategies can be broadly categorized into two main types: breadth-first traversal and depth-first traversal.
+
+###### 7.2.1 Breadth-First Traversal (Level Order Traversal)
+
+In this strategy, all nodes at the same level are visited before moving on to nodes at the next level. Essentially, the tree is traversed level by level, starting from the root and moving downwards.
+
+###### 7.2.2 Depth-First Traversal
+
+This strategy involves exploring as far down a branch as possible before backtracking. Depth-first traversal is further divided into three types:
+
+1. **Pre-order Traversal**: Root, Left, Right order.
+
+2. **In-order Traversal**: Left, Root, Right order. This traversal method results in nodes being visited in ascending order.
+
+3. **Post-order Traversal**: Left, Right, Root order.
+
+###### 7.2.3 Recursion
+
+Recursion is a powerful programming technique that allows for repetition without using explicit iteration. It involves a method calling itself within its own implementation to repeat a part of the program. A crucial aspect of recursion is the base condition, which ensures that the recursive calls eventually terminate. Without this base condition, the method would continue to call itself indefinitely, leading to a stack overflow error.
+
+In Java, recursive calls are managed using a stack data structure. Each time a recursive method is invoked, a new frame is added to the stack to keep track of the current state of the method. When the base condition is met, the stack begins to unwind, and the program proceeds to resolve each recursive call in reverse order. Recursion is particularly useful for implementing algorithms, such as Depth-First Traversal in tree structures.
+
+###### 7.2.4 Tree Height and Depth
+
+The concepts of tree height and tree depth are fundamental in understanding tree data structures. 
+
+- The depth of a node is defined by its distance from the root. The root node has a depth of 0, its direct children have a depth of 1, and this pattern continues down to the leaves.
+
+- The height of a tree, on the other hand, is measured from the leaves up to the root. To determine the height of a node, one counts the longest path from that node down to a leaf. The height of the tree is the height of the root node. 
+
+To find the height of a tree, one can use a Depth-First Traversal (DFS) strategy, which explores each branch of the tree as far as possible before backtracking, ensuring that the longest path from the root to a leaf is measured.
+
+## 8. AVL Trees
+
+#### 8.1 Balanced vs Unbalanced Trees
+
+In a Binary Search Tree, most operations can run in logarithmic time complexity, but this efficiency is only maintained when the tree is balanced. A balanced tree is defined by the property that the difference in height between the left and right subtrees of any node is less than or equal to one. 
+
+However, not all Binary Search Tree are balanced. In a right-skewed binary tree, most nodes have only a right child, leading to an unbalanced structure where the tree resembles a linked list leaning to the right. Similarly, in a left-skewed binary tree, most nodes have only a left child, creating a linked-list-like structure leaning to the left. These skewed trees do not function efficiently as BSTs, as they degrade to linear time complexity for operations, similar to linked lists.
+
+#### 8.2 Self-Balancing Trees
+
+To address this issue, AVL trees were introduced as the first self-balancing binary search trees. AVL trees automatically maintain balance after each insertion or deletion by ensuring that the height difference between the left and right subtrees of any node remains less than or equal to one. When an imbalance is detected, AVL trees use rotations to restore balance. 
+
+###### 8.2.1 Rotations
+
+There are four types of rotations used in AVL trees:
+
+1. **Left (LL) Rotation**:
+   
+   - Used when the imbalance occurs at the right child node connected to the right subtree, creating a right-skewed tree.
+   - The parent node is rotated to become the left subtree of the child node.
+
+2. **Right (RR) Rotation**:
+   
+   - Used when the imbalance occurs at the left child node connected to the left subtree, creating a left-skewed tree.
+   - The parent node is rotated to become the right subtree of the child node.
+
+3. **Left-Right (LR) Rotation**:
+   
+   - Used when the imbalance occurs at the left child node connected to the right subtree.
+   - First, a left rotation is performed on the left child node, creating a left-skewed tree, followed by a right rotation on the parent node.
+
+4. **Right-Left (RL) Rotation**:
+   
+   - Used when the imbalance occurs at the right child node connected to the left subtree.
+   - First, a right rotation is performed on the right child node, creating a right-skewed tree, followed by a left rotation on the parent node.
+
+These rotations ensure that AVL trees remain balanced, maintaining the logarithmic time complexity for operations and optimizing the tree's performance.
