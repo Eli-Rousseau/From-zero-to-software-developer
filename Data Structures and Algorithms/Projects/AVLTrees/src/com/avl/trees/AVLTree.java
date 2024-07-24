@@ -1,7 +1,5 @@
 package com.avl.trees;
 
-import javax.xml.transform.Source;
-
 public class AVLTree {
 
     private class AVLNode {
@@ -38,30 +36,48 @@ public class AVLTree {
         else if (value > root.value) {
             root.rightChildNode = insert(root.rightChildNode, value);
         }
-        root.height = Math.max(height(root.leftChildNode), height(root.rightChildNode)) + 1;
 
-        balance(root);
+        setHeight(root);
 
-        return root;
+        return balance(root);
     }
 
-    private void balance(AVLNode root) {
+    private AVLNode balance(AVLNode root) {
         if (isLeftSkewed(root)) {
             if (balanceFactor(root.leftChildNode) < 0) {
-                System.out.println("Left rotation on" + root.leftChildNode);
+                root.leftChildNode = rotateLeft(root.leftChildNode);
             }
-            System.out.println("Right rotation on" + root);
+            return rotateRight(root);
         }
         else if (isRightSkewed(root)) {
             if (balanceFactor(root.rightChildNode) > 0) {
-                System.out.println("Right rotation on" + root.rightChildNode);
+                root.rightChildNode = rotateRight(root.rightChildNode);
             }
-            System.out.println("Left rotation on" + root);
+            return rotateLeft(root);
         }
+        return root;
     }
 
-    private AVLNode leftRotate(AVLNode root) {
+    private AVLNode rotateLeft(AVLNode root) {
+        var newRoot = root.rightChildNode;;
+        root.rightChildNode = newRoot.leftChildNode;
+        newRoot.leftChildNode = root;
+        setHeight(root);
+        setHeight(newRoot);
+        return newRoot;
+    }
 
+    private AVLNode rotateRight(AVLNode root) {
+        var newRoot = root.leftChildNode;
+        root.leftChildNode = newRoot.rightChildNode;
+        newRoot.rightChildNode = root;
+        setHeight(root);
+        setHeight(newRoot);
+        return newRoot;
+    }
+
+    private void setHeight(AVLNode node) {
+        node.height = Math.max(height(node.leftChildNode), height(node.rightChildNode)) + 1;
     }
 
     private int height(AVLNode node) {

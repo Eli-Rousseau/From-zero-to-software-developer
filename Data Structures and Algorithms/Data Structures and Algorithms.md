@@ -407,3 +407,27 @@ There are four types of rotations used in AVL trees:
    - First, a right rotation is performed on the right child node, creating a right-skewed tree, followed by a left rotation on the parent node.
 
 These rotations ensure that AVL trees remain balanced, maintaining the logarithmic time complexity for operations and optimizing the tree's performance.
+
+## 9. Heap Trees
+
+#### 9.1 The Heap Properties
+
+A heap is a special type of binary tree characterized by two main properties. First, it is a complete tree, meaning every level of the tree, except possibly the last, is fully filled with nodes, and all nodes are as far left as possible. Second, it adheres to the heap property, where the value of each node is greater than or equal to the values of its child nodes. Depending on whether the root holds the largest or smallest value, we refer to the tree as a max heap or a min heap, respectively.
+
+Heaps are particularly useful in sorting data, graph algorithms for finding the shortest path between nodes, and implementing priority queues.
+
+#### 9.2 Operations on Heap Trees
+
+To construct a heap, we start by populating the tree with values while ensuring compliance with the heap property. Beginning with the root value, child nodes are added. If a child node's value is larger than the parent node's, it violates the heap property, and the child value must be moved up, a process known as "bubbling up." The time complexity of bubbling up is O(log(n)) because it involves traversing part of the tree up to its height, requiring at most O(log(n)) comparisons.
+
+Nodes can also be removed from a heap, typically starting with the root. The root is replaced by the last value in the tree, and if this new root value is smaller than its child nodes, it violates the heap property. To correct this, we perform "bubbling down," swapping the parent node with its largest child node until the heap property is restored. This process also has a time complexity of O(log(n)), as the value can traverse the tree's height.
+
+Finding the maximum value in a heap is efficient, running in constant time O(1), since it is always located at the root of the tree.
+
+#### 9.3 Creating Heap Trees
+
+Compared to other binary search trees, heap trees offer a unique advantage in terms of memory storage. Instead of implementing recursive instances, heap trees can be efficiently stored as arrays. In this array representation, the root is stored at the first index. The indices of the left and right child nodes can be calculated using simple arithmetic: the left child of a parent at index *(i)* is located at *(2i + 1)*, and the right child is at *(2i + 2)*. Conversely, to find the parent of a node at index *(i)*, the formula *((i - 1) / 2)* is used. This array-based implementation significantly reduces memory overhead and simplifies the management of heap structures.
+
+#### 9.4 Sorting items with Heap Trees
+
+In a max heap tree, the largest number is always located at the root. When the root is removed from the heap, the next largest value moves up to take its place. By performing sequential removal operations on the max heap tree until it is empty, you can obtain a sorted array of the items stored in the tree in descending order. This process effectively sorts the elements by continually removing the maximum value and rebalancing the heap in a time complexity of O(log(n)).
