@@ -431,3 +431,75 @@ Compared to other binary search trees, heap trees offer a unique advantage in te
 #### 9.4 Sorting items with Heap Trees
 
 In a max heap tree, the largest number is always located at the root. When the root is removed from the heap, the next largest value moves up to take its place. By performing sequential removal operations on the max heap tree until it is empty, you can obtain a sorted array of the items stored in the tree in descending order. This process effectively sorts the elements by continually removing the maximum value and rebalancing the heap in a time complexity of O(log(n)).
+
+### 10 Tries
+
+#### 10. Autocompletion with Tries
+
+Tries are a type of non-binary tree data structure where each node can have multiple child nodes. Tries are particularly useful for auto-completion tasks because they allow for the storage of millions of words and enable super-fast lookups. They efficiently identify words with the same prefix by structuring each node to potentially have up to 26 child nodes, corresponding to the letters of the alphabet. 
+
+#### 10.2 Operations on Tries
+
+The root node of a trie is typically null or an empty character, indicating the starting point for all different words, as no tree can have 26 distinct roots. This empty root allows any word to start from a unified starting point. When looking up a word in a trie, each index of the word corresponds to traversing a maximum of 26 nodes, resulting in a lookup time complexity of O(L), where L represents the length of the word. This is significantly more efficient compared to arrays, where the time complexity for lookup is O(n), with n being the number of elements in the array.
+
+Inserting and deleting operations in a trie also involve traversing a branch corresponding to the word's length, both achieving a time complexity of O(L). This makes tries an effective data structure for tasks requiring quick and efficient word retrieval based on prefixes.
+
+#### 10.3 Tries Traversal
+
+There are two primary ways to traverse a trie: pre-order and post-order traversal. 
+
+In pre-order traversal, each node is visited before its children. This method is particularly useful for inserting a word into a trie, as it allows you to establish the correct node structure from the root down to the leaves.
+
+In post-order traversal, the process starts at the deepest nodes and moves sequentially back up the structure. This approach is beneficial for deleting a word from a trie, ensuring that nodes are only removed after their children have been processed.
+
+## 11. Graphs
+
+#### 11.1 Graphs Structure
+
+Graphs are used to represent connected objects, making them ideal for depicting networks. By using a graph, one can visualize how objects are connected and assess the strength of these connections. Graphs, like trees, consist of nodes (or vertices) and edges. Mathematically, a tree is a type of graph without any cycles. Unlike trees, graphs do not have a root, and nodes can be connected to any other node without restrictions on the number of connections or edges a node can have. Nodes directly connected to each other are called adjacent or neighboring nodes. If the edges have directions, it is a directed graph; otherwise, it is an undirected graph. Connections between nodes can have weights representing the strength of a particular connection.
+
+#### 11.2 Implementing Graphs
+
+There are two main ways to implement graphs in code: using an adjacency matrix or an adjacency list.
+
+###### 11.2.1 Adjacency Matrix
+
+An adjacency matrix is a two-dimensional array where nodes are represented in both rows and columns, indicating the source and target nodes for directed connections. If two nodes are connected, their intersection is marked, typically with a 1 or a Boolean value. The space complexity of an adjacency matrix is \(O(v^2)\), where \(v\) is the number of vertices. 
+
+- **Adding a Node**: Adding a node requires updating both rows and columns, resulting in a time complexity of \(O(v^2)\). Preallocating a large matrix can mitigate the need to copy data but wastes memory.
+- **Removing a Node**: Removing a node involves copying connections to a smaller matrix, also with a time complexity of \(O(v^2)\).
+- **Adding/Removing a Connection**: Changing the value of a connection is efficient, with a time complexity of \(O(1)\), by using a hash table to find indices.
+- **Querying a Connection**: Similar to adding/removing a connection, querying a connection also takes \(O(1)\) time.
+- **Finding Neighbors**: Finding all neighbors of a node requires iterating over each value in the array, with a time complexity of \(O(v)\).
+
+###### 11.2.2 Adjacency List
+
+An adjacency list uses an array of linked lists, where each array element represents a node and its linked list contains its adjacent nodes. Node identifiers are stored in a hash table for quick access. The space complexity is \(O(v + e)\), where \(e\) is the number of edges.
+
+- **Adding a Node**: This operation has a time complexity of \(O(1)\).
+- **Removing a Node**: Removing a node requires updating the adjacency list and all occurrences of the node in other lists, with a time complexity of \(O(v + e)\) or \worst-case (O(v^2)\) in dense graphs.
+- **Adding an Edge**: Adding an edge involves checking for its existence and then adding it, with a worst-case time complexity of \(O(v)\) in dense graphs.
+- **Removing an Edge**: Removing an edge also involves checking for its existence and removing it, with a worst-case time complexity of \(O(v)\) in dense graphs.
+- **Finding an Edge**: Similar to adding/removing an edge, finding an edge takes \(O(v)\) time in the worst case.
+
+###### 11.2.3 Choosing Between Adjacency Matrix and Adjacency List
+
+When dealing with very dense graphs, both the adjacency matrix and adjacency list approaches approximate the same space complexity. However, the adjacency matrix tends to perform better in adding, removing, or querying edges due to its constant time complexities (\(O(1)\)). For less dense graphs, an adjacency list is preferable due to its lower space complexity and efficient handling of sparse connections.
+
+#### 11.3 Traversal Strategies in Graphs
+
+In tree algorithms, traversal strategies such as breadth-first and depth-first rely on the leaf and root structure inherent to trees. However, graphs do not have leaves or roots, allowing traversal to start from any node within a connected network. 
+
+###### 11.3.1 Depth-First Traversal
+
+The depth-first traversal algorithm can be initiated from any starting node in a graph. From the chosen node, the algorithm explores all its child nodes and recursively applies the same strategy to each of these child nodes. If a specific node is found to be a child of multiple parent nodes, there is no need to explore its child nodes again. This helps in avoiding redundant traversal and ensures efficient exploration of the graph.
+
+###### 11.3.2 Breadth-First Traversal
+
+The breadth-first traversal algorithm involves visiting a node and then all its neighbors before proceeding further. This can be implemented using a queue, where the neighbors of the currently visited node are added to the queue to be processed next. Like in depth-first traversal, if a specific node is found to be a child of multiple parent nodes, there is no need to explore its child nodes again. This ensures that each node is visited only once, maintaining efficiency and preventing redundancy.
+
+###### 11.3.3 Topological Sorting Algorithm
+
+Topological sorting algorithms are used to determine the correct order to process nodes in a graph, which is particularly useful in applications such as scheduling jobs to complete a project. It's important to note that these algorithms might produce different but equivalent results, as the order of some nodes may not depend on each other.  Topological sorting only works on graphs without cycles, known as directed acyclic graphs (DAGs). This ensures that the algorithm can start from a beginning node and end at a terminal node without encountering any cyclic connections.
+
+To achieve topological sorting, a depth-first traversal strategy can be employed from the initail node. The terminal node is added to a stack structure once it is reached. The algorithm then backtracks, adding parent nodes to the stack in sequence.  Before adding the initial node to the stack, the algorithm ensures that all its child nodes have been processed. This can be done by traversing the graph from the initial node to the terminal node using depth-first traversal. The process is repeated until all nodes have been visited and added to the stack.
