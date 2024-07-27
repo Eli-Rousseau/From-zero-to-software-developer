@@ -503,3 +503,161 @@ The breadth-first traversal algorithm involves visiting a node and then all its 
 Topological sorting algorithms are used to determine the correct order to process nodes in a graph, which is particularly useful in applications such as scheduling jobs to complete a project. It's important to note that these algorithms might produce different but equivalent results, as the order of some nodes may not depend on each other.  Topological sorting only works on graphs without cycles, known as directed acyclic graphs (DAGs). This ensures that the algorithm can start from a beginning node and end at a terminal node without encountering any cyclic connections.
 
 To achieve topological sorting, a depth-first traversal strategy can be employed from the initail node. The terminal node is added to a stack structure once it is reached. The algorithm then backtracks, adding parent nodes to the stack in sequence.  Before adding the initial node to the stack, the algorithm ensures that all its child nodes have been processed. This can be done by traversing the graph from the initial node to the terminal node using depth-first traversal. The process is repeated until all nodes have been visited and added to the stack.
+
+#### 11.4 Detecting Cycles in a Directed Graph
+
+To detect a cycle in a directed graph, one can use three sets to track the nodes' states: the "all" set containing all nodes initially, the "visiting" set for nodes currently being explored, and the "visited" set for nodes fully explored. The process begins by placing all nodes in the "all" set and selecting a node to move to the "visiting" set. From there, the child nodes of this node are also moved to the "visiting" set, and this process continues recursively. When a node with no more child nodes to visit is reached, all nodes in the "visiting" set are moved to the "visited" set in a manner where the last visited node is the first moved. This process is repeated until all nodes are transferred from the "all" set to the "visiting" and then to the "visited" set. A cycle is detected if a node in the "visiting" set has a child node that is also in the "visiting" set, indicating a node is revisited before its exploration is complete, thus confirming the presence of a cycle.
+
+## 12. Undirected Graphs
+
+#### 12.1 Shortest Path Algorithm
+
+Weighted graphs are characterized by weights assigned to their edges, often representing magnitudes such as distances. A common application of weighted graphs is finding the shortest path between two nodes. Dijkstra's Shortest Path Algorithm is a classical algorithm for this purpose. It involves generating an information table for a node, storing the distances from the node to itself and to all other nodes in the graph, initially set to unknown. The algorithm then compares the distances from the node being processed to its connected child nodes in the undirected graph. If a shorter distance is found, it updates the table and records the current node as the previous node. This table is only updated if the new distance is smaller than the previously recorded distance.
+
+Based on the information table, the algorithm selects the node with the smallest distance as the new central node and updates the distances for its unvisited child nodes. This process repeats until all nodes have been visited. At the end, the information table allows reconstruction of the shortest path from any node to the start node using the recorded distances and node references. Dijkstra's algorithm is considered a greedy algorithm, as it finds an optimal solution by selecting the optimal choice at each step.
+
+To implement Dijkstra's algorithm, one needs to use a breadth-first traversal strategy. This can be achieved using a queue, where child nodes are visited in the order they are added. However, since nodes must be visited based on the smallest distance recorded in the information table, a priority queue is more suitable than a regular queue for this purpose.
+
+#### 12.2 Detecting Cycles in a Undirected Graph
+
+To detect a cycle in an undirected graph, one needs to keep track of a set of visited nodes. This can be achieved using depth-first traversal starting from any node. As you traverse each child node, you must pass along the origin of the parent node to ensure you are not simply returning in the original direction. Each traversed node is added to the visited set. If, during this traversal, you encounter a node that is already in the visited set, a cycle is detected.
+
+#### 12.3 Spanning Trees
+
+In graph algorithms, a spanning tree is a subgraph of an undirected graph that includes all the nodes of the original graph, ensuring they remain connected, and is itself a tree. Essentially, a spanning tree connects all the vertices together without forming any cycles and uses the minimum number of edges, which is \(n - 1\), where \(n\) is the number of nodes. If there are fewer than \(n - 1\) edges, not all nodes are connected.
+
+###### 12.3.1 Minimum Spanning Tree
+
+A minimum spanning tree (MST) is a type of spanning tree where the total weights on the edges are minimized. Prim's algorithm is a classical method used to find an MST in a weighted undirected graph. The algorithm starts with an arbitrary node and selects the edge with the minimum weight to create the initial tree. Sequentially, it traverses the edge with the minimum weight that connects the tree to a node not yet included in the tree, extending the tree by adding the smallest connected edge. This greedy approach ensures that all nodes are visited, resulting in a minimum spanning tree. For the implementation, a priority queue can be used to keep track of the connected edges and their weights at each iteration of the algorithm.
+
+## 13. Sorting Algorithms
+
+Sorting algorithms are fundamental to computer science and are used to organize data in a specified order, typically in ascending or descending order. It is essential to have an understanding of how these algorithms work, how they are implemented and their time complexity.
+
+#### 13.1 Bubble Sort
+
+###### 13.1 Bubble Sorting Process
+
+Bubble sort is the simplest of all sorting algorithms and is used to sort an array of numbers in increasing order. The algorithm works by repeatedly scanning the array from left to right and swapping adjacent items if they are out of order. This process is repeated multiple times until all the numbers are correctly ordered. After each full scan, the next largest number will be correctly placed at the end of the array, a process often referred to as "bubbling up." 
+
+###### 13.1.2 Time complexity
+
+In the best-case scenario, where the array is already sorted, bubble sort requires only a single pass over the array, giving it a time complexity of O(n). In the worst-case scenario, where the array is in reverse order, it requires n passes over the array, with n being the number of elements in the array. Each pass involves n comparisons, making the time complexity O(n^2) in the worst case.
+
+#### 13.2 Selection Sort
+
+###### 13.2.1 Select Sorting Process
+
+Selection sort is a sorting algorithm used to arrange an array of numbers in ascending order. It works by repeatedly passing over the array, selecting the smallest item from the unsorted portion, and placing it at the front by swapping it with the item at that position. This process creates a sorted section at the front and an unsorted section at the back of the array. In each subsequent iteration, the next smallest item in the unsorted part is found and swapped into place next to the sorted section. This continues until the entire array is sorted.
+
+###### 13.2.2 Time Complexity
+
+Both the best-case and worst-case scenarios require n passes over the array, with n being the number of elements in the array. In each pass, finding the smallest value in the unsorted part requires n operations. Consequently, the time complexity of the selection sort algorithm is O(n^2) in both best and worst cases.
+
+#### 13.3 Insertion Sort
+
+###### 13.3.1 Insert Sorting Process
+
+Insertion sort is a sorting algorithm used to arrange an array of numbers in ascending order. It works by iterating through the array, taking each new number, and inserting it into its correct position within an already sorted section of the array. To insert a new number, the algorithm scans the sorted part of the array to find the appropriate spot and shifts the larger numbers to the right to make space. During each iteration, a number from the unsorted part of the array is selected and inserted into the sorted part.
+
+###### 13.3.2 Time Complexity
+
+Reading the input array and selecting a new number requires n iterations, where n is the number of items in the array. If no items need to be shifted, the operation takes O(1) time; otherwise, in the worst case, shifting all items takes O(n) time. Consequently, the time complexity of the insertion sort algorithm is O(n) in the best case and O(n^2) in the worst case.
+
+#### 13.4 Merge Sort
+
+###### 13.4.1 Merge Sorting Process
+
+Merge sort is a sorting algorithm used to arrange an array of numbers in ascending order. It follows the divide-and-conquer principle, which involves breaking down a list into smaller sublists, sorting these sublists, and then merging them back together to form a complete sorted list. 
+
+The process begins by splitting the array in half, which requires additional space allocation in memory as the numbers from the original array are copied into new subarrays. These subarrays are recursively divided until each array consists of a single, indivisible number. During the backtracking phase of recursion, the arrays are merged in the correct order. This merging operation involves iterating over the items in both subarrays and adding the smallest number from either array to a new merged array. This process continues until all the numbers are sorted and merged back into a single array.
+
+###### 13.4.2 Time and Space Complexity
+
+The merge sort algorithm operates by recursively dividing the problem into smaller subproblems, each of which is solved and then combined to solve the larger problem. The dividing process resembles tree traversal, which has a time complexity of O(log(n)). The merging part requires iterating over all elements of the subarrays, taking O(n) operations. Therefore, the overall time complexity of merge sort is O(n log(n)). However, this efficiency comes at the cost of additional memory allocation, as splitting the array into subarrays requires the same space as the original array, resulting in a space complexity of O(n).
+
+#### 13.5 Quick Sort
+
+###### 13.5.1 Quick Sorting Process
+
+Quick sort is a widely used sorting algorithm for arranging an array of numbers in ascending order. Unlike merge sort, it does not require additional space for subarrays, as it sorts the array in place. The process begins by selecting a pivot, which is often the last number of the array. The array is then rearranged so that all numbers smaller than the pivot are placed to its left, and all numbers larger are placed to its right, effectively positioning the pivot in its correct sorted location. 
+
+###### 13.5.2 Time and Space Complexity
+
+The partitioning of the array involves iterating through the array with a pointer marking the boundary between smaller and larger numbers. Each time a number smaller than the pivot is encountered, it is swapped to the left partition, moving the boundary forward. This partitioning takes O(n) operations. 
+
+Quick sort then recursively applies the same process to the subarrays on the left and right of the pivot. Ideally, the pivot divides the array into two roughly equal halves, leading to a time complexity of O(log(n)) for the recursive steps. In the best-case scenario, this results in an overall time complexity of O(n log(n)). However, in the worst-case scenario, such as when the array is already sorted, the pivot ends up at one extreme of the array, resulting in a time complexity of O(n^2). 
+
+###### 13.5.3 Merge vs Quick Sorting
+
+Despite the potential for a worst-case scenario, quick sort is often preferred over merge sort because it generally performs better in practice and requires less memory. The algorithm does not need extra space for subarrays, although the recursive calls do use some stack space. Nonetheless, quick sort's in-place sorting and typical performance advantages make it a popular choice for many programming languages and frameworks.
+
+#### 13.6 Counting Sort
+
+###### 13.6.1 Counting Sorting Process
+
+The sorting algorithms we've discussed so far are categorized as comparison sorting. However, there are other sorting algorithms that do not rely on comparisons but use basic arithmetic. One such algorithm is counting sort, which is used to arrange an array of numbers in ascending order. Counting sort assumes that the array contains numbers within a specific range, from 0 to k, where k largest value in the input array. The algorithm works by computing the frequencies of all the numbers from 0 to k in the array. These counts are stored in a separate array, which is constructed by scanning the input array. Once the counts array is populated, it is used to update the input array according to the number of counts for each value. 
+
+###### 13.6.2 Time and Space Complexity
+
+Populating the counts array requires scanning the entire input array, which takes O(n) operations, where n is the number of elements in the input array. Updating the input array based on the counts array takes O(k) operations. Thus, the time complexity of counting sort is O(n + k). 
+
+Counting sort is more efficient than comparison-based algorithms, which typically run in O(n^2) or O(n log(n)), but this speed comes at the cost of increased memory usage. The space complexity of counting sort depends on the maximum value in the input array, as extra memory is required to store the counts array.
+
+#### 13.7 Bucket Sort
+
+###### 13.7.1 Bucket Sorting Process
+
+Bucket sort is a sorting algorithm that distributes numbers into several buckets, sorts each bucket using another sorting algorithm, and then combines the sorted buckets. The process begins by declaring a new array containing linked lists, which represent the buckets. Numbers from the input array are added to the appropriate linked list (bucket) based on their value. This is often done by dividing each number by the total number of buckets and using the quotient as the index for the bucket array. Once all numbers are distributed, each bucket is sorted individually using another sorting algorithm. The sorted buckets are then merged back into the input array, ensuring that all elements are in order.
+
+###### 13.7.2 Time and Space Complexity
+
+The initial distribution of numbers into buckets involves scanning the input array, which takes O(n) operations. Iterating over the bucket arrays is an O(k) operation, where k is the number of buckets. The time complexity for sorting the buckets depends on the chosen sorting algorithm and can range from O(1) to O(n^2). Therefore, the best-case time complexity for bucket sort is O(n + k + 1), simplified to O(n), and the worst-case time complexity is O(n + k + n^2), simplified to O(n^2). 
+
+Allocating more buckets can reduce the sorting time per bucket but increases the space complexity. Assuming an array of k buckets, the space complexity involves allocating an array of k items, with each item being a linked list. The total number of items across these linked lists equals the original number n of elements in the input array. Hence, the space complexity is O(n + k).
+
+## 14. Searching Algorithms
+
+#### 14.1 Linear Search
+
+###### 14.1.1 Linear Search Process
+
+Linear search is the simplest searching algorithm. It involves iterating over each item in an array and comparing it to the target search item. If a match is found, the index of that item is returned; if no match is found after examining all elements, the algorithm returns -1. 
+
+###### 14.2.2 Time Complexity
+
+The time complexity of linear search is O(n), as each element must be checked, making it straightforward but not the most efficient for large datasets.
+
+#### 14.2 Binary Search
+
+###### 14.2.1 Binary Search Process
+
+Binary search is faster than linear search but only works on sorted arrays. The algorithm begins by examining the middle value of the array. By comparing the target search value to this middle value, the search scope can be reduced to either the left or right half of the array, depending on whether the target is smaller or larger. This process is repeated, each time halving the search window, until the target value is found or the window is empty. 
+
+###### 14.2.2 Time and Space Complexity
+
+This divide-and-conquer approach effectively breaks the problem into smaller subproblems, resembling a tree traversal, and operates with a time complexity of O(log(n)). 
+
+There are two main ways to implement binary search: iteratively and recursively. The iterative approach has a space complexity of O(1) since it uses a constant amount of memory. In contrast, the recursive implementation requires additional memory for each recursive call, leading to a space complexity of O(log(n)).
+
+#### 14.3 Ternary Search
+
+###### 14.3.1 Ternary Search Process
+
+Ternary search is an algorithm that only works on sorted arrays. It divides the input array into three equal parts by calculating the partition size as the array length divided by three. These partitions create three windows of the same size. The target value is then compared to the two middle values, determining which of the three partitions contains the target. This process is repeated recursively until the target value is found. 
+
+###### 14.3.2 Time Complexity
+
+The time complexity of ternary search is O(log3(n)). Despite this, ternary search is not necessarily more efficient than binary search, which has a time complexity of O(log2(n)). This is because ternary search involves more comparisons per iteration. In binary search, each step involves three comparisons (equal to, smaller than, and larger than the middle value). Ternary search, on the other hand, requires these comparisons for two middle points at each iteration, leading to more comparisons overall. Consequently, binary search is generally faster than ternary search for the same array size, as has been mathematically demonstrated.
+
+#### 14.4 Jump Search
+
+###### 14.4.1 Jump Search Process
+
+Jump search is an algorithm designed for sorted arrays, where the array is divided into blocks. The algorithm works by comparing the last value of each block with the target value. If the target value is smaller, the algorithm moves to the next block. This process continues until a block is found where the last value is larger than the target value. At this point, a linear search is performed within the identified block to find the target value. The optimal block size for jump search is the square root of the total number of elements, n, in the input array. This means each block contains roughly the square root of n elements.
+
+###### 14.4.2 Time Complexity
+
+The time complexity of jump search involves two main steps: jumping between blocks and performing the linear search within a block. Both steps require approximately the square root of n operations. Therefore, the overall time complexity of jump search is O(√n).
+
+#### 14.5 Exponential Search
