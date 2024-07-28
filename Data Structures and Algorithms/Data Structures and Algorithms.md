@@ -661,3 +661,42 @@ Jump search is an algorithm designed for sorted arrays, where the array is divid
 The time complexity of jump search involves two main steps: jumping between blocks and performing the linear search within a block. Both steps require approximately the square root of n operations. Therefore, the overall time complexity of jump search is O(√n).
 
 #### 14.5 Exponential Search
+
+###### 14.5.1 Exponential Search Process
+
+Exponential search is an algorithm designed for sorted arrays. It starts by dividing the input array into small windows and gradually increases the window size. Initially, the algorithm examines a small window at the beginning of the array. If the target search value is larger than the last number of the current window, the window size is doubled, starting again from the beginning of the array. This doubling process continues until a window is found where the last number is larger than the target value. Once such a window is identified, a linear search is performed within the bounds of the last two window sizes to locate the target value. 
+
+###### 14.5.2 Time Complexity
+
+The time complexity of exponential search is logarithmic, as it effectively uses a form of binary search within the identified window.
+
+## 15. String Manipulations
+
+#### 15.1 Static String Manipulation Utilities
+
+When creating string manipulation utilities, it is conventional to use static methods. This approach allows for direct invocation of the methods from their class without needing to create an instance specifically for string manipulation. By using static methods, one can perform string operations more efficiently and conveniently, as the methods can be called directly on the class itself.
+
+#### 15.2 Strings are Immutable
+
+In most programming languages, such as Java, strings are immutable. This means that any manipulation of a string, such as modifying a character or concatenating another string, actually creates a new string in memory rather than altering the original. This immutability can lead to increased space and time complexity for string operations. To address this, Java offers the `StringBuilder` class, which provides a mutable alternative to strings. `StringBuilder` allows for efficient string manipulation without the overhead of creating new strings in memory, thus improving performance for operations that involve frequent modifications to strings.
+
+#### 15.3 Counting Character Occurences with ASCII Code
+
+A very useful feature for counting the number of occurrences of characters in a string involves using their ASCII codes as indices to initialize an array of occurrences. Since there are a total of 256 characters in the ASCII table, one can initialize an integer array of length 256, which will be filled with zero values. For each character in the string, its ASCII code is used as the index in the array to update its occurrence count by one. This approach effectively eliminates the need for a hash table to count occurrences, as the character itself serves as the index.
+
+#### 15.4 Useful Methods for String Manipulations
+
+The table below provides a concise overview of the methods and their functionalities for string manipulation.
+
+| Method              | Description                                                                                                              |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `split()`           | Splits a string into an array of substrings based on a specified delimiter.                                              |
+| `join()`            | Joins an array of strings into a single string, with a specified delimiter separating each element.                      |
+| `charAt()`          | Returns the character at a specified index in a string.                                                                  |
+| `trim()`            | Removes leading and trailing whitespace from a string.                                                                   |
+| `toCharArray()`     | Converts a string into an array of characters.                                                                           |
+| `substring()`       | Returns a substring from the original string, based on specified start and end indices.                                  |
+| `toUpperCase()`     | Converts all characters in a string to uppercase.                                                                        |
+| `toLowerCase()`     | Converts all characters in a string to lowercase.                                                                        |
+| `Arrays.asList()`   | Converts an array to a list, providing a fixed-size list backed by the specified array.                                  |
+| `Arrays.toString()` | Converts an array to a string representation, where each element is separated by commas and enclosed in square brackets. |
