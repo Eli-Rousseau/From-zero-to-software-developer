@@ -1,9 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="bf728914-4ea6-4c63-8476-84c576efe9a3" name="Default Changelist" comment="" />
-    <ignored path="$PROJECT_DIR$/out/" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <list default="true" id="bf728914-4ea6-4c63-8476-84c576efe9a3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/chainOfResponsibility/DataReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/chainOfResponsibility/DataReader.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/command/VideoEditor.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/command/VideoEditor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/iterator/Iterator.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/iterator/Iterator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/iterator/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/iterator/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/iterator/Product.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/iterator/Product.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/iterator/ProductCollection$ListArrayIterator.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/iterator/ProductCollection$ListArrayIterator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/iterator/ProductCollection.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/iterator/ProductCollection.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/mediator/Button.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/mediator/Button.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/mediator/CheckBox.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/mediator/CheckBox.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/mediator/TextBox.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/mediator/TextBox.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/mediator/UIControl.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/mediator/UIControl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/memento/Document.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/memento/Document.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/observer/StatusBar.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/observer/StatusBar.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/observer/Stock.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/observer/Stock.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/observer/StockListView.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/observer/StockListView.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/state/BicyclingMode.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/state/BicyclingMode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/state/DirectionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/state/DirectionService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/state/DrivingMode.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/state/DrivingMode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/state/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/state/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/state/TransitMode.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/state/TransitMode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/state/TravelMode.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/state/TravelMode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/state/WalkingMode.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/state/WalkingMode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/strategy/ChatClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/strategy/ChatClient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/template/Window.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/visitor/FactSegment.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/visitor/FactSegment.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/visitor/FormatSegment.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/visitor/FormatSegment.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/visitor/Segment.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/visitor/Segment.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/visitor/WavFile.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/out/production/Exercises/com/codewithmosh/visitor/WavFile.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/src/com/codewithmosh/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/src/com/codewithmosh/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/src/com/codewithmosh/command/VideoEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/src/com/codewithmosh/command/VideoEditor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/src/com/codewithmosh/strategy/ChatClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/src/com/codewithmosh/strategy/ChatClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Exercises/src/com/codewithmosh/template/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Exercises/src/com/codewithmosh/template/Window.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/chainOfResponsibility/DataReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/chainOfResponsibility/DataReader.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/chainOfResponsibility/DataReaderFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/chainOfResponsibility/DataReaderFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/chainOfResponsibility/Demo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/chainOfResponsibility/Demo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/chainOfResponsibility/ExcelReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/chainOfResponsibility/ExcelReader.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/chainOfResponsibility/NumbersReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/chainOfResponsibility/NumbersReader.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/chainOfResponsibility/QuickBooksReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/chainOfResponsibility/QuickBooksReader.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/command/AbstractUndoableCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/command/AbstractUndoableCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/command/Command.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/command/Command.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/command/Demo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/command/Demo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/command/History.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/command/History.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/command/SetContrastCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/command/SetContrastCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/command/SetTextCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/command/SetTextCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/command/UndoCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/command/UndoCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/command/UndoableCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/command/UndoableCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/command/VideoEditor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/command/VideoEditor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/iterator/Demo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/iterator/Demo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/iterator/Iterator.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/iterator/Iterator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/iterator/Product.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/iterator/Product.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/iterator/ProductCollection$ListIterator.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/iterator/ProductCollection$ListIterator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/iterator/ProductCollection.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/iterator/ProductCollection.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/mediator/Button.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/mediator/Button.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/mediator/CheckBox.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/mediator/CheckBox.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/mediator/EventHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/mediator/EventHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/mediator/SignUpDialogBox.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/mediator/SignUpDialogBox.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/mediator/TextBox.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/mediator/TextBox.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/mediator/UIControl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/mediator/UIControl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/memento/Demo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/memento/Demo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/memento/Document.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/memento/Document.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/memento/DocumentMemento.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/memento/DocumentMemento.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/memento/History.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/memento/History.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/observer/Demo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/observer/Demo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/observer/Observer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/observer/Observer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/observer/StatusBar.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/observer/StatusBar.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/observer/Stock.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/observer/Stock.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/observer/StockListView.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/observer/StockListView.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/state/Bicyling.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/state/Bicyling.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/state/Demo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/state/Demo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/state/DirectionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/state/DirectionService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/state/Driving.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/state/Driving.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/state/Transit.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/state/Transit.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/state/TravelMode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/state/TravelMode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/state/Walking.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/state/Walking.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/strategy/AES.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/strategy/AES.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/strategy/ChatClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/strategy/ChatClient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/strategy/DES.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/strategy/DES.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/strategy/Demo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/strategy/Demo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/strategy/EncryptionAlgorithm.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/strategy/EncryptionAlgorithm.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/template/ChatWindow.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/template/ChatWindow.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/template/Demo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/template/Demo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/template/Window.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/template/Window.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/visitor/AudioFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/visitor/AudioFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/visitor/Demo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/visitor/Demo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/visitor/FactSegment.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/visitor/FactSegment.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/visitor/FormatSegment.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/visitor/FormatSegment.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/visitor/NoiseReductionFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/visitor/NoiseReductionFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/visitor/NormalizeFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/visitor/NormalizeFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/visitor/ReverbFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/visitor/ReverbFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/visitor/Segment.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/visitor/Segment.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/visitor/WavFile.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Solutions/com/codewithmosh/visitor/WavFile.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/codewithmosh/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/codewithmosh/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Design Patterns Pictures/Memento pattern.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../Design Patterns Pictures/Memento pattern.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Design Patterns Pictures/State pattern.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../Design Patterns Pictures/State pattern.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Design Patterns.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Design Patterns.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Projects/DesignPatterns/src/design/patterns/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Projects/DesignPatterns/src/design/patterns/Main.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -23,6 +127,9 @@
         <option value="Class" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -81,11 +188,15 @@
       </list>
     </option>
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="23" />
     <option name="width" value="967" />
     <option name="height" value="568" />
   </component>
+  <component name="ProjectId" id="2juvYSBaiwE34zLi0StTu2UiIfm" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -124,21 +235,20 @@
       <pane id="PackagesPane" />
     </panes>
   </component>
-  <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/From zero to software developer/Design Patterns/Design Patterns - Part 1/Solutions"
+  }
+}]]></component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.codewithmosh.Main" />
@@ -156,6 +266,7 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>

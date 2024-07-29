@@ -309,7 +309,11 @@ There are three main types of relationship depictions in UML:
 
 3. Dependency relationships are represented by a directed dashed arrow between two classes, pointing to a reference of a class. This often occurs when a method parameter in one class refers to another class.
 
-## 3. Memento Pattern
+*In a UML relationship the arrow shows where the relationship comes from. The relationship from class 1 comes from class 2.*
+
+## 3. Behavioral Design Patterns
+
+#### 3.1 Memento Pattern
 
 The Memento Design Pattern is used for implementing undo mechanisms by capturing and restoring an object's state. Below you can see how the design pattern is laid out in UML.
 
@@ -317,7 +321,7 @@ The Memento Design Pattern is used for implementing undo mechanisms by capturing
 
 A notable aspect of the Memento Pattern is **the separation of responsibilities among classes**. The `Editor` class is dedicated to manipulating the content of an editor and creating `EditorState` instances that capture the current state of the editor. These state instances are then managed by the `History` class, which tracks changes over time and facilitates undoing operations by reverting to previous states. When an undo operation is required, a state instance from `History` is passed back to the `Editor` class to restore its previous state. This separation of concerns allows each class to focus on a specific responsibility, thereby enhancing code maintainability and clarity. The entire sequence of actions can be orchestrated from the main method in the `Main` class, ensuring a clean and organized implementation of the undo mechanism.
 
-## 4. State Pattern
+#### 3.2 State Pattern
 
 The State design pattern is a behavioral design pattern that allows an object to change its behavior when its internal state changes. This can be the case, for example, when selecting different mouse types in an image editor that allows the user to use a mouse to colour, select, or even resize an image. Depending on the state of the mouse the action one can perform with the mouse will be different. Below you can see how the design pattern is laid out in UML.
 
@@ -325,10 +329,66 @@ The State design pattern is a behavioral design pattern that allows an object to
 
 The State Pattern is notable for its use of polymorphism to represent different states of an object, such as the state of a mouse. By defining an abstract state class, each concrete state of the mouse can implement its own behavior. This approach ensures that each state handles its specific actions, making the system more modular and maintainable. When an instance of a particular state is created, it determines the behavior of the associated object, such as how a mouse interacts with an image. This design pattern eliminates the need for extensive if-else statements within the image class to check and adapt behavior based on state. Instead, the behavior is directly managed by the state instances. An image instance can be created within the main method of the Main class, and the appropriate mouse state can be assigned to it, dictating its behavior. This design pattern makes it easier **to extend for new mouse states by preventing class modification**, since modifications are based on the mouse state.
 
-## 5. Iterator Design Pattern
+#### 3.3 Iterator Design Pattern
 
 The Iterator design pattern is particularly useful when you need to traverse a list of items declared in another class without concerning yourself with the internal implementation of that list. For example when iterating over a browser history. Below you can see how the design pattern is laid out in UML.
 
 ![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Iterator%20pattern.png)
 
 The Iterator Pattern is notable for its **separation of responsibilities between classes**. On one end, there is the `BrowserHistory` class, which manages the browser history, and on the other, there is the `Iterator` class, which enables iteration over an instance of `BrowserHistory`. The `Iterator` interface defines key methods such as `hasNext()`, which checks if there are more items, `current()`, which returns the current item, and `next()`, which advances to the next item in the list. This pattern ensures that the `Iterator` is defined as an interface to serve as a contract for different implementations of the iterator. This flexibility allows for iteration over various types of collections, whether they are lists, arrays, hash tables, or any other iterable objects. The iterator implementations can be declared as nested subclasses within the `BrowserHistory` object, giving them access to all private fields of the `BrowserHistory` instance. This approach ensures that any **changes made to the implementation will result in compilation errors only in the class where the implementation was altered**, without affecting other classes in the program.
+
+#### 3.4 Strategy Pattern
+
+The Strategy design pattern is useful for handling different behaviors based on user input. For instance, in an image storage class, the user might need to specify the filter and compression strategy to be applied when storing an image. Below you can see how the design pattern is laid out in UML.
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Strategy%20pattern.png)
+
+The Strategy design pattern promotes **the separation of responsibility** by delegating different behaviors to distinct classes. In an image storage system, the `ImageStorage` class is responsible for storing uploaded images, while separate `Compress` and `Filter` classes handle compression and filtering, respectively. By defining interfaces for each strategy, multiple implementations can be created. This allows **new strategies to be added without altering the existing codebase**. The `ImageStorage` class only needs a method to accept instances of the `Filter` and `Compressor` interfaces, which can then be supplemented from the main function in the Main class. Unlike the State design pattern, where an object maintains a single state represented by a subclass of its interface, the Strategy pattern uses different strategy objects to represent various behaviors, providing a robust mechanism for dynamic behavior selection.
+
+#### 3.5 Template Pattern
+
+The Template Method pattern is beneficial when dealing with instances of different classes that represent tasks performed on an object, where these tasks require the same logic for defining and processing the object in their constructor methods. This design pattern ensures that the common logic is centralized and reused, allowing each class to focus solely on their specific tasks without duplicating the shared logic. Below you can see how the design pattern is laid out in UML.
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Template%20pattern.png)
+
+The Template Method design pattern uses an abstract parent class, often called Task, which implements a common `execute()` method. This method outlines the steps of that must be shared among all task subclasses, such as registering the task in an audit trail. The Task class defines an abstract `doExecute()` method, which is called within the non-abstract `execute()` method. Subclasses extending the Task class must implement `doExecute()`, providing the specific behavior for each task. Alternatively, `doExecute()` can have a default implementation, allowing subclasses to override it as needed. These default implementations are referred to as hooks. To ensure the `execute()` method handles the common logic and not the `doExecute()` implementation directly, `doExecute()` can be made protected to hide its implementation details. When operations need to be performed on the same object, the object can be passed from the subclass to the parent class using the `super` keyword in Java. This pattern ensures that subclasses focus on their specific tasks while **reusing the common logic defined in the parent class and allows to extend to new task subclasses.**
+
+#### 3.6 Command Pattern
+
+The Command design pattern aims to decouple commands from their concrete implementations. This is particularly useful in scenarios such as building a graphical user interface (GUI) framework, where the specific actions associated with button clicks are not known upfront. By using this pattern, the button interface is separated from its actual implementation, allowing the implementation to be delegated to the user. This enables the user to define the specific action to be executed when a button is clicked, promoting flexibility and extensibility in the design. Below you can see how the design pattern is laid out in UML.
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Command%20pattern.png)
+
+The Command design pattern is notable for separating an instance from its action, enhancing flexibility and modularity. In this pattern, a button class receives a command instance, which follows the `execute()` contract defined by the `Command` interface. Each specific command instance provides its own implementation of the `execute()` method. But instead of directly providing an command implementation, this implmentation will be delegated to the service that uses the command instance by supplying a service instance that performs the specific action. This separation allows for **easy addition of new commands without altering the existing code**, promoting extensibility and maintaining a clean code structure.
+
+###### 3.6.1 Composite Command
+
+The Command design pattern also enables the implementation of a composite command, an independent class that implements the Command interface and can execute multiple commands in sequence. This is achieved by maintaining a history list of commands. When the composite command is called, it iterates over the list, executing each command in order. This approach allows for complex operations to be composed from simpler commands.
+
+###### 3.6.2 Undoable Command Pattern
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Undoable%20command%20pattern.png)
+
+The Command design pattern can be extended to support undoable commands, similar to the Memento design pattern. By introducing a `History` class that keeps track of all executed commands, each command instance can call the `execute()` method while being recorded in the history. An `UndoCommand` class, implementing the `Command` interface, can then use the `History` instance to retrieve and undo the last executed command via the unexecute() method. This extension adds the ability to reverse actions, enhancing flexibility and control over command execution.
+
+#### 3.7 Observer Design Pattern
+
+The Observer design pattern is utilized when changes in the state of an object need to be communicated to other dependent objects. For instance, when the value of a data source object changes, it might immediately affect other instances such as a spreadsheet or chart. In this pattern, the dependent objects, known as observers, are registered to receive updates from the subject (the object whose state changes). When the subject's state changes, it automatically notifies all registered observers, ensuring that they remain synchronized with the subject's current state. Below you can see how the design pattern is laid out in UML.
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Observer%20pattern.png)
+
+When the state of an object changes, it can notify different dependent objects using the Observer design pattern. This pattern involves a mutable object extending three methods: addObserver(), removeObservers(), and notifyObserver(), which manage the registration and notification of observer instances. These methods can be inherited by the mutable class rather than being directly implemented within it. Each time the state of the object is altered, the notifyObservers() method is called to alert all registered observers. Subsequently, each observer can interact with the mutable object to retrieve the updated value and refresh its own state, a process known as pull-style interaction. This method allows the retrieval process to remain adaptable over time. The design pattern enables the notifier behavior of the mutable class to be extended flexibly, allowing any number of observer objects to be notified when changes occur in the data source values. This ensures a scalable and maintainable approach to handling dependencies and state changes in complex systems.
+
+#### 3.8 Mediator Pattern
+
+The Mediator Design Pattern is utilized when multiple instances need to collaborate, such as in a graphical user interface where various components must communicate their states in real-time for proper functionality. This pattern facilitates the exchange of state information between objects, allowing them to interact and coordinate without direct dependencies on each other. Instead, a mediator object handles the communication, promoting a more modular and maintainable system. Below you can see how the design pattern is laid out in UML.
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Mediator%20pattern.png)
+
+In complex systems, particularly graphical user interfaces, the problem of numerous interactions between different objects can arise, complicating maintenance and scalability. The Mediator Design Pattern addresses this by creating an abstract class, known as a mediator, which facilitates communication among instances. Instead of objects interacting directly, they communicate through the mediator. Each object only needs to know about the mediator, not the other objects. The mediator features a changed() method, which takes an object as a parameter. When an object's state or behavior changes and needs to be communicated, this change is sent to the mediator via the changed() method. All interaction logic is encapsulated within the mediator instance. Instead of implementing this logic directly in the mediator, another class implements the mediator's abstract class contract. This setup allows for **the creation of different types of mediator instances with varying implementations** as needed, promoting flexibility and extensibility in the system.
+
+###### 3.8.1 Enhancing the Mediator Pattern with the Observer Pattern
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Mediator&Observer%20pattern.png)
+
+The classical Mediator Design Pattern can lead to a bulky changed method filled with numerous if-else statements to determine which controller has changed. This issue can be addressed by combining the Mediator Pattern with the Observer Pattern. In this enhanced approach, the mediator acts as an observer. Each time an instance changes, it notifies the mediator, eliminating the need for the instance to reference the mediator directly. This method simplifies the interaction logic, as the mediator automatically receives updates about state changes. To implement this, instances must include an attach() method, similar to the mutable object in the Observer Pattern, ensuring that changes in state trigger notifications to the mediator. In this design pattern, the term "event handlers" is frequently employed rather than "observers," as event handlers facilitate the management of specific instance states.

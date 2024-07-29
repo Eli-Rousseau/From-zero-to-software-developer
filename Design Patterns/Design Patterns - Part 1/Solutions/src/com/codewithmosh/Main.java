@@ -1,7 +1,7 @@
 package com.codewithmosh;
 
 import com.codewithmosh.mediator.SignUpDialogBox;
-import com.codewithmosh.visitor.Demo;
+import com.codewithmosh.command.Demo;
 
 public class Main {
 
