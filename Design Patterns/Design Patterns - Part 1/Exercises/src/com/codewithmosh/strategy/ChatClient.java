@@ -1,14 +1,14 @@
 package com.codewithmosh.strategy;
 
 public class ChatClient {
-    private Encryption encryptionAlgorithm;
+    private EncryptionStrategy encryptionAlgorithm;
 
-    public ChatClient(Encryption encryptionAlgorithm) {
+    public ChatClient(EncryptionStrategy encryptionAlgorithm) {
         this.encryptionAlgorithm = encryptionAlgorithm;
     }
 
-    public void send(String filename) {
-        encryptionAlgorithm.encrypt(filename);
+    public void send(String message) {
+        encryptionAlgorithm.encryption(message);
         System.out.println("Sending the encrypted message...");
     }
 }

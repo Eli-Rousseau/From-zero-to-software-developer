@@ -3,12 +3,12 @@ package com.codewithmosh.state;
 public class DirectionService {
     private TravelMode travelMode;
 
-    public int getEta() {
-        return travelMode.getEta();
+    public int getEta(TravelMode mode) {
+        return mode.getEta();
     }
 
-    public int getDirection() {
-        return travelMode.getDirection();
+    public int getDirection(TravelMode mode) {
+        return mode.getDirection();
     }
 
     public TravelMode getTravelMode() {

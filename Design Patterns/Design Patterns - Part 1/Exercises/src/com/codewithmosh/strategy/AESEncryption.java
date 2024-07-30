@@ -1,8 +1,8 @@
 package com.codewithmosh.strategy;
 
-public class AESEncryption extends Encryption{
+public class AESEncryption implements EncryptionStrategy {
     @Override
-    public void encrypt(String filename) {
+    public void encryption(String message) {
         System.out.println("Encrypting message using AES");
     }
 }

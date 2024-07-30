@@ -20,8 +20,6 @@ public class VideoEditor {
         this.contrast = contrast;
     }
 
-    public String getText() { return text; }
-
     @Override
     public String toString() {
         return "VideoEditor{" +

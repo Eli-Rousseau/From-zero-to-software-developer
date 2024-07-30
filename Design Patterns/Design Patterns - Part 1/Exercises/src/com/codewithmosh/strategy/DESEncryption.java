@@ -1,8 +1,8 @@
 package com.codewithmosh.strategy;
 
-public class DESEncryption extends Encryption {
+public class DESEncryption implements EncryptionStrategy {
     @Override
-    public void encrypt(String filename) {
+    public void encryption(String message) {
         System.out.println("Encrypting message using DES");
     }
 }

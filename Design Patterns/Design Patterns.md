@@ -303,55 +303,125 @@ A class in UML is represented as a box divided into three sections: the top sect
 
 There are three main types of relationship depictions in UML:
 
-1. Inheritance relationships are represented by a directed arrow between two classes, pointing to the class from which another class inherits or extends.
+1. Inheritance relationships are represented by a directed arrow between two classes. In this scenario, the first class (where the arrow starts) inherits from or extends the second class (where the arrow ends). The second class is often an abstract class or an interface in design patterns.
 
-2. Composition relationships are represented by a directed arrow with a diamond at the base between two classes, pointing to the class from which the origin class is composed of. This indicates that one class contains a field that is an instance of another class.
+2. Composition relationships are depicted by a directed arrow with a diamond at the base between two classes. In this case, the first class (where the arrow starts) contains a field that references an instance of the second class (where the arrow ends).
 
-3. Dependency relationships are represented by a directed dashed arrow between two classes, pointing to a reference of a class. This often occurs when a method parameter in one class refers to another class.
-
-*In a UML relationship the arrow shows where the relationship comes from. The relationship from class 1 comes from class 2.*
+3. Dependency relationships are shown by a directed dashed arrow between two classes. Here, the first class (where the arrow starts) includes a method with a parameter whose type is an instance of the second class (where the arrow ends).
 
 ## 3. Behavioral Design Patterns
 
 #### 3.1 Memento Pattern
 
-The Memento Design Pattern is used for implementing undo mechanisms by capturing and restoring an object's state. Below you can see how the design pattern is laid out in UML.
+The Memento Design Pattern is particularly useful in scenarios where an application needs to provide a way to restore its previous state. This is commonly needed for implementing undo functionality in applications such as text editors, drawing programs, and games.
 
-![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Memento%20pattern.png)
+###### 3.1.1 Problem
 
-A notable aspect of the Memento Pattern is **the separation of responsibilities among classes**. The `Editor` class is dedicated to manipulating the content of an editor and creating `EditorState` instances that capture the current state of the editor. These state instances are then managed by the `History` class, which tracks changes over time and facilitates undoing operations by reverting to previous states. When an undo operation is required, a state instance from `History` is passed back to the `Editor` class to restore its previous state. This separation of concerns allows each class to focus on a specific responsibility, thereby enhancing code maintainability and clarity. The entire sequence of actions can be orchestrated from the main method in the `Main` class, ensuring a clean and organized implementation of the undo mechanism.
+The primary design problem that the Memento Pattern addresses is how to capture and restore an object's internal state without violating encapsulation. In other words, it allows an object's state to be saved externally in a way that the object itself does not have to expose its internal details to the outside world.
+
+###### 3.1.2 Solution
+
+The Memento Pattern solves this problem by introducing three key roles:
+
+1. **Originator**: This is the object whose state needs to be saved and restored. It knows how to create a memento containing a snapshot of its current state and how to restore its state from the memento.
+
+2. **Memento**: This is a value object that acts as a snapshot of the Originator's state. It is used to store the state and can be returned to the Originator to restore it. The Memento should be opaque and immutable to the Caretaker to prevent it from altering the state.
+
+3. **Caretaker**: This is responsible for keeping track of the mementos. It knows when to save a memento and when to restore one, but it should not modify the mementos' contents. It maintains a history of the states (typically a stack).
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Memento%20patter.png)
 
 #### 3.2 State Pattern
 
-The State design pattern is a behavioral design pattern that allows an object to change its behavior when its internal state changes. This can be the case, for example, when selecting different mouse types in an image editor that allows the user to use a mouse to colour, select, or even resize an image. Depending on the state of the mouse the action one can perform with the mouse will be different. Below you can see how the design pattern is laid out in UML.
+The State Design Pattern is particularly useful in scenarios where an object’s behavior needs to change based on its internal state. This pattern is ideal for applications where an object's state can change dynamically, influencing its behavior, such as user interfaces with different modes (e.g., a mouse in an image editor with different functionalities).
+
+###### 3.2.1 Problem
+
+The primary design problem that the State Pattern addresses is how to manage an object's behavior when it can be in different states without resorting to a complex and error-prone series of conditional statements. When an object's behavior is dependent on its state, using a series of `if-else` or `switch` statements can make the code hard to maintain and extend. The State Pattern aims to avoid these pitfalls by encapsulating the state-specific behavior within separate state objects.
+
+###### 3.2.2 Solution
+
+The State Pattern solves this problem by introducing three key roles:
+
+1. **Context**: This is the object whose behavior changes depending on its current state. It maintains a reference to an instance of a `State` subclass that represents the current state and delegates state-specific behavior to this instance.
+
+2. **State**: This is an abstract class or interface that defines the behavior that all concrete states must implement. It typically includes methods that correspond to the actions that can be performed based on the state.
+
+3. **ConcreteState**: These are specific implementations of the `State` interface. Each `ConcreteState` class represents a distinct state and implements the behavior associated with that state. 
+
+By encapsulating state-specific behavior within separate classes, the State Pattern allows for easier management of state transitions and promotes the addition of new states without modifying existing code. The `Context` class delegates tasks to the current `State`, which handles the appropriate actions. When the internal state changes, the `Context` simply switches to a different `ConcreteState` object, thereby changing its behavior.
 
 ![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\State%20pattern.png)
 
-The State Pattern is notable for its use of polymorphism to represent different states of an object, such as the state of a mouse. By defining an abstract state class, each concrete state of the mouse can implement its own behavior. This approach ensures that each state handles its specific actions, making the system more modular and maintainable. When an instance of a particular state is created, it determines the behavior of the associated object, such as how a mouse interacts with an image. This design pattern eliminates the need for extensive if-else statements within the image class to check and adapt behavior based on state. Instead, the behavior is directly managed by the state instances. An image instance can be created within the main method of the Main class, and the appropriate mouse state can be assigned to it, dictating its behavior. This design pattern makes it easier **to extend for new mouse states by preventing class modification**, since modifications are based on the mouse state.
+#### 3.3 Iterator Pattern
 
-#### 3.3 Iterator Design Pattern
+The Iterator Design Pattern is particularly useful when you need to traverse a collection of items without exposing the underlying representation of that collection. This pattern is ideal for situations where you want to iterate over a set of elements in a consistent manner, regardless of how those elements are stored, such as traversing a browser history or iterating over a list of objects.
 
-The Iterator design pattern is particularly useful when you need to traverse a list of items declared in another class without concerning yourself with the internal implementation of that list. For example when iterating over a browser history. Below you can see how the design pattern is laid out in UML.
+###### 3.3.1 Problem
+
+The primary design problem that the Iterator Pattern addresses is how to provide a uniform way to access the elements of a collection without exposing its internal structure. When a collection's implementation details are hidden, it can be challenging to traverse or manipulate its elements directly. Without an iterator, you might need to write complex code that interacts with the collection's internal details or rely on exposing internal mechanisms, which can compromise encapsulation and make the code harder to maintain.
+
+###### 3.3.2 Solution
+
+The Iterator Pattern solves this problem by introducing two key roles:
+
+1. **Iterator**: This is an interface or abstract class that defines methods for iterating over a collection. Key methods include:
+   
+   - `hasNext()`: Checks if there are more elements to iterate over.
+   - `current()`: Returns the current element in the iteration.
+   - `next()`: Advances to the next element and returns it.
+
+2. **Aggregate (or Collection)**: This is the interface or abstract class that defines a method to create an iterator. It typically includes a method like `createIterator()` that returns an instance of an `Iterator`.
+
+3. **ConcreteIterator**: This class implements the `Iterator` interface and provides the specific logic for iterating over the elements of a particular `Aggregate`. It keeps track of the current position within the collection.
+
+4. **ConcreteAggregate (or ConcreteCollection)**: This class implements the `Aggregate` interface and provides an implementation for creating an iterator. It contains the actual collection of items and returns a new instance of `ConcreteIterator` for traversing the collection.
+
+By separating the iteration logic from the collection itself, the Iterator Pattern allows for a clean and consistent way to access elements without exposing the collection's internal details. This separation promotes encapsulation and makes it easier to iterate over different types of collections. Additionally, this pattern supports multiple iterators over the same collection, which can be useful in various scenarios.
 
 ![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Iterator%20pattern.png)
 
-The Iterator Pattern is notable for its **separation of responsibilities between classes**. On one end, there is the `BrowserHistory` class, which manages the browser history, and on the other, there is the `Iterator` class, which enables iteration over an instance of `BrowserHistory`. The `Iterator` interface defines key methods such as `hasNext()`, which checks if there are more items, `current()`, which returns the current item, and `next()`, which advances to the next item in the list. This pattern ensures that the `Iterator` is defined as an interface to serve as a contract for different implementations of the iterator. This flexibility allows for iteration over various types of collections, whether they are lists, arrays, hash tables, or any other iterable objects. The iterator implementations can be declared as nested subclasses within the `BrowserHistory` object, giving them access to all private fields of the `BrowserHistory` instance. This approach ensures that any **changes made to the implementation will result in compilation errors only in the class where the implementation was altered**, without affecting other classes in the program.
-
 #### 3.4 Strategy Pattern
 
-The Strategy design pattern is useful for handling different behaviors based on user input. For instance, in an image storage class, the user might need to specify the filter and compression strategy to be applied when storing an image. Below you can see how the design pattern is laid out in UML.
+The Strategy Design Pattern is particularly useful in scenarios where you need to select an algorithm or behavior dynamically based on user input or other conditions. This pattern is ideal for situations where an object can perform various actions or operations, such as applying different filters or compression techniques to an image based on user preferences.
+
+###### 3.4.1 Problem
+
+The primary design problem that the Strategy Pattern addresses is how to manage and switch between different algorithms or behaviors without modifying the context class or the code that uses it. When an object needs to support multiple behaviors or strategies, embedding the logic for each behavior directly into the class can lead to a large and inflexible design. This approach can make it difficult to add new behaviors or to manage and extend existing ones. The Strategy Pattern aims to solve this by providing a way to define and encapsulate each behavior or algorithm in a separate class.
+
+###### 3.4.2 Solution
+
+The Strategy Pattern solves this problem by introducing three key roles:
+
+1. **Context**: This is the class that needs to use a strategy for performing a specific operation. It maintains a reference to a `Strategy` object and delegates the operation to this strategy. For example, in an image storage system, the `ImageStorage` class would be the context that delegates the actual filtering and compression to the strategy objects.
+
+2. **Strategy**: This is an interface or abstract class that defines the method(s) that concrete strategies must implement. This ensures that all strategies adhere to a common interface, allowing the context to interact with any strategy in a uniform way. For instance, the `Filter` and `Compressor` interfaces define methods that concrete filter and compression classes must implement.
+
+3. **ConcreteStrategy**: These are specific implementations of the `Strategy` interface. Each `ConcreteStrategy` class implements a particular algorithm or behavior. For example, `JPEGCompression` and `PNGCompression` would be concrete implementations of the `Compressor` interface, while `BlackAndWhiteFilter` and `SepiaFilter` would be implementations of the `Filter` interface.
+
+By defining each behavior or algorithm in a separate class, the Strategy Pattern allows for easy addition and modification of strategies without changing the `Context` class. The `Context` only needs to interact with the `Strategy` interface, which means new strategies can be introduced without altering existing code. This promotes flexibility and adherence to the open/closed principle, as the `Context` class remains closed for modification but open for extension with new strategies.
 
 ![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Strategy%20pattern.png)
 
-The Strategy design pattern promotes **the separation of responsibility** by delegating different behaviors to distinct classes. In an image storage system, the `ImageStorage` class is responsible for storing uploaded images, while separate `Compress` and `Filter` classes handle compression and filtering, respectively. By defining interfaces for each strategy, multiple implementations can be created. This allows **new strategies to be added without altering the existing codebase**. The `ImageStorage` class only needs a method to accept instances of the `Filter` and `Compressor` interfaces, which can then be supplemented from the main function in the Main class. Unlike the State design pattern, where an object maintains a single state represented by a subclass of its interface, the Strategy pattern uses different strategy objects to represent various behaviors, providing a robust mechanism for dynamic behavior selection.
+#### 3.5 Template Method Pattern
 
-#### 3.5 Template Pattern
+The Template Method Pattern is particularly useful when dealing with multiple classes that represent tasks performed on an object, where these tasks share a common structure but differ in specific details. This pattern is ideal for scenarios where you want to centralize shared logic and ensure that the common steps are consistently applied across various subclasses.
 
-The Template Method pattern is beneficial when dealing with instances of different classes that represent tasks performed on an object, where these tasks require the same logic for defining and processing the object in their constructor methods. This design pattern ensures that the common logic is centralized and reused, allowing each class to focus solely on their specific tasks without duplicating the shared logic. Below you can see how the design pattern is laid out in UML.
+###### 3.5.1 Problem
+
+The primary design problem that the Template Method Pattern addresses is how to define the skeleton of an algorithm in a superclass while allowing subclasses to provide specific implementations for some of the steps. When tasks share a common structure but differ in certain details, duplicating the shared logic in each subclass can lead to code duplication and increased maintenance overhead. The Template Method Pattern aims to solve this problem by centralizing the common logic in a single place and allowing subclasses to implement the specific behavior as needed.
+
+###### 3.5.2 Solution
+
+The Template Method Pattern solves this problem by introducing two key roles:
+
+1. **AbstractClass**: This is the abstract parent class that defines the template method (`execute()`) outlining the steps of the algorithm. This method includes the common logic and calls one or more abstract or hook methods that subclasses must implement or can override. The abstract class ensures that the shared logic is centralized and reused.
+
+2. **ConcreteClass**: These are subclasses that extend the `AbstractClass` and provide specific implementations for the abstract or hook methods. Each `ConcreteClass` focuses solely on the specific details of the task, relying on the `AbstractClass` to handle the common steps.
+
+The `AbstractClass` includes an abstract method (`doExecute()`) that subclasses must implement, ensuring that each subclass can provide its specific behavior. Additionally, the `AbstractClass` can define hook methods with default implementations that subclasses can override if needed. By defining the template method (`execute()`) in the `AbstractClass`, the pattern ensures that the common steps are consistently applied, and only the specific behavior is implemented in the subclasses.
 
 ![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Template%20pattern.png)
-
-The Template Method design pattern uses an abstract parent class, often called Task, which implements a common `execute()` method. This method outlines the steps of that must be shared among all task subclasses, such as registering the task in an audit trail. The Task class defines an abstract `doExecute()` method, which is called within the non-abstract `execute()` method. Subclasses extending the Task class must implement `doExecute()`, providing the specific behavior for each task. Alternatively, `doExecute()` can have a default implementation, allowing subclasses to override it as needed. These default implementations are referred to as hooks. To ensure the `execute()` method handles the common logic and not the `doExecute()` implementation directly, `doExecute()` can be made protected to hide its implementation details. When operations need to be performed on the same object, the object can be passed from the subclass to the parent class using the `super` keyword in Java. This pattern ensures that subclasses focus on their specific tasks while **reusing the common logic defined in the parent class and allows to extend to new task subclasses.**
 
 #### 3.6 Command Pattern
 
@@ -392,3 +462,19 @@ In complex systems, particularly graphical user interfaces, the problem of numer
 ![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Mediator&Observer%20pattern.png)
 
 The classical Mediator Design Pattern can lead to a bulky changed method filled with numerous if-else statements to determine which controller has changed. This issue can be addressed by combining the Mediator Pattern with the Observer Pattern. In this enhanced approach, the mediator acts as an observer. Each time an instance changes, it notifies the mediator, eliminating the need for the instance to reference the mediator directly. This method simplifies the interaction logic, as the mediator automatically receives updates about state changes. To implement this, instances must include an attach() method, similar to the mutable object in the Observer Pattern, ensuring that changes in state trigger notifications to the mediator. In this design pattern, the term "event handlers" is frequently employed rather than "observers," as event handlers facilitate the management of specific instance states.
+
+#### 3.9 Chain of Responsibility Pattern
+
+The Chain of Responsibility design pattern is used for processing a sequence of requests, allowing multiple handlers to handle a request without specifying the handler explicitly. This pattern is particularly useful in scenarios such as handling HTTP requests in a web server, where multiple checks and processes need to be applied sequentially. For example, when an HTTP request is received from a client, it may need to undergo several stages of validation and processing, such as authentication to verify the request is sent by a valid user, logging to keep track of the request details, and compression to optimize data transmission. Each of these tasks can be handled by separate handlers in the chain, ensuring that each responsibility is managed independently and allowing for flexible and reusable code. Below you can see how the design pattern is laid out in UML.
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Chain%20of%20Resposbilities%20pattern.png)
+
+To adhere to the Single Responsibility Principle and avoid tightly coupling classes, tasks should be declared in separate classes. Instead of handling the chain of events directly within the web server class, one should use interfaces for these events, enabling the construction of a flexible pipeline for handling a chain of requests. By doing so, the system remains open for extension but closed for modification, ensuring that new handlers can be added without altering existing code. In this setup, a request is first sent to an authenticator instance. If authentication succeeds, the request is passed to a logger instance, and then to a compressor instance, in a sequential manner. Each instance only knows about the next instance to pass the request to, ensuring a loosely coupled chain of responsibilities. If an instance fails, such as authentication, the chain is broken, preventing further processing. This is achieved by having the web server communicate with an abstract handler class that declares a next field and a handle method. Each event class implements this handle function in its own way and uses the next field to pass the request to the next class in the chain of responsibilities.
+
+#### 3.10 Visitor Pattern
+
+The Visitor design pattern allows for adding new operations to an object structure without modifying the structure itself. This is useful, for example, when working with an HTML document containing various types of HtmlNodes, such as titles and bodies, on which one might want to perform operations like highlighting or converting to plain text. If each type of HtmlNode were to implement its own operations, it would require creating iterators for each individual operation, violating the open-closed principle. Instead, by using the Visitor design pattern, one can implement a single iteration that allows any operation to be performed on these HtmlNodes. This pattern enables the addition of new operations without altering the HtmlDocument class, maintaining its integrity and promoting flexibility and extensibility. Below you can see how the design pattern is laid out in UML.
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Visitor%20pattern.png)
+
+In the Visitor design pattern, the HtmlNode interface enforces a contract for different operations on all HtmlNode instances, which are responsible for their concrete implementations. To maintain the principle of separation of responsibilities, an Operation interface should be used. This interface should declare multiple apply() methods, one for each type of HtmlNode, resulting in method overloading where each method has the same name but different parameters. Concrete classes can implement this Operation interface, centralizing the logic for a single operation. This design is effective when the object structure is stable, but new operations need to be implemented. Instead of having operation methods directly in the HtmlNode interface, an execute() method that takes an Operation instance is preferred. HtmlNode instances can then use the apply() method of the Operation instance to perform the desired operation, ensuring that all logic related to a specific operation is located in a single place.

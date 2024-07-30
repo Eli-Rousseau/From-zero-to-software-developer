@@ -1,6 +1,7 @@
 package com.codewithmosh.state;
 
-public class TransitMode implements TravelMode{
+public class Transit implements TravelMode {
+
     @Override
     public int getEta() {
         System.out.println("Calculating ETA (transit)");
