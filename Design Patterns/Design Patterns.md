@@ -425,56 +425,116 @@ The `AbstractClass` includes an abstract method (`doExecute()`) that subclasses 
 
 #### 3.6 Command Pattern
 
-The Command design pattern aims to decouple commands from their concrete implementations. This is particularly useful in scenarios such as building a graphical user interface (GUI) framework, where the specific actions associated with button clicks are not known upfront. By using this pattern, the button interface is separated from its actual implementation, allowing the implementation to be delegated to the user. This enables the user to define the specific action to be executed when a button is clicked, promoting flexibility and extensibility in the design. Below you can see how the design pattern is laid out in UML.
+The Command Design Pattern is particularly useful in scenarios where you need to decouple the sender of a request from its receiver. This pattern is ideal for situations such as building graphical user interfaces (GUIs), where actions triggered by user inputs (like button clicks) need to be flexibly assigned and modified.
+
+###### 3.6.1 Problem
+
+The primary design problem that the Command Pattern addresses is how to encapsulate a request as an object, thereby allowing for parameterization of clients with queues, requests, and operations. When a request needs to be made, it is often useful to have a way to encapsulate the request itself, so it can be handled, stored, and passed around independently of the actual sender and receiver. Without this pattern, the sender and receiver can become tightly coupled, leading to code that is difficult to extend and maintain.
+
+###### 3.6.2 Solution
+
+The Command Pattern solves this problem by introducing four key roles:
+
+1. **Command**: This is an interface or abstract class that defines the `execute()` method. All concrete commands implement this interface and provide specific implementations for the `execute()` method.
+
+2. **ConcreteCommand**: These are implementations of the `Command` interface. Each `ConcreteCommand` class binds together a specific action on a receiver. It implements the `execute()` method to perform the action, often delegating the work to a receiver.
+
+3. **Invoker**: This is the object that knows how to execute a command but doesn't know the specifics of the command's actions. It maintains a reference to a `Command` object and calls the `execute()` method on it.
+
+4. **Receiver**: This is the object that performs the actual work when the command's `execute()` method is called. The `ConcreteCommand` calls methods on the receiver to carry out the request.
+
+By decoupling the object that invokes the operation from the one that performs it, the Command Pattern promotes flexibility and extensibility. New commands can be added without altering the existing code, and commands can be parameterized with different receivers and operations, making it easy to extend and modify the system.
 
 ![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Command%20pattern.png)
 
-The Command design pattern is notable for separating an instance from its action, enhancing flexibility and modularity. In this pattern, a button class receives a command instance, which follows the `execute()` contract defined by the `Command` interface. Each specific command instance provides its own implementation of the `execute()` method. But instead of directly providing an command implementation, this implmentation will be delegated to the service that uses the command instance by supplying a service instance that performs the specific action. This separation allows for **easy addition of new commands without altering the existing code**, promoting extensibility and maintaining a clean code structure.
+### 3.7 Observer Pattern
 
-###### 3.6.1 Composite Command
+The Observer Design Pattern is particularly useful in scenarios where changes in the state of an object need to be communicated to and synchronized with multiple dependent objects. This pattern is ideal for applications where various components need to react to changes in a central data source, such as updating a user interface when the underlying data changes.
 
-The Command design pattern also enables the implementation of a composite command, an independent class that implements the Command interface and can execute multiple commands in sequence. This is achieved by maintaining a history list of commands. When the composite command is called, it iterates over the list, executing each command in order. This approach allows for complex operations to be composed from simpler commands.
+###### 3.7.1 Problem
 
-###### 3.6.2 Undoable Command Pattern
+The primary design problem that the Observer Pattern addresses is how to create a one-to-many dependency between objects so that when one object (the subject) changes its state, all its dependents (observers) are notified and updated automatically. Without this pattern, maintaining such dependencies would require tight coupling between the subject and its observers, making the system rigid and difficult to extend or modify.
 
-![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Undoable%20command%20pattern.png)
+###### 3.7.2 Solution
 
-The Command design pattern can be extended to support undoable commands, similar to the Memento design pattern. By introducing a `History` class that keeps track of all executed commands, each command instance can call the `execute()` method while being recorded in the history. An `UndoCommand` class, implementing the `Command` interface, can then use the `History` instance to retrieve and undo the last executed command via the unexecute() method. This extension adds the ability to reverse actions, enhancing flexibility and control over command execution.
+The Observer Pattern solves this problem by introducing three key roles:
 
-#### 3.7 Observer Design Pattern
+1. **Subject**: This is the object that holds the state and controls the process of notifying observers about state changes. It provides methods to add, remove, and notify observers (`addObserver()`, `removeObserver()`, `notifyObservers()`).
 
-The Observer design pattern is utilized when changes in the state of an object need to be communicated to other dependent objects. For instance, when the value of a data source object changes, it might immediately affect other instances such as a spreadsheet or chart. In this pattern, the dependent objects, known as observers, are registered to receive updates from the subject (the object whose state changes). When the subject's state changes, it automatically notifies all registered observers, ensuring that they remain synchronized with the subject's current state. Below you can see how the design pattern is laid out in UML.
+2. **Observer**: This is an interface or abstract class that defines the update method (`update()`). All concrete observers implement this interface to receive updates from the subject.
+
+3. **ConcreteObserver**: These are implementations of the `Observer` interface. Each concrete observer defines how it reacts to updates from the subject. When notified, it pulls the updated state from the subject and refreshes its own state accordingly.
+
+By implementing the Observer Pattern, the subject and its observers become loosely coupled. The subject does not need to know the details of its observers, only that they implement the `Observer` interface. Observers can be added or removed dynamically, and the system remains flexible and easy to extend.
 
 ![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Observer%20pattern.png)
 
-When the state of an object changes, it can notify different dependent objects using the Observer design pattern. This pattern involves a mutable object extending three methods: addObserver(), removeObservers(), and notifyObserver(), which manage the registration and notification of observer instances. These methods can be inherited by the mutable class rather than being directly implemented within it. Each time the state of the object is altered, the notifyObservers() method is called to alert all registered observers. Subsequently, each observer can interact with the mutable object to retrieve the updated value and refresh its own state, a process known as pull-style interaction. This method allows the retrieval process to remain adaptable over time. The design pattern enables the notifier behavior of the mutable class to be extended flexibly, allowing any number of observer objects to be notified when changes occur in the data source values. This ensures a scalable and maintainable approach to handling dependencies and state changes in complex systems.
-
 #### 3.8 Mediator Pattern
 
-The Mediator Design Pattern is utilized when multiple instances need to collaborate, such as in a graphical user interface where various components must communicate their states in real-time for proper functionality. This pattern facilitates the exchange of state information between objects, allowing them to interact and coordinate without direct dependencies on each other. Instead, a mediator object handles the communication, promoting a more modular and maintainable system. Below you can see how the design pattern is laid out in UML.
+The Mediator Design Pattern is particularly useful in scenarios where multiple objects need to communicate and collaborate but doing so directly would lead to a tangled and hard-to-maintain system. This pattern is ideal for applications like graphical user interfaces, where various components need to interact with each other frequently and in real-time.
 
-![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Mediator%20pattern.png)
+###### 3.8.1 Problem
 
-In complex systems, particularly graphical user interfaces, the problem of numerous interactions between different objects can arise, complicating maintenance and scalability. The Mediator Design Pattern addresses this by creating an abstract class, known as a mediator, which facilitates communication among instances. Instead of objects interacting directly, they communicate through the mediator. Each object only needs to know about the mediator, not the other objects. The mediator features a changed() method, which takes an object as a parameter. When an object's state or behavior changes and needs to be communicated, this change is sent to the mediator via the changed() method. All interaction logic is encapsulated within the mediator instance. Instead of implementing this logic directly in the mediator, another class implements the mediator's abstract class contract. This setup allows for **the creation of different types of mediator instances with varying implementations** as needed, promoting flexibility and extensibility in the system.
+The primary design problem that the Mediator Pattern addresses is how to manage communication between multiple objects without having them refer to each other directly. Direct interaction between objects creates dependencies that make the system complex, difficult to understand, and challenging to maintain. As the number of objects grows, the problem exacerbates, leading to a "spaghetti code" scenario where changes in one object can have unforeseen effects on others.
 
-###### 3.8.1 Enhancing the Mediator Pattern with the Observer Pattern
+###### 3.8.2 Solution
 
-![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Mediator&Observer%20pattern.png)
+The Mediator Pattern solves this problem by introducing a mediator object that centralizes the communication logic among interacting objects. This mediator handles all communication, ensuring that objects don't need to know about each other directly. The pattern involves three key roles:
 
-The classical Mediator Design Pattern can lead to a bulky changed method filled with numerous if-else statements to determine which controller has changed. This issue can be addressed by combining the Mediator Pattern with the Observer Pattern. In this enhanced approach, the mediator acts as an observer. Each time an instance changes, it notifies the mediator, eliminating the need for the instance to reference the mediator directly. This method simplifies the interaction logic, as the mediator automatically receives updates about state changes. To implement this, instances must include an attach() method, similar to the mutable object in the Observer Pattern, ensuring that changes in state trigger notifications to the mediator. In this design pattern, the term "event handlers" is frequently employed rather than "observers," as event handlers facilitate the management of specific instance states.
+1. **Mediator**: This is an abstract class or interface that defines the communication methods. It includes a method, typically called `changed()`, which takes an object as a parameter. This method is used by the objects to notify the mediator of any changes.
 
-#### 3.9 Chain of Responsibility Pattern
+2. **ConcreteMediator**: This class implements the Mediator interface. It encapsulates the interaction logic, coordinating the communication among the objects. It responds to the `changed()` notifications by handling the necessary interactions.
 
-The Chain of Responsibility design pattern is used for processing a sequence of requests, allowing multiple handlers to handle a request without specifying the handler explicitly. This pattern is particularly useful in scenarios such as handling HTTP requests in a web server, where multiple checks and processes need to be applied sequentially. For example, when an HTTP request is received from a client, it may need to undergo several stages of validation and processing, such as authentication to verify the request is sent by a valid user, logging to keep track of the request details, and compression to optimize data transmission. Each of these tasks can be handled by separate handlers in the chain, ensuring that each responsibility is managed independently and allowing for flexible and reusable code. Below you can see how the design pattern is laid out in UML.
+3. **Colleague**: These are the objects that need to communicate. Each colleague knows about the mediator but not about the other colleagues. They notify the mediator when their state changes, and the mediator handles the communication.
+
+By using the Mediator Pattern, the system becomes more modular and maintainable. The interaction logic is centralized within the mediator, making it easier to manage and modify. Objects become simpler, focusing only on their primary responsibilities and delegating communication concerns to the mediator.
+
+<img src="file:///D:/From%20zero%20to%20software%20developer/Design%20Patterns/Design%20Patterns%20Pictures/Mediator%20UML.drawio.png" title="" alt="" width="698">
+
+### 3.9 Chain of Responsibility Pattern
+
+The Chain of Responsibility Design Pattern is particularly useful in scenarios where a request needs to be processed by multiple handlers in a sequence, and where each handler can either process the request or pass it on to the next handler in the chain. This pattern is ideal for applications such as web servers handling HTTP requests, where different stages of processing (like authentication, logging, and compression) need to be applied in sequence.
+
+###### 3.9.1 Problem
+
+The primary design problem that the Chain of Responsibility Pattern addresses is how to process a request through a sequence of handlers without tightly coupling the request sender to the specific handlers. Without this pattern, the sender would need to be aware of the entire processing sequence, making the system rigid and difficult to maintain or extend.
+
+###### 3.9.2 Solution
+
+The Chain of Responsibility Pattern solves this problem by introducing a chain of handler objects. Each handler has a reference to the next handler in the chain and decides either to process the request or to pass it along to the next handler. The pattern involves three key roles:
+
+1. **Handler**: This is an abstract class or interface that defines the method `handle(request)` and maintains a reference to the next handler in the chain. It includes a method `setNext(handler)` to set the next handler.
+
+2. **ConcreteHandler**: These classes implement the `Handler` interface. Each concrete handler processes the request or passes it to the next handler in the chain.
+
+3. **Client**: This is the initiator of the request. It holds a reference to the first handler in the chain and starts the request processing.
+
+By using the Chain of Responsibility Pattern, each handler is responsible for a single aspect of request processing, adhering to the Single Responsibility Principle. The handlers are loosely coupled, making the system flexible and extensible. New handlers can be added without modifying existing code, and the order of handlers can be easily changed.
+
+
 
 ![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Chain%20of%20Resposbilities%20pattern.png)
 
-To adhere to the Single Responsibility Principle and avoid tightly coupling classes, tasks should be declared in separate classes. Instead of handling the chain of events directly within the web server class, one should use interfaces for these events, enabling the construction of a flexible pipeline for handling a chain of requests. By doing so, the system remains open for extension but closed for modification, ensuring that new handlers can be added without altering existing code. In this setup, a request is first sent to an authenticator instance. If authentication succeeds, the request is passed to a logger instance, and then to a compressor instance, in a sequential manner. Each instance only knows about the next instance to pass the request to, ensuring a loosely coupled chain of responsibilities. If an instance fails, such as authentication, the chain is broken, preventing further processing. This is achieved by having the web server communicate with an abstract handler class that declares a next field and a handle method. Each event class implements this handle function in its own way and uses the next field to pass the request to the next class in the chain of responsibilities.
+### 3.10 Visitor Pattern
 
-#### 3.10 Visitor Pattern
+The Visitor Design Pattern is particularly useful in scenarios where an object structure needs to support various operations without changing the classes of the elements on which it operates. This pattern is ideal for applications like processing HTML documents, where different types of HTML nodes might require different operations such as highlighting or converting to plain text.
 
-The Visitor design pattern allows for adding new operations to an object structure without modifying the structure itself. This is useful, for example, when working with an HTML document containing various types of HtmlNodes, such as titles and bodies, on which one might want to perform operations like highlighting or converting to plain text. If each type of HtmlNode were to implement its own operations, it would require creating iterators for each individual operation, violating the open-closed principle. Instead, by using the Visitor design pattern, one can implement a single iteration that allows any operation to be performed on these HtmlNodes. This pattern enables the addition of new operations without altering the HtmlDocument class, maintaining its integrity and promoting flexibility and extensibility. Below you can see how the design pattern is laid out in UML.
+###### 3.10.1 Problem
+
+The primary design problem that the Visitor Pattern addresses is how to add new operations to an existing object structure without modifying the structure itself. When new operations need to be added, modifying the object structure directly violates the open-closed principle. This leads to code that is hard to maintain and extend, as changes in operations require changes in multiple classes.
+
+###### 3.10.2 Solution
+
+The Visitor Pattern solves this problem by separating the operations from the object structure. It introduces a Visitor interface that defines a visit method for each type of element in the object structure. The pattern involves three key roles:
+
+1. **Element**: This is an interface or abstract class that declares an `accept(Visitor)` method. All concrete elements in the object structure implement this method to accept a visitor object.
+
+2. **ConcreteElement**: These are the classes that implement the Element interface. Each concrete element class implements the `accept(Visitor)` method to call the visitor's appropriate visit method.
+
+3. **Visitor**: This is an interface that declares visit methods for each type of element. Each method is responsible for performing the operation on the specific element type.
+
+4. **ConcreteVisitor**: These are the classes that implement the Visitor interface. Each concrete visitor class provides the implementation for the visit methods, encapsulating the logic for a specific operation.
+
+By using the Visitor Pattern, new operations can be added by creating new visitor classes without altering the existing object structure. This promotes flexibility and adheres to the open-closed principle.
 
 ![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Visitor%20pattern.png)
-
-In the Visitor design pattern, the HtmlNode interface enforces a contract for different operations on all HtmlNode instances, which are responsible for their concrete implementations. To maintain the principle of separation of responsibilities, an Operation interface should be used. This interface should declare multiple apply() methods, one for each type of HtmlNode, resulting in method overloading where each method has the same name but different parameters. Concrete classes can implement this Operation interface, centralizing the logic for a single operation. This design is effective when the object structure is stable, but new operations need to be implemented. Instead of having operation methods directly in the HtmlNode interface, an execute() method that takes an Operation instance is preferred. HtmlNode instances can then use the apply() method of the Operation instance to perform the desired operation, ensuring that all logic related to a specific operation is located in a single place.

@@ -1,6 +1,6 @@
 package com.codewithmosh.observer;
 
-public class Stock {
+public class Stock extends StockSubject {
     private String symbol;
     private float price;
 
@@ -15,6 +15,7 @@ public class Stock {
 
     public void setPrice(float price) {
         this.price = price;
+        notifyObeservers();
     }
 
     @Override

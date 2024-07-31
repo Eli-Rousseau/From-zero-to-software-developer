@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WavFile {
+
     private List<Segment> segments = new ArrayList<>();
 
     public static WavFile read(String fileName) {
@@ -17,18 +18,9 @@ public class WavFile {
         return wavFile;
     }
 
-    public void reduceNoise() {
-        for (var segment : segments)
-            segment.reduceNoise();
-    }
-
-    public void addReverb() {
-        for (var segment : segments)
-            segment.addReverb();
-    }
-
-    public void normalize() {
-        for (var segment : segments)
-            segment.normalize();
+    public void operation(Operation operation) {
+        for (Segment segment : segments) {
+            operation.apply(segment);
+        }
     }
 }
