@@ -6,33 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="e00fccb7-aa77-4407-ace5-1ab3c6c47b84" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Exercises/com/codewithmosh/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Exercises/com/codewithmosh/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Exercises/com/codewithmosh/chainOfResponsibility/DataReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Exercises/com/codewithmosh/chainOfResponsibility/DataReader.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Exercises/com/codewithmosh/mediator/CheckBox.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Exercises/com/codewithmosh/mediator/CheckBox.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Exercises/com/codewithmosh/mediator/TextBox.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Exercises/com/codewithmosh/mediator/TextBox.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Exercises/com/codewithmosh/mediator/UIControl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Exercises/com/codewithmosh/mediator/UIControl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Exercises/com/codewithmosh/observer/StatusBar.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Exercises/com/codewithmosh/observer/StatusBar.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Exercises/com/codewithmosh/observer/Stock.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Exercises/com/codewithmosh/observer/Stock.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Exercises/com/codewithmosh/observer/StockListView.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Exercises/com/codewithmosh/observer/StockListView.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Exercises/com/codewithmosh/visitor/WavFile.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Exercises/com/codewithmosh/visitor/WavFile.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/codewithmosh/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/codewithmosh/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/codewithmosh/chainOfResponsibility/DataReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/codewithmosh/chainOfResponsibility/DataReader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/codewithmosh/mediator/CheckBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/codewithmosh/mediator/CheckBox.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/codewithmosh/mediator/TextBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/codewithmosh/mediator/TextBox.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/codewithmosh/mediator/UIControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/codewithmosh/mediator/UIControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/codewithmosh/observer/StatusBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/codewithmosh/observer/StatusBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/codewithmosh/observer/Stock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/codewithmosh/observer/Stock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/codewithmosh/observer/StockListView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/codewithmosh/observer/StockListView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/codewithmosh/visitor/FactSegment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/codewithmosh/visitor/FactSegment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/codewithmosh/visitor/FormatSegment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/codewithmosh/visitor/FormatSegment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/codewithmosh/visitor/Segment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/codewithmosh/visitor/Segment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/codewithmosh/visitor/WavFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/codewithmosh/visitor/WavFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Solutions/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Solutions/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Design Patterns Pictures/Chain of Resposbilities pattern.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../Design Patterns Pictures/Chain of Resposbilities pattern.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Design Patterns Pictures/Command pattern.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../Design Patterns Pictures/Command pattern.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Design Patterns Pictures/Mediator pattern.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../Design Patterns Pictures/Mediator pattern.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Design Patterns Pictures/Observer pattern.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../Design Patterns Pictures/Observer pattern.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Design Patterns Pictures/Visitor pattern.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../Design Patterns Pictures/Visitor pattern.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Design Patterns.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Design Patterns.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -126,18 +99,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.com.codewithmosh.iterator.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.com.codewithmosh.state.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.com.codewithmosh.strategy.Main.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/From zero to software developer/Design Patterns/Design Patterns - Part 1/Solutions&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "Application.com.codewithmosh.iterator.Main.executor": "Run",
+    "Application.com.codewithmosh.state.Main.executor": "Run",
+    "Application.com.codewithmosh.strategy.Main.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/From zero to software developer/Design Patterns/Design Patterns - Part 2/Exercises"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.codewithmosh.Main" />

@@ -511,8 +511,6 @@ The Chain of Responsibility Pattern solves this problem by introducing a chain o
 
 By using the Chain of Responsibility Pattern, each handler is responsible for a single aspect of request processing, adhering to the Single Responsibility Principle. The handlers are loosely coupled, making the system flexible and extensible. New handlers can be added without modifying existing code, and the order of handlers can be easily changed.
 
-
-
 ![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Chain%20of%20Resposbilities%20pattern.png)
 
 ### 3.10 Visitor Pattern
@@ -538,3 +536,207 @@ The Visitor Pattern solves this problem by separating the operations from the ob
 By using the Visitor Pattern, new operations can be added by creating new visitor classes without altering the existing object structure. This promotes flexibility and adheres to the open-closed principle.
 
 ![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Visitor%20pattern.png)
+
+## 4. Structural Design Patterns
+
+#### 4.1 Composite Pattern
+
+The Composite Design Pattern is particularly useful in scenarios where a hierarchy of objects needs to be managed, allowing individual objects and groups of objects to be treated uniformly. This pattern is ideal for applications like file systems, where files and directories can be manipulated through the same interface.
+
+###### 4.1.1 Problem
+
+The primary design problem that the Composite Pattern addresses is how to treat individual objects and compositions of objects uniformly. When an object structure includes both individual objects and compositions of objects, performing operations on this structure can become complex. Without a uniform treatment, each operation would need to check whether it is dealing with an individual object or a composition, leading to code duplication and reduced modularity.
+
+###### 4.1.2 Solution
+
+The Composite Pattern solves this problem by introducing a common interface for both individual objects and compositions. It allows clients to treat individual objects and compositions of objects uniformly through the following key roles:
+
+1. **Component**: This is an interface or abstract class that declares common methods for both individual objects and compositions. It provides a contract for the operations that can be performed on the objects in the hierarchy.
+
+2. **Leaf**: These are the concrete classes that implement the Component interface and represent individual objects. Leaf objects define the behavior for primitive objects in the composition.
+
+3. **Composite**: These are the concrete classes that implement the Component interface and represent compositions of objects. Composite objects store child components and implement methods to manage and access these children.
+
+By using the Composite Pattern, operations can be performed on individual objects and compositions of objects through the same interface, promoting uniformity and reducing code duplication. This pattern allows new operations to be added easily without modifying the existing class hierarchy.
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Composite%20pattern.png)
+
+#### 4.2 Adapter Pattern
+
+The Adapter Design Pattern is particularly useful in scenarios where an existing class's interface needs to be converted into a different form to be compatible with a client's expectations. This pattern is ideal for situations where third-party classes need to be integrated into a system without modifying their source code.
+
+###### 4.2.1 Problem
+
+The primary design problem that the Adapter Pattern addresses is how to integrate incompatible interfaces. When a client expects an interface that a third-party class does not provide, direct integration becomes challenging. Modifying the third-party class is often not feasible or desirable, as it could involve changing external code or violating encapsulation principles.
+
+###### 4.2.2 Solution
+
+The Adapter Pattern solves this problem by introducing an adapter class that acts as a bridge between the client and the third-party class. The adapter converts the interface of the third-party class into the interface expected by the client, enabling seamless integration. The key roles in this pattern are:
+
+1. **Target**: This is the interface expected by the client. It defines the methods that the client needs to interact with.
+
+2. **Adaptee**: This is the existing class with an incompatible interface. It contains useful functionality that needs to be adapted.
+
+3. **Adapter**: This class implements the Target interface and holds an instance of the Adaptee. It translates the client's requests into calls to the Adaptee, effectively bridging the gap between the incompatible interfaces.
+
+By using the Adapter Pattern, the client can interact with the third-party class through a compatible interface, without modifying the third-party class itself. This promotes flexibility and reusability, allowing existing classes to be used in new ways.
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Adapter%20pattern.png)
+
+### 4.3 Decorator Pattern
+
+The Decorator Design Pattern is particularly useful in scenarios where additional behavior needs to be added to an object's methods dynamically, without modifying the original class or using extensive subclassing. This pattern is ideal for extending the functionalities of objects in a flexible and reusable manner, such as adding new functionalities to a stream processing class.
+
+###### 4.3.1 Problem
+
+The primary design problem that the Decorator Pattern addresses is how to add additional features or behaviors to a class method without modifying the existing class. When dealing with non-mandatory features, traditional subclassing can lead to an explosion of subclasses, each representing different combinations of features. This approach is not scalable or maintainable.
+
+###### 4.3.2 Solution
+
+The Decorator Pattern solves this problem by introducing a set of decorator classes that are used to wrap concrete components. These decorators can add new behavior before or after delegating to the wrapped component's method. The key roles in this pattern are:
+
+1. **Component**: This is an interface or abstract class that defines the methods to be implemented by both the concrete component and the decorators.
+
+2. **ConcreteComponent**: This is the original class that implements the Component interface. It contains the core functionality that can be extended by decorators.
+
+3. **Decorator**: These are classes that implements the Component class and add new behavior to the component methods. Each Decorator class adds a specific feature to the component.
+
+By using the Decorator Pattern, additional behavior can be added to objects dynamically at runtime, and new features can be added without modifying existing code. This promotes flexibility, extensibility, and adherence to the Single Responsibility Principle.
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Decorator%20pattern.png)
+
+#### 4.4 Facade Pattern
+
+The Facade Design Pattern is particularly useful in scenarios where a complex subsystem needs to be simplified for easier usage. This pattern is ideal for applications that require multiple steps and interactions with several classes to execute a process, such as initializing and running a complex workflow in a software system.
+
+###### 4.4.1 Problem
+
+The primary design problem that the Facade Pattern addresses is how to provide a simple interface to a complex subsystem. When a process involves multiple steps and interactions with various classes, implementing this process directly within a client class (e.g., the Main class) leads to tight coupling and makes the client class dependent on the intricacies of the subsystem. This tight coupling complicates maintenance and reduces flexibility.
+
+###### 4.4.2 Solution
+
+The Facade Pattern solves this problem by introducing a facade class that provides a simplified interface to the complex subsystem. This facade class encapsulates the complex interactions and dependencies between the subsystem classes, allowing the client class to interact with the subsystem through a single, unified interface. The key roles in this pattern are:
+
+1. **Facade**: This is a class that provides a simplified interface to the complex subsystem. It contains methods that encapsulate the interactions between the various subsystem classes.
+
+2. **Subsystem Classes**: These are the classes that perform the actual work within the subsystem. They implement the core functionality and are unaware of the facade.
+
+By using the Facade Pattern, the client class (e.g., the Main class) can interact with the subsystem through the facade, which handles the complexity of the interactions. This decouples the client class from the subsystem, promoting modularity and ease of use.
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Facade%20pattern.png)
+
+#### 4.5 Flyweight Pattern
+
+The Flyweight Design Pattern is particularly useful in scenarios where a large number of objects are required, and these objects consume a significant amount of memory. This pattern is ideal for applications where many instances of a class need to share common data, such as rendering a large number of characters in a text editor or handling numerous graphical elements in a game.
+
+###### 4.5.1 Problem
+
+The primary design problem that the Flyweight Pattern addresses is how to efficiently manage memory when dealing with a large number of similar objects. Without the Flyweight Pattern, each object instance would hold its own copy of the data, leading to high memory consumption. This is especially problematic when many objects share identical or similar data.
+
+###### 4.5.2 Solution
+
+The Flyweight Pattern solves this problem by introducing the concept of sharing. It separates the intrinsic (shared) state from the extrinsic (unique) state of the objects. The key roles in this pattern are:
+
+1. **ConcreteFlyweight**: This class contains the intrinsic state that can be shared across multiple objects. Flyweight objects are immutable and shareable.
+
+2. **FlyweightFactory**: This class creates and manages the flyweight objects using a hashtable for instance. It ensures that flyweights are shared properly by returning an existing flyweight object if it exists, or creating a new one if it does not.
+
+3. **Client**: This class maintains references to the flyweight objects and computes or stores the extrinsic state that can vary among objects.
+
+By using the Flyweight Pattern, the system can reduce the number of object instances and, consequently, the amount of memory required. The FlyweightFactory ensures that only one instance of each flyweight is created and shared among the clients that need it.
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Flyweight%20pattern.png)
+
+#### 4.6 Bridge Pattern
+
+The Bridge Design Pattern is particularly useful when you want to decouple an abstraction from its implementation so that the two can vary independently. This is ideal for scenarios where you have a hierarchy of abstractions and a hierarchy of implementations that need to be combined in various ways, such as in graphical user interfaces or device driver development.
+
+###### 4.6.1 Problem
+
+The primary design problem that the Bridge Pattern addresses is how to prevent a proliferation of classes when combining different abstractions and implementations. Without the Bridge Pattern, extending both abstractions and their implementations would lead to a combinatorial explosion of subclasses, making the system hard to manage and extend.
+
+###### 4.6.2 Solution
+
+The Bridge Pattern solves this problem by dividing the class hierarchy into two separate parts: the abstraction and the implementation. It introduces the following key roles:
+
+1. **Abstraction**: This is an abstract class that defines the abstraction's interface and holds a reference to an implementation object (Implementor). The Abstraction's methods delegate the actual work to the Implementor object.
+
+2. **RefinedAbstraction**: This class extends the Abstraction and implements additional methods that are specific to the refined abstraction.
+
+3. **Implementor**: This is an interface or abstract class that defines the methods that the concrete implementations must implement.
+
+4. **ConcreteImplementor**: These classes implement the Implementor interface and provide concrete implementations of the methods defined in the Implementor.
+
+By using the Bridge Pattern, the abstraction and its implementation can be developed independently, promoting flexibility and scalability. The abstraction forwards client requests to the appropriate Implementor object, which handles the actual operations. This separation allows new abstractions and implementations to be added without modifying existing code.
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Bridge%20pattern.png)
+
+#### 4.7 Proxy Pattern
+
+The Proxy Design Pattern is used to provide a surrogate or placeholder for another object to control access to it. This pattern is particularly useful in situations where you need to add additional behavior to an object without modifying its code, such as lazy initialization, access control, logging, or caching.
+
+###### 4.7.1 Problem
+
+The primary design problem that the Proxy Pattern addresses is how to control access to an object in a way that allows additional functionalities like lazy initialization, logging, access control, and caching, without altering the actual object's code. This is especially useful when dealing with resource-intensive objects that should be created or accessed only when absolutely necessary.
+
+###### 4.7.2 Solution
+
+The Proxy Pattern solves this problem by introducing the following key roles:
+
+1. **Subject**: This is an interface or abstract class that defines the common interface for RealSubject and Proxy. This interface declares the methods that will be implemented by both RealSubject and Proxy.
+
+2. **RealSubject**: This class implements the Subject interface and defines the real object that the Proxy represents. It contains the actual business logic that the client wants to use.
+
+3. **Proxy**: This class also implements the Subject interface and contains a reference to the RealSubject object. It controls access to the RealSubject and can add additional behavior, such as lazy initialization, logging, access control, and caching.
+
+The Proxy class intercepts calls to the RealSubject and can perform various operations before or after forwarding the request to the RealSubject. This allows the Proxy to manage the creation and access of the RealSubject and to add extra functionalities transparently.
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Proxy%20pattern.png)
+
+## 5. Creational Design Patterns
+
+#### 5.1 Prototype Pattern
+
+The Prototype Design Pattern is used when the type of objects to create is determined by a prototypical instance, which is cloned to produce new objects. This pattern is particularly useful when creating new objects by copying existing ones, ensuring that the new objects maintain the same properties as the original without being tightly coupled to their classes.
+
+###### 5.1.1 Problem
+
+The primary design problem that the Prototype Pattern addresses is how to create new instances of objects without specifying their exact classes. When creating objects, one typically has to implement specific logic to control the data types and handle the casting of these data types. This approach violates the Open/Closed Principle, as extending the system to copy new data types requires modifying the existing copy class. This increases the coupling between the copy class and the other data classes.
+
+###### 5.1.2 Solution
+
+The Prototype Pattern solves this problem by introducing a prototype interface that declares a `clone()` method. This allows for the creation of new objects by cloning existing instances, enabling extension without modification. The pattern includes the following key roles:
+
+1. **Prototype**: This is an interface or abstract class that defines the `clone()` method. Any class that needs to be copied must implement this interface.
+
+2. **ConcretePrototype**: These classes implement the `Prototype` interface and provide specific implementations of the `clone()` method. Each concrete prototype knows how to clone itself.
+
+3. **Client**: This class uses the `Prototype` interface to clone objects. It is not aware of the specific classes of objects it is cloning, which decouples the client from the concrete prototype classes.
+
+By using the Prototype Pattern, you can create new objects by copying existing ones, promoting flexibility and extensibility. This pattern allows for easy addition of new types without altering existing code, adhering to the Open/Closed Principle.
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Prototype.png)
+
+### 5.2 Singleton Pattern
+
+The Singleton Design Pattern ensures that a class has only one instance and provides a global point of access to it. This pattern is particularly useful in scenarios where exactly one object is needed to coordinate actions across the system, such as in configurations, logging, or thread pools.
+
+###### 5.2.1 Problem
+
+The primary design problem that the Singleton Pattern addresses is how to ensure that a class has only one instance and how to provide a global point of access to this instance. Without the Singleton Pattern, it would be easy to create multiple instances of a class, leading to potential issues such as inconsistent states or resource contention.
+
+###### 5.2.2 Solution
+
+The Singleton Pattern solves this problem by implementing the following key features:
+
+1. **Private Constructor**: The class constructor is made private to prevent direct instantiation from outside the class.
+2. **Private Static Instance**: A private static field holds the single instance of the class.
+3. **Public Static Method**: A public static method provides a global point of access to the instance. This method creates the instance if it doesn't already exist and returns it.
+
+By restricting the instantiation of the class to a single instance and providing a controlled access point, the Singleton Pattern ensures that only one instance of the class exists throughout the application.
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Singleton%20pattern.png)
+
+
+
+The minus (`-`) shows the field or method is private. The underlining <u>underlining</u> shows the field or method should be static.
