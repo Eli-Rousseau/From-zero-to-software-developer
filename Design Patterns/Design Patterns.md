@@ -737,6 +737,65 @@ By restricting the instantiation of the class to a single instance and providing
 
 ![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Singleton%20pattern.png)
 
-
-
 The minus (`-`) shows the field or method is private. The underlining <u>underlining</u> shows the field or method should be static.
+
+#### 5.3 Factory Method Pattern
+
+The Factory Method Design Pattern provides an interface for creating objects in a superclass but allows subclasses to alter the type of objects that will be created. This pattern is particularly useful when the exact type of objects to be created is not known until runtime or when the creation process involves some complex logic that can vary between different subclasses.
+
+###### 5.3.1 Problem
+
+The primary design problem that the Factory Method Pattern addresses is how to delegate the instantiation of objects to subclasses. Without this pattern, the superclass would be responsible for creating objects, which can lead to a tight coupling between the superclass and the concrete classes it instantiates. This makes the code less flexible and harder to maintain.
+
+###### 5.3.2 Solution
+
+The Factory Method Pattern solves this problem by introducing an abstract method in the superclass that subclasses must override to create instances of the desired type. The pattern includes the following key roles:
+
+1. **Creator**: Declares the `factoryMethod()` which must be implemented by subclasses to instantiate `Product` objects. Contains the `operation()` method which utilizes the `factoryMethod()` to get a product instance, ensuring the instantiation logic is deferred to subclasses.
+
+2. **ConcreteCreator**: Implements the `factoryMethod()` to create and return an instance of `ConcreteProduct`. Ensures that the specific product instantiation logic is encapsulated within this subclass, promoting flexibility and adherence to the Open/Closed Principle.
+
+The Factory Method Pattern promotes loose coupling by decoupling the code that uses the objects from the code that creates the objects. This allows for more flexibility and easier maintenance.
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Factory%20pattern.png)
+
+Certainly! Here is an explanation of the Abstract Factory pattern, along with a UML diagram to illustrate its components:
+
+#### 5.4 Abstract Factory Pattern
+
+The Abstract Factory pattern is useful when you need to create families of related or dependent objects without specifying their concrete classes. This pattern provides an interface for creating a series of related objects, abstracting the instantiation process from the client.
+
+###### 5.4.1 Problem
+
+When working with multiple families of related objects, directly instantiating these objects can lead to code that is tightly coupled to the specific classes. This violates the Open/Closed Principle, as adding new families would require modifying existing code. The goal is to encapsulate the creation of these objects, allowing for flexibility and scalability.
+
+###### 5.4.2 Solution
+
+The Abstract Factory pattern solves this problem by introducing a series of interfaces and concrete implementations:
+
+1. **AbstractFactory**: An interface that declares methods for creating abstract products.
+2. **ConcreteFactory**: Classes that implement the AbstractFactory interface, producing families of related products.
+
+By defining an AbstractFactory interface, the pattern allows for the creation of different families of products without changing the client code, adhering to the Open/Closed Principle.
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Abstract%20factory%20pattern.png)
+
+#### 5.5 Builder Pattern
+
+The Builder pattern is useful when you need to construct complex objects that require a series of steps or configurations. This pattern separates the construction of an object from its representation, allowing for more flexible and maintainable code.
+
+###### 5.5.1 Problem
+
+When creating complex objects, the construction process can become convoluted and hard to manage. Directly instantiating these objects with different configurations can lead to code that is difficult to read, maintain, and extend. Additionally, if new types of objects need to be supported, the client code must be modified, violating the Open/Closed Principle and increasing tight coupling.
+
+###### 5.5.2 Solution
+
+The Builder pattern solves this problem by introducing a systematic approach to object construction through a series of interfaces and concrete implementations:
+
+1. **AbstractBuilder**: Defines the `buildPart()` method for constructing parts of a product. Acts as a contract for concrete builders to follow.
+2. **ConcreteBuilder**: Implements the `Builder` interface, providing specific logic for building parts. Includes `buildPart()` to construct parts and `getResult()` to return the final product.
+3. **Director**: Manages the construction process by directing the order of building steps. Uses the `construct()` method to interact with the `Builder` interface.
+
+By defining an AbstractBuilder interface, the pattern allows different types of builders to construct various representations of the product without changing the client code, adhering to the Open/Closed Principle.
+
+![](D:\From%20zero%20to%20software%20developer\Design%20Patterns\Design%20Patterns%20Pictures\Builder%20pattern.png)

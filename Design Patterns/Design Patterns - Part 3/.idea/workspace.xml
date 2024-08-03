@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9ca053af-b562-4fa5-a532-9a40c4bd09ac" name="Default Changelist" comment="" />
-    <ignored path="$PROJECT_DIR$/out/" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <list default="true" id="9ca053af-b562-4fa5-a532-9a40c4bd09ac" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/Demos" beforeDir="false" afterPath="$PROJECT_DIR$/Demos" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exercises/out/production/Exercises/com/codewithmosh/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/Exercises/out/production/Exercises/com/codewithmosh/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exercises/out/production/Exercises/com/codewithmosh/factory/Calendar.class" beforeDir="false" afterPath="$PROJECT_DIR$/Exercises/out/production/Exercises/com/codewithmosh/factory/Calendar.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exercises/out/production/Exercises/com/codewithmosh/factory/Demo.class" beforeDir="false" afterPath="$PROJECT_DIR$/Exercises/out/production/Exercises/com/codewithmosh/factory/Demo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exercises/out/production/Exercises/com/codewithmosh/factory/Scheduler.class" beforeDir="false" afterPath="$PROJECT_DIR$/Exercises/out/production/Exercises/com/codewithmosh/factory/Scheduler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exercises/src/com/codewithmosh/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Exercises/src/com/codewithmosh/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exercises/src/com/codewithmosh/factory/Calendar.java" beforeDir="false" afterPath="$PROJECT_DIR$/Exercises/src/com/codewithmosh/factory/Calendar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exercises/src/com/codewithmosh/factory/Demo.java" beforeDir="false" afterPath="$PROJECT_DIR$/Exercises/src/com/codewithmosh/factory/Demo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exercises/src/com/codewithmosh/factory/Scheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Exercises/src/com/codewithmosh/factory/Scheduler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Solutions/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Solutions/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Solutions/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Solutions/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,12 +24,17 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/Demos" />
+    <option name="ROOT_SYNC" value="SYNC" />
   </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 6
+}]]></component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="25" />
     <option name="width" value="1211" />
     <option name="height" value="747" />
   </component>
+  <component name="ProjectId" id="2k96LYHIctpA0VbGverhnXUCvmW" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -31,6 +46,18 @@
       <pane id="ProjectPane" />
     </panes>
   </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/From zero to software developer/Design Patterns/Design Patterns - Part 3"
+  }
+}]]></component>
   <component name="RunDashboard">
     <option name="ruleStates">
       <list>
@@ -55,6 +82,7 @@
       </method>
     </configuration>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>

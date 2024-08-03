@@ -2,11 +2,12 @@ package com.codewithmosh.factory;
 
 import java.util.Date;
 
-public class Scheduler {
-    private Calendar calendar = new Calendar();
+public abstract class Scheduler {
 
     public void schedule(Event event) {
         var today = new Date();
-        calendar.addEvent(event, today);
+        getCalendar().addEvent(event, today);
     }
+
+    protected abstract Calendar getCalendar();
 }
