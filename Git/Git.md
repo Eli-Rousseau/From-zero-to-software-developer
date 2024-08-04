@@ -205,6 +205,7 @@ One can consult the history of commit operations from a repository using the fol
 git log # Full history
 git log --oneline # Summary
 git log --reverse # Lists the commits from the oldest to the newest
+git log --all # Shows the commits for all branches
 ```
 
 The history provides detailed information about each commit, including the unique identifier, author, date and time, and the commit message.
@@ -222,7 +223,7 @@ git show HEAD:<file> # Shows the version of file stored in the last commit
 
 #### 2.10 Unstagging Files (Undoing git add)
 
-To restore a file in the working directory to the version present in the staging area, use the following command:
+To restore a file in the staging area to the version from the last commit, use the following command:
 
 ```bash
 git restore --staged <file> # Copies the last version of file from repo to index
@@ -233,10 +234,9 @@ git restore --staged <file> # Copies the last version of file from repo to index
 To restore a file in the working directory to the version present in the last commit, use the following command:
 
 ```bash
-git restore <file> # Copies file from index to working directory
+git restore <file> # Copies file from staging area to working directory
 git restore <file1> <file2> # Restores multiple files in working directory
 git restore . # Discards all local changes (except untracked files)
-
 ```
 
 If one wants to restore all the files and also remove the untracked files not present in the stagging area, one should use the following command instead:
@@ -255,34 +255,331 @@ git restore --source=HEAD~2 file.js
 
 ## 3. Browsing History
 
-#### 3.1 Viewing the History:
+#### 3.1 Viewing the History
 
-#### 3.2 Filtering the History:
+One can consult in the commit history the list of modified files and actual changes made to them by combining multiple flags:
 
-#### 3.3 Formatting the log Output:
+```bash
+git log --stat # Shows the list of modified files in each commit
+git log --patch # Shows the actual changes (patches)
+```
 
-#### 3.4 Creating an Alias:
+By adding the file name at the end one can consult the commit history for a specific file:
 
-#### 3.5 Viewing a Commit:
+```bash
+git log <file>
+```
 
-#### 3.6 Comparing Commits
+#### 3.2 Filtering the History
 
-#### 3.7 Checking out a Commit:
+One can filter the commit history using different flags:
 
-#### 3.8 Finding a Bad Commit:
+```bash
+git log -3 # Shows the last 3 entries
+git log --author=“Eli” # Shows all the commit of the author
+git log --before=“2024-08-04” # Finds all commits on the indicated date or before
+git log --after=“2024-08-04” # Finds all commits on the indicated date or after
+git log --grep=“pattern” # Commits with “pattern” in their message
+git log -S“pattern” # Commits with “pattern” in their patches
+git log reference1..reference2 # Range of commits
+git log file.txt # Commits that touched file.txt
+```
 
-#### 3.9 Finding Contributors:
+#### 3.3 Creating an Alias
 
-#### 3.10 Viewing the History of a File:
+One can create aliases for frequently used Git commands to avoid typing their full form by using:
 
-#### 3.11 Finding the Author of Lines:
+```bash
+git config --global alias.<custom-cmd-name> "my git command"
+```
 
-#### 3.12 Tagging:
+#### 3.4 Comparing Commits
+
+One can compare the changes of one or more files across two commits using the following command:
+
+```bash
+git diff HEAD~2 HEAD # Shows the changes between two commits
+git diff HEAD~2 HEAD <file> # Changes to file only
+```
+
+#### 3.5 Checking out a Commit
+
+To view a snapshot of your project at a specific commit, you can use:
+
+```bash
+git checkout <commit-hash>
+```
+
+Using the `git checkout` command places you in a detached HEAD state, meaning the HEAD pointer is not on the master branch. Be cautious not to create new commits in this state; use it for inspecting or experimenting with a previous version of your project.
+
+To return to the master branch and reattach the HEAD pointer, use:
+
+```bash
+git checkout master
+```
+
+#### 3.6 Finding Contributors
+
+One can find all the contributors and their commit messages in the repository using the following command:
+
+```bash
+git shortlog
+```
+
+#### 3.7 Finding the Author of Lines
+
+To identify who made specific changes to a file one can use the following command:
+
+```bash
+git blame <file>
+```
+
+#### 3.8 Tagging
+
+Tags are bookmarks for commits in a project.
+
+```bash
+git tag # Shows all the current tags
+git tag <name-of-tag> <hash-commit> # Creates a lightweight tag
+git tag <name-of-tag> <hash-commit> -m "message" # Creates an annotated tag with custom message
+git tag -d <name-of-tag> # Deletes a tag
+```
+
+Tags can be used as commit references in Git commands, similar to the HEAD pointer.
 
 ## 4. Branching & Merging
 
+#### 4.1 How do Branches Work?
+
+Branching allows you to diverge from the main line of work (typically the master branch) and work in isolation on different tasks. Each branch acts as a separate workspace. Once the work in a branch is tested and approved, it can be merged back into the master branch, keeping the main line stable.  In Git, branching is efficient as it uses pointers instead of copying the entire project. The master branch is a pointer to the latest commit, and new branches create additional pointers that move with new commits. The HEAD pointer indicates the current branch you are working on.
+
+#### 4.2 Managing branches
+
+To display the current branch and its status one uses the following command:
+
+```bash
+git status
+```
+
+Instead one can also use the following command to show all branches:
+
+```bash
+git branch
+```
+
+There are different commands that are used to manipulate and switch between branches:
+
+```bash
+git branch <branch-name> # Creates a new branch
+git switch <branch-name> # Switches to another branch
+git branch -m <old-branch-name> <new-branc-name> # Rename a branch
+git branch -d <branch-name> # Deletes branch without commits
+git branch -D <branch-name> # Enforce the branch deletion
+```
+
+#### 4.3 Comparing branches
+
+To display the differences in commits or in the exact changes that have been made between two branches, one can use the following commands:  
+
+```bash
+git log <branch1>..<branch2> # Lists the commits of branch2 not in branch1
+git diff <branch1>..<branch2> # Shows the summary of changes in branch2 not in branch1
+```
+
+#### 4.4 Stashing
+
+Git prevents switching branches if there are unstaged changes, but you can use a stash to save these changes temporarily. This allows you to switch branches freely and later reapply the stashed changes to your working directory when you return to the original branch.
+
+```bash
+## Creating stach for a branch
+git stash push -m “message” # Creates a new stash
+
+## Inspect the staches and their content
+git stash list # Lists all the stashes
+git stash show stash@{1} # Shows the given stash
+git stash show 1 # shortcut for stash@{1}
+
+## Apply the stached changes to the working directory
+git stash apply 1 # Applies the given stash to the working dir
+
+## Deleting Staches
+git stash drop 1 # Deletes the given stash
+git stash clear # Deletes all the stashes
+```
+
+#### 4.5 Merging
+
+###### 4.5.1 Types of Merges
+
+In Git, there are two types of merges:
+
+1. **Fast-forward merges**: occur when changes in a branch are linear and have not diverged from the master branch, allowing the master pointer to simply move to the latest commit of the branch. 
+
+2. **3-way merges**: are used when branches have diverged, with commits made independently. In this case, Git creates a new commit that combines the last common commit and the latest commits from both branches.
+
+###### 4.5.2 Merging Branches
+
+To merge a branch with the master branch, one needs to switch to the master branch and use the following command:
+
+```bash
+git merge <banch-name> # Default merge
+git merge --no-ff <banch-name> # Disable fast forward merge
+```
+
+By default, Git performs a fast-forward merge when branches have not diverged, but this can be disabled to force a 3-way merge, which creates a new commit combining the last commits from both branches and their common ancestor. Disabling fast-forward merges can simplify reverting features later by allowing a single commit to undo changes, rather than multiple steps. This choice depends on personal preference and project needs.
+
+###### 4.5.3 Display Graph History
+
+To display the commit history in a visual format with all branches one can use the following command:
+
+```bash
+git log --oneline --all --graph
+```
+
+###### 4.5.4 Viewing the merged branches
+
+To see all branches currently merged/unmerged with the current master branch one can use the following commands:
+
+```bash
+git branch --merged ## Shows all branches merged with master
+git branch --no-merged ## Shows all branches not merged with master
+```
+
+###### 4.5.5 Resolving Merging Conflicts
+
+When merging branches, conflicts can occur if the same code is modified differently, a file is deleted in one branch and changed in another, or different contents are added to the same file in both branches. The more branches diverge, the more conflicts may arise. Git halts the merge process when conflicts occur, requiring user intervention to resolve them. One can check conflicts with the status command, open the conflicted files in a code editor, follow the prompts to resolve the conflicts, and stage the resolved files. Once all conflicts are resolved, one can complete the merge using the commit command.
+
+Git can be configured to use external visual merge tools, such as p4merge, to handle conflicts more effectively.
+
+###### 4.5.6 Aborting a Merge
+
+If we do not want to handle a conflict immediately, one can use the following command to abort a merge operation:
+
+```bash
+git merge --abort
+```
+
+###### 4.5.7 Undoing a Faulty Merging
+
+If a merge results in a non-working project, you can undo the merge by creating a new commit that reverts it, rather than rewriting history. Use the following command, where `-m 1` refers to the first parent branch:
+
+```bash
+git revert -m 1 HEAD
+```
+
+###### 4.5.8 Squash Merging
+
+For merging two branches while avoiding undesirable commits, use a squash merge. This method merges the commits of the second branch into the master branch without tracking the divergence, maintaining a linear history and preventing history pollution. It's ideal for short branches with bad history. Use the following command, then review and commit the changes:
+
+```bash
+git merge --squash <branch-name>
+```
+
+Note that this command only stages the changes without making a commit, and the target branch should be removed after the merge.
+
+#### 4.6 Rebasing
+
+To align the commits of a diverging branch with the latest commit of the master branch, use rebasing. This process moves the branch's commits on top of the master branch, creating a linear history and allowing for fast-forward merging. However, be cautious as rebasing rewrites history. Perform the rebase with:
+
+```bash
+git rebase master
+```
+
+If conflicts arise, resolve them and then use:
+
+```bash
+git rebase --continue # Continues the rebase after resolving conflicts
+git rebase --abort    # Aborts the current rebase operation
+```
+
+#### 4.7 Cherry picking
+
+Cherry-picking allows you to apply a specific commit from one branch to another. To use a commit from a second branch on the master branch, switch to the master branch and run:
+
+```bash
+git cherry-pick <hash-commit>
+```
+
+#### 4.8 Transferring a File from Another Branch
+
+To transfer a specific file version from a commit in a second branch to the master branch, use:
+
+```bash
+git restore --source=<branch-name> <file-name>
+```
+
 ## 5. Collaboration
 
+#### 5.1 Collaboration Workflows
+
+###### 5.1.1 Understanding Git's Distributed System and Collaboration
+
+Git operates on a distributed system, allowing each individual to maintain a complete copy of the project on their local machine. This setup enables users to save snapshots locally and synchronize their work with others when the server is online, facilitating seamless collaboration.
+
+###### 5.1.2 Centralized Workflow and Repositories
+
+Collaboration is based on a centralized workflow where each team member has a separate local repository, but synchronization occurs through a centralized repository. These repositories can be stored on private servers or cloud services like GitHub, which can be set as private for team access only. Team members start by pulling a copy of the centralized repository to their local systems, make their commits, and push these commits back to the centralized repository. Before pushing their own commits, members must pull any updates from the centralized repository to ensure synchronization.
+
+###### 5.1.3 Open-Source Collaboration and Integration Manager Architecture
+
+In open-source projects, an integration manager architecture is used, involving maintainers and contributors. Contributors, who are external and not fully trusted, do not have push or write access to the centralized repository. Instead, they fork the repository to create a copy in the cloud, clone it locally, make their commits, and push changes to the forked copy. They then send a pull request to the maintainer. The maintainer reviews the changes and, if satisfied, merges and pushes them to the original centralized repository.
+
+###### 5.1.4 GitHub Plateform
+
+GitHub is a popular Git hosting platform where users can create their own repositories. To add collaborators, users can go to the repository settings and manage access to invite them.
+
+#### 5.2 Pushing, Fetching, and Pulling
+
+###### 5.2.1 Cloning a Repository
+
+Once access is granted to all collaborators, each can work on the project by cloning the repository to their local machine. They need to copy the URL of the centralized repository from the GitHub page and use the following command:
+
+```bash
+git clone <project-url>
+```
+
+Git will create a new repository with the same name. The source repository is named 'origin,' referring to the centralized repository. This includes pointers like origin/master for the master branch and origin/HEAD for the HEAD pointer of the centralized repository. Origin is a remote tracking branch that cannot be directly accessed from the local machine.
+
+###### 5.2.2 Fetching a Repository
+
+Our local repository is not automatically synchronized with the remote repository, so new commits made remotely will not be reflected locally. To download the latest commits from the remote repository, use the following command:
+
+```bash
+git fetch origin <branch-name> # Default without branch name fetches all branches
+```
+
+This updates the local repository and moves the `origin/master` pointer to the new commit. To synchronize the local master pointer, merge it with `origin/master` and resolve any conflicts that arise:
+
+```bash
+git merge origin/master
+```
+
+###### 5.5.3 Pulling a Repository
+
+To bring changes from a remote repository into your local repository, combine the fetch and merge commands using:
+
+```bash
+git pull
+```
+
+This command pulls the latest commits from the remote repository and adds them to the local repository. By default, if the master and origin/master branches have diverged, it performs a three-way merge. Alternatively, you can use the rebase option to apply your local commits directly behind the remote commits in a linear fashion:
+
+```bash
+git pull --rebase
+```
+
+###### 5.5.4 Pushing a Repository
+
+To synchronize the master branch on your local machine with the remote repository, use:
+
+```bash
+git push
+```
+
+This command updates the remote repository, moving the origin/master pointer to the latest commit on the master branch. If the local master branch is ahead of origin/master, but the remote repository has diverged, you must first synchronize your local repository with the remote repository before the push command will be valid.
+
+#### 5.3 Pull Requests, Issues, and Milestones
+
+#### 5.4 Contributing to Open-Source Projects
+
 ## 6. Rewriting History
-
-
