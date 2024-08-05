@@ -578,7 +578,55 @@ git push
 
 This command updates the remote repository, moving the origin/master pointer to the latest commit on the master branch. If the local master branch is ahead of origin/master, but the remote repository has diverged, you must first synchronize your local repository with the remote repository before the push command will be valid.
 
+###### 5.5.5 Sharing Tags
+
+To share a local tag with collaborators on the central repository, use:
+
+```bash
+git push origin <tag-name>
+```
+
+To remove a tag from the remote repository, use:
+
+```bash
+git push origin --delete <tag-name>
+```
+
+###### 5.5.6 GitHub Releases
+
+GitHub's releases feature allows you to package software with source code, binary files, and release notes. You can create a new release in the repository's release settings, add tags, a release title, and notes, and attach binary files. The tag is added to the latest commit of the centralized repository, providing a convenient way to distribute software packages.
+
+###### 5.5.7 Sharing Branches
+
+Local branches in Git are private by default and need to be explicitly pushed to the centralized repository for collaboration. To share a branch, switch to it and use:
+
+```bash
+git push -u origin <branch-name>
+```
+
+This command links the local branch to the remote repository with the origin pointer. To verify the linkage, use:
+
+```bash
+git branch -vv # Displays local branch coupled to remote branch
+git branch -r # Displays all the remote branches
+```
+
+To remove a remote branch without deleting the local branch, use:
+
+```bash
+git remote prune origin  # Removes remote branch from local repository
+git push -d origin <branch-name>  # Removes remote branch from centralized repository without deleting the local branch
+```
+
 #### 5.3 Pull Requests, Issues, and Milestones
+
+###### 5.3.1 Collaborating with Pull Requests
+
+Pull requests in GitHub allow team members to review and provide feedback on changes before merging a branch into the master branch. After pushing the local branch to the centralized repository, a pull request can be initiated from GitHub by selecting the base (master) and the feature branch for comparison. This process checks for mergeability and potential conflicts. Reviewers can be added to the pull request to provide comments and suggestions. The review process facilitates discussion and necessary changes before the final merge.
+
+###### 5.3.2 Collaborating with Issues
+
+GitHub's issue tracking feature complements pull requests by allowing users to create, describe, and assign issues to collaborators with specific labels. This opens a discussion page for team collaboration on resolving the issue. Successfully merging a pull request can close the related issue. The issues tab also enables the customization of project labels.
 
 #### 5.4 Contributing to Open-Source Projects
 
