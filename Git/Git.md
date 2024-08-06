@@ -628,6 +628,180 @@ Pull requests in GitHub allow team members to review and provide feedback on cha
 
 GitHub's issue tracking feature complements pull requests by allowing users to create, describe, and assign issues to collaborators with specific labels. This opens a discussion page for team collaboration on resolving the issue. Successfully merging a pull request can close the related issue. The issues tab also enables the customization of project labels.
 
+###### 5.3.3 Milestones
+
+Milestones in GitHub help track the progress of multiple issues by bundling them together, making it easier to manage improvements for a new project version or other goals. Issues can be assigned to milestones to monitor collective progress.
+
 #### 5.4 Contributing to Open-Source Projects
 
+###### 5.4.1 Contributing with Forked Repository
+
+To collaborate on an open-source project without push access on GitHub, you can fork the repository to your account, creating a local version. You can then clone this fork to your local machine to work on. After making changes and pushing them to your fork, you can open a pull request to propose merging your changes into the original repository. Only the maintainers of the original repository can merge and close the pull request.
+
+###### 5.4.2 Keeping Forked Repositories Synchronized
+
+To keep a forked repository in sync with the original base repository, add a reference to the base repository and pull new commits. This can be done with the following commands:
+
+```bash
+git remote add upstream <url-base-repository> # Adds a remote link to the base repository
+git remote -v # Shows all remote links
+git pull upstream master # Pulls new commits from the base repository's master branch
+git push origin master # Pushes the updates to your forked repository
+```
+
+To remove a remote link, use:
+
+```bash
+git remote rm <remote-name>
+```
+
 ## 6. Rewriting History
+
+#### 6.1 Why and When to Rewrite History
+
+To maintain a clean, readable, and meaningful commit history in Git, it's important to ensure commit messages are meaningful and commits are appropriately sized and related. You can squash small related commits into a single commit, split large commits into multiple logical ones, reword commit messages, drop unwanted commits, and modify commit contents. 
+
+Rewriting history can be risky and should adhere to the golden rule of not rewriting public history, meaning commits that have been pushed and shared with others should not be modified. However, rewriting the history of local commits before pushing is a good practice.
+
+#### 6.2 Undo or Revert Commits
+
+###### 6.2.1 Remove Commit from History
+
+Git allows complete removal of a commit from history using the revert command. The effects of different options are:
+
+- `--soft`: Moves the HEAD pointer to the specified commit without changing the staging area or working directory, effectively just removing the commit.
+- `--mixed`: Moves the HEAD pointer and changes the staging area but leaves the working directory unchanged, unstaging files.
+- `--hard`: Moves the HEAD pointer and resets both the staging area and working directory to match the specified commit, discarding all local changes.
+
+```bash
+git revert --hard HEAD~1
+```
+
+###### 6.2.2 Reverting Commits in History
+
+To avoid dropping commits, use the revert operation to create a new commit that reverts changes from previous commits. This method ensures all intermediate commits remain intact. The `--no-commit` option stages the changes of the indicated range of commits without committing them, allowing a single commit to revert multiple commits.
+
+```bash
+git revert --no-commit HEAD~3..HEAD
+```
+
+This command stages the reversion of the last three commits, and you need to commit the changes manually afterward.
+
+###### 6.2.3 Recover a Lost Commit
+
+To recover a lost commit in Git, use the reflog, which keeps track of how the HEAD pointer has moved. Git temporarily retains commits even after they've been removed from the history. By checking the reflog, you can find the commit's identifier and reset it to recover the lost commit from a revert operation.
+
+```bash
+git reflog
+```
+
+This command displays the history of HEAD movements, allowing you to identify and recover the lost commit by its identifier.
+
+#### 6.3 Use Interactive Rebasing
+
+###### 6.3.1 Amending/Editing a Commit
+
+To correct small mistakes like typos or including irrelevant files in a recent commit, you don't need to make a new commit. Instead, you can modify or amend the commit by fixing the mistake in your working directory, staging the changes, and using the `--amend` option with the `git commit` command:
+
+```bash
+git commit --amend -m "corrected commit message"
+```
+
+If you don't provide a new message, it will keep the initial commit message.
+
+To edit an earlier commit in the commit history, use interactive rebasing. This allows you to stop, make changes, and continue the rebase, effectively modifying the commit and replaying subsequent commits on top of it. Use the interactive mode of the `rebase` command by using the hash value of the parent commit:
+
+```bash
+git rebase -i <hash-commit>
+```
+
+This command opens a script listing all commit comments to be replayed from oldest to newest. You can change `pick` to `edit` for the commits you want to modify. After closing the script window, the rebase operation pauses at each commit marked for editing. Make the necessary changes, amend the commit, and continue the rebase:
+
+```bash
+git commit --amend -m "corrected commit message"
+git rebase --continue
+```
+
+Remember, rebasing rewrites history and should only be done on commits that haven't been shared with others.
+
+###### 6.3.2 Dropping Commits
+
+Similar to the amend operation, you can use the interactive mode of the rebase operation in Git to drop specific commits from the history. To begin, use the interactive rebase command by using the hash value of the parent commit:
+
+```bash
+git rebase -i <hash-commit>
+```
+
+This command opens a script listing all commit comments to be replayed from oldest to newest. You can change `pick` to `drop` for the commits you want to remove. After closing the script window, the rebase operation will skip the specified commits, ensuring they are no longer present in the commit history.
+
+Be aware that dropping certain commits may result in conflicts. These conflicts must be resolved, staged, and committed before continuing the rebase operation seamlessly:
+
+```bash
+git rebase --continue
+```
+
+This process rewrites history and should be performed with caution, especially on commits that have already been shared with others.
+
+###### 6.3.3 Rewording Commit Messages
+
+Similar to the amend operation, you can use the interactive rebase mode in Git to reword commit messages in the commit history. Start by using the interactive rebase command by using the hash value of the parent commit:
+
+```bash
+git rebase -i <hash-commit>
+```
+
+This command opens a script listing all commit comments to be replayed from oldest to newest. Change `pick` to `reword` for the commits you want to reword. After closing the script window, Git will open the text editor to allow you to enter the modified commit message.
+
+This process rewrites history and should be performed with caution, especially on commits that have already been shared with others.
+
+###### 6.3.4 Reordering Commits
+
+Similar to the amend operation, you can use the interactive rebase mode in Git to reorder commits in the history. Start by using the interactive rebase command with the hash value of the parent commit:
+
+```bash
+git rebase -i <hash-commit>
+```
+
+This command opens a script listing all commit comments to be replayed from oldest to newest. Change the order of the commit lines, then close the script. Git will perform the rebase according to the new commit order. 
+
+Be aware that changing the order of certain commits may result in conflicts, which must be resolved, staged, and committed before continuing the rebase operation seamlessly:
+
+```bash
+git rebase --continue
+```
+
+This process rewrites history and should be performed with caution, especially on commits that have already been shared with others.
+
+###### 6.3.5 Combine Multiple Commits Together
+
+Similar to the amend operation, you can use the interactive rebase mode in Git to combine commits in the history. Start by using the interactive rebase command with the hash value of the parent commit:
+
+```bash
+git rebase -i <hash-commit>
+```
+
+This command opens a script listing all commit comments to be replayed from oldest to newest. Change `pick` to `squash` for the commit you want to combine with the previous commit. After closing the script, the rebase operation will perform the squash, merging the selected commits into a single commit. 
+
+Be aware that squash merging may result in conflicts, which must be resolved, staged, and committed before continuing the rebase operation seamlessly:
+
+```bash
+git rebase --continue
+```
+
+This process rewrites history and should be performed with caution, especially on commits that have already been shared with others.
+
+###### 6.3.6 Splitting a Commit
+
+Similar to the amend operation, you can use the interactive rebase mode in Git to split specific commits from the history. Start by using the interactive rebase command with the hash value of the parent commit:
+
+```bash
+git rebase -i <hash-commit>
+```
+
+This command opens a script listing all commit comments to be replayed from oldest to newest. Change `pick` to `edit` for the commits you want to split. After closing the script, the rebase operation pauses at each commit marked for editing. You can then split the content of a commit into two by performing the stages, staging, and committing in subsequent operations (without using the amend option). After correctly implementing the split, continue the rebase:
+
+```bash
+git rebase --continue
+```
+
+Rebasing rewrites history and should only be done on commits that haven't been shared with others.
