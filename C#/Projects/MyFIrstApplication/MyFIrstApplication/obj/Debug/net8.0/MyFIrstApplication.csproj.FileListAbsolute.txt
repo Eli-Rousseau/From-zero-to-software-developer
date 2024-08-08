@@ -1,0 +1,15 @@
+D:\From zero to software developer\C#\Projects\MyFIrstApplication\MyFIrstApplication\bin\Debug\net8.0\MyFIrstApplication.exe
+D:\From zero to software developer\C#\Projects\MyFIrstApplication\MyFIrstApplication\bin\Debug\net8.0\MyFIrstApplication.deps.json
+D:\From zero to software developer\C#\Projects\MyFIrstApplication\MyFIrstApplication\bin\Debug\net8.0\MyFIrstApplication.runtimeconfig.json
+D:\From zero to software developer\C#\Projects\MyFIrstApplication\MyFIrstApplication\bin\Debug\net8.0\MyFIrstApplication.dll
+D:\From zero to software developer\C#\Projects\MyFIrstApplication\MyFIrstApplication\bin\Debug\net8.0\MyFIrstApplication.pdb
+D:\From zero to software developer\C#\Projects\MyFIrstApplication\MyFIrstApplication\obj\Debug\net8.0\MyFIrstApplication.GeneratedMSBuildEditorConfig.editorconfig
+D:\From zero to software developer\C#\Projects\MyFIrstApplication\MyFIrstApplication\obj\Debug\net8.0\MyFIrstApplication.AssemblyInfoInputs.cache
+D:\From zero to software developer\C#\Projects\MyFIrstApplication\MyFIrstApplication\obj\Debug\net8.0\MyFIrstApplication.AssemblyInfo.cs
+D:\From zero to software developer\C#\Projects\MyFIrstApplication\MyFIrstApplication\obj\Debug\net8.0\MyFIrstApplication.csproj.CoreCompileInputs.cache
+D:\From zero to software developer\C#\Projects\MyFIrstApplication\MyFIrstApplication\obj\Debug\net8.0\MyFIrstApplication.sourcelink.json
+D:\From zero to software developer\C#\Projects\MyFIrstApplication\MyFIrstApplication\obj\Debug\net8.0\MyFIrstApplication.dll
+D:\From zero to software developer\C#\Projects\MyFIrstApplication\MyFIrstApplication\obj\Debug\net8.0\refint\MyFIrstApplication.dll
+D:\From zero to software developer\C#\Projects\MyFIrstApplication\MyFIrstApplication\obj\Debug\net8.0\MyFIrstApplication.pdb
+D:\From zero to software developer\C#\Projects\MyFIrstApplication\MyFIrstApplication\obj\Debug\net8.0\MyFIrstApplication.genruntimeconfig.cache
+D:\From zero to software developer\C#\Projects\MyFIrstApplication\MyFIrstApplication\obj\Debug\net8.0\ref\MyFIrstApplication.dll
