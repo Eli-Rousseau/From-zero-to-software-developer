@@ -154,7 +154,11 @@ double height = 1.85;
 decimal price = 19.99m;
 ```
 
-###### 3.4.2 Simplifying Variable Declarations
+###### 3.4.2 Character Encoding Standard
+
+ASCII is a character encoding standard that represents text in computers and other devices that use text. Each character, including letters, digits, and symbols, is mapped to a unique decimal number ranging from 0 to 127. This allows characters to be easily converted (or cast) into their corresponding numerical values in programming, and vice versa. For example, the character `'A'` has an ASCII value of 65, so casting `'A'` to an integer in many programming languages would yield 65. This feature enables easy manipulation of characters in terms of their numeric representations.
+
+###### 3.4.3 Simplifying Variable Declarations
 
 In C#, the `var` keyword provides a convenient way to declare variables without explicitly specifying their data type. When you use `var`, the compiler automatically infers the variable's data type based on the value assigned to it. This feature can simplify code and reduce redundancy, especially in cases where the data type is clear from the context.
 
@@ -274,11 +278,11 @@ Assignment operators are used to assign values to variables. They include the ba
 
 Logical operators are used to combine or invert boolean expressions. They are typically used in conditional statements to control the flow of a program.
 
-| Operator | Description                                                                  |
-| -------- | ---------------------------------------------------------------------------- |
-| `&&`     | Returns `true` if both operands are true; otherwise, returns `false`.        |
-| `\||`    | Returns `true` if one of both operands are true; otherwise, returns `false`. |
-| `!`      | Inverts the boolean value of the operand.                                    |
+| Operator | Description                                                           |
+| -------- | --------------------------------------------------------------------- |
+| `&&`     | Returns `true` if both operands are true; otherwise, returns `false`. |
+| `\|      | `                                                                     |
+| `!`      | Inverts the boolean value of the operand.                             |
 
 ## 5. Comments
 
@@ -308,3 +312,641 @@ It can span multiple lines.
 While comments are useful for explaining code, they should be used sparingly and purposefully. The focus of comments should be on explaining the "why" and "how" of the code, including any constraints or decisions made during development, rather than describing what the code does. Well-written code should be self-explanatory, with comments providing additional context where necessary.
 
 Overusing comments can lead to clutter and can become problematic if the code is updated but the comments are not. This is because comments are not maintained or checked by the compiler, so outdated comments can be misleading to other developers working on the code.
+
+## 6. Non-Primitive Data Types
+
+#### 6.1 Classes
+
+###### 6.1.1 Defining Classes
+
+Classes are the fundamental building blocks of object-oriented programming in C#. They serve as blueprints for creating objects, which are instances of these classes. A class groups together related variables (known as fields) and functions (known as methods) into a single, cohesive unit. To define a class in C#, you need to specify an access modifier, use the `class` keyword, and provide a class name (also known as an identifier).
+
+```csharp
+public class Car
+{
+    // Fields
+    private string make;
+    private string model;
+
+    // Method
+    public void Drive()
+    {
+        Console.WriteLine("The car is driving.");
+    }
+}
+```
+
+###### 6.1.2 Creating an Object of a Class
+
+An object is an instance of a class, meaning it is a concrete implementation of the class blueprint. To create an object in C#, you declare a variable of the class type, use the `new` keyword to allocate memory, and call the class's constructor. Once the object is created, you can access its fields and methods using the dot notation.
+
+```csharp
+Car myCar = new Car();
+myCar.Drive();
+```
+
+###### 6.1.3 Static Fields and Methods
+
+Static fields and methods belong to the class itself rather than to any specific instance. This means they can be accessed directly through the class name, without needing to create an instance. You use the `static` modifier to declare static members. Static members are useful when you want a single, shared instance of a variable or method across all instances of the class.
+
+```csharp
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("Hello, World!");
+    }
+}
+```
+
+In the example above, the `Main()` method is declared as `static` because it serves as the entry point of the application, and there should only be one such method. Since it is static, it can be called directly using the class name without creating an instance of the `Program` class.
+
+#### 6.2 Structs
+
+###### 6.2.1 Usage of Structs
+
+Structs in C# are similar to classes in that they both serve as containers for related data (fields) and behavior (methods). However, while classes are typically more versatile and commonly used in most scenarios, structs can be more efficient when defining small, lightweight objects with only a few fields or methods. This efficiency becomes particularly valuable when you need to create a large number of such objects. For instance, structs are often used to represent geometric coordinates, colors, or small data aggregates like a point in 2D space.
+
+```csharp
+public struct Point
+{
+    public int X;
+    public int Y;
+
+    public void DisplayCoordinates()
+    {
+        Console.WriteLine($"X: {X}, Y: {Y}");
+    }
+}
+```
+
+#### 6.3 Arrays
+
+###### 6.3.1 Declaring an Array
+
+An array is a fundamental data structure in C# that allows you to store a collection of variables, all of the same type, in a single, organized structure. Declaring an array in C# is similar to declaring a variable of a primitive data type, with some key differences. When declaring an array, you must include square brackets `[]` after the data type to indicate that the variable will hold an array.
+
+```csharp
+int[] numbers = new int[5];
+```
+
+Behind the scenes, arrays in C# are objects. The syntax used to declare an array actually creates an instance of the `Array` class, which is part of the .NET framework. 
+
+###### 6.3.2 Accessing Array Elements
+
+To access or modify the elements of an array, you use the index inside square brackets `[]`. It's important to note that C# arrays are zero-indexed, meaning the first element is accessed with an index of `0`.
+
+```csharp
+int firstNumber = numbers[0]; // Accessing the first element
+numbers[1] = 42; // Modifying the second element
+```
+
+###### 6.3.3 Array Initialization
+
+C# also provides an object initialization syntax, which allows you to declare and initialize the array in a single step. This approach is more concise and eliminates the need to specify the array elements explicitly after declaration.
+
+```csharp
+int[] numbers = new int[5] { 1, 2, 3, 4, 5 };
+```
+
+#### 6.4 Strings
+
+###### 6.4.1 String Literals
+
+A string in C# is a sequence of characters enclosed within double quotes. It differs from a single character, which is enclosed in single quotes. One of the simplest ways to create a string in C# is by using a string literal. This involves defining a variable with the `string` type, followed by an identifier, an assignment operator, and the string value enclosed in double quotes.
+
+```csharp
+string greeting = "Hello, World!";
+```
+
+Although `string` appears to be a primitive data type, it is actually an alias for the `String` class in the `System` namespace. Therefore, whether you use `string` or `String`, you are creating an instance of the `String` class.
+
+###### 6.4.2 Concatenation
+
+Strings can also be created by concatenating multiple strings together using the `+` operator.
+
+```csharp
+string fullName = "Eli" + " " + "Rousseau";
+```
+
+###### 6.4.3 String Formatting
+
+String formatting allows you to create a string by inserting values into placeholders within a format string. This is done using the `Format()` method of the `String` class.
+
+```csharp
+string formattedString = String.Format("My name is {0} and I am {1} years old.", "John", 30);
+```
+
+###### 6.4.4 Joining Strings
+
+You can also create a string by joining elements of an array using the `Join()` method from the `String` class. The method takes a separator and the array elements to combine them into a single string.
+
+```csharp
+string[] words = { "apple", "banana", "cherry" };
+string fruitList = String.Join(", ", words);
+```
+
+###### 6.4.5 Accessing Characters in a String
+
+The individual characters in a string can be accessed using an index, similar to accessing elements in an array.
+
+```csharp
+char firstLetter = greeting[0]; // 'H'
+```
+
+###### 6.4.6 String Immutability
+
+In C#, strings are immutable, meaning that once a string is created, it cannot be changed. If you attempt to modify a string, you will actually create a new string instance rather than altering the original one.
+
+###### 6.4.7 Special Characters in Strings
+
+C# provides several special characters that have specific meanings when used within strings.
+
+| Char | Description           |
+| ---- | --------------------- |
+| `\n` | New line              |
+| `\t` | Tab                   |
+| `\\` | Backslash             |
+| `\'` | Single quotation mark |
+| `\"` | Double quotation mark |
+
+###### 6.4.8 Verbatim Strings
+
+When working with strings that contain many special characters, such as backslashes in file paths, you can use a verbatim string. A verbatim string is created by prefixing the string with the `@` symbol, which treats backslashes as normal characters and not escape sequences.
+
+```csharp
+string filePath = @"C:\Users\JohnDoe\Documents\file.txt";
+```
+
+###### 6.4.9 Useful String Methods
+
+C# provides a rich set of methods for manipulating and working with strings. Below is a detailed description of some of the most commonly used string methods.
+
+| **Category**                | **Method**                          | **Description**                                                                     |
+| --------------------------- | ----------------------------------- | ----------------------------------------------------------------------------------- |
+| **Formatting**              | `ToLower()`                         | Converts all characters in the string to lowercase.                                 |
+|                             | `ToUpper()`                         | Converts all characters in the string to uppercase.                                 |
+|                             | `Trim()`                            | Removes leading and trailing whitespace from the string.                            |
+| **Searching**               | `IndexOf(string)`                   | Finds the index of the first occurrence of a specified substring.                   |
+|                             | `LastIndexOf(string)`               | Finds the index of the last occurrence of a specified substring.                    |
+| **Substring**               | `Substring(startIndex, length)`     | Extracts a substring starting at the specified index and with the specified length. |
+| **Replacing**               | `Replace(old, new)`                 | Replaces all occurrences of a specified substring with another substring.           |
+| **Null and Empty Checking** | `String.IsNullOrEmpty(string)`      | Checks if the string is either null or has a length of zero.                        |
+|                             | `String.IsNullOrWhiteSpace(string)` | Checks if the string is null, empty, or consists only of white-space characters.    |
+| **Splitting**               | `Split(pattern)`                    | Splits the string into an array of substrings based on the specified pattern.       |
+| **Conversion**              | `Convert.ToInt32(string)`           | Converts a string to a 32-bit integer.                                              |
+|                             | `ToString()`                        | Converts a number to its string representation.                                     |
+
+#### 6.5 StringBuilder
+
+###### 6.5.1 Advantges of StringBuilder
+
+In C#, the `StringBuilder` class is a useful tool for efficiently handling extensive string manipulation. Unlike the `String` class, which is immutable, `StringBuilder` allows for the creation and modification of strings without generating new instances each time a change is made. This can significantly improve performance, especially in scenarios where numerous string modifications are necessary. However, one should realize that `StringBuilder` are not meant for searching type of operations, these might be more efficiently handled by the `String` class.
+
+###### 6.5.2 Declaring a StringBuilder
+
+ `StringBuilder` is a class from the `System.Text` namespace.  Here's how you can declare a `StringBuilder`:
+
+```csharp
+StringBuilder sb = new StringBuilder();
+StringBuilder sb = new StringBuilder("Initial string"); // Can be initialized with a string
+```
+
+###### 6.5.3 Useful StringBuilder Methods
+
+Here’s a table summarizing some of the most commonly used `StringBuilder` methods:
+
+| Method         | Description                                                                      |
+| -------------- | -------------------------------------------------------------------------------- |
+| `Append()`     | Adds a string to the end of the `StringBuilder` instance.                        |
+| `AppendLine()` | Adds a string followed by a newline character to the end of the `StringBuilder`. |
+| `Insert()`     | Inserts a string at the specified index within the `StringBuilder`.              |
+| `Remove()`     | Deletes a specified range of characters from the `StringBuilder`.                |
+| `Replace()`    | Replaces all occurrences of a specified string or character.                     |
+| `Clear()`      | Removes all content from the `StringBuilder` instance.                           |
+| `ToString()`   | Converts the `StringBuilder` content to a regular string.                        |
+
+#### 6.6 Enums
+
+###### 6.6.1 Defining an Enum
+
+An enum (short for "enumeration") is a special data type in C# that allows you to define a set of named constants. Enums are useful when you have a collection of related constants, such as days of the week, directions, or states in a process. To define an enum, start by specifying an access modifier, followed by the `enum` keyword and an identifier for the enum. Inside the enum block, list the name/value pairs that make up the enum.
+
+```csharp
+public enum DaysOfWeek
+{
+    Sunday,
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday,
+    Saturday
+}
+```
+
+###### 6.6.2 Internal Representation
+
+By default, the values in an enum are stored as integers, with the first value assigned `0` and each subsequent value incremented by one. However, you can change the underlying data type of the enum values by specifying it after the enum identifier.
+
+```csharp
+public enum DaysOfWeek : byte
+{
+    Sunday = 1,
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday,
+    Saturday
+}
+```
+
+###### 6.6.3 Accessing Enum Values
+
+You can access enum values using dot notation. Enums can also be used to declare variables of the enum type.
+
+```csharp
+DaysOfWeek today = DaysOfWeek.Monday;
+```
+
+To retrieve the numeric value associated with an enum name, you need to cast the enum value to its underlying data type.
+
+```csharp
+int numericValue = (int)DaysOfWeek.Monday; // Outputs 1
+```
+
+###### 6.6.4 Parsing Strings to Enum
+
+If you have a string representation of an enum name, you can convert it to the corresponding enum name using the `Parse()` method from the `Enum` class in the `System` namespace. This requires specifying the enum type and the string value to be parsed. The returned object must then be cast to the enum type.
+
+```csharp
+DaysOfWeek day = (DaysOfWeek)Enum.Parse(typeof(DaysOfWeek), "Monday");
+```
+
+###### 6.6.5 Converting Values to Enum Names
+
+Conversely, you can obtain the name of an enum based on its numeric value by casting the numeric value to the enum type.
+
+```csharp
+string dayName = ((DaysOfWeek)1).ToString(); // Outputs "Monday"
+```
+
+## 7. Value Types vs. Reference Types
+
+#### 7.1 Implementation of Primitive and Non-Primitive Types
+
+In C#, you can create new types using two main constructs: classes and structs. Both are powerful tools, but they differ significantly in how they are treated at runtime and how they manage memory.
+
+- **Primitive Types**: All primitive types in C#, such as `int`, `float`, and `bool`, are implemented as structs. This means they are **value types**. Additionally, you can create custom value types by defining your own structs.
+
+- **Non-Primitive Types**: Non-primitive types, like arrays and strings, are implemented as classes. You can also create custom classes. Unlike structs, classes are **reference types**, and this distinction plays a crucial role in their memory behavior.
+
+#### 7.2 Memory Management
+
+###### 7.2.1 Value Types (Structs)
+
+In C#, structs are known as value types. When you create a variable that is a value type, the memory required for that variable is automatically allocated on the **stack**, a specific area of memory. The stack is efficient and fast because its allocation and deallocation are managed automatically. When a value type variable goes out of scope, the Common Language Runtime (CLR) immediately removes it from memory.
+
+###### 7.2.2 Reference Types (Classes)
+
+Classes, on the other hand, are reference types. When you create an instance of a class, memory for the object is allocated on the **heap**, a different area of memory designed for longer-lived objects. Unlike the stack, memory on the heap is managed through a process called **garbage collection**, handled by the CLR. The garbage collector periodically checks for objects that are no longer in use and removes them from the heap.
+
+#### 7.3 Copying Value Types vs. Reference Types
+
+###### 7.3.1 Copying Value Types
+
+When you copy a value type variable, a new, independent copy of the value is created on the stack. As a result, changes made to one copy do not affect the other.
+
+###### 7.3.2 Copying Reference Types
+
+Copying a reference type variable does not create a new instance of the object. Instead, it creates a new reference to the same object in memory. Both variables point to the same memory address on the heap, so changes to one reference will affect the object seen by the other reference.
+
+## 8. Control Flow
+
+#### 8.1 Conditional Statements
+
+###### 8.1.1 If / else Statements
+
+If/else statements are used to execute code based on whether a specific condition is true or false. They allow you to control the flow of the program by providing alternative paths for different conditions.
+
+```javascript
+if (condition) {
+    someStatement
+} else if (anotherCondition) {
+    anotherStatement
+} else {
+    yetAnotherStatement
+}
+```
+
+###### 8.1.2 Switch / case Statements
+
+Switch/case statements are used to simplify multiple if/else conditions by allowing a variable to be tested against a list of values, executing the corresponding block of code for the matching case. 
+
+```javascript
+switch(variable) {
+    case value1:
+        // code block for value1
+        break;
+    case value2:
+        // code block for value2
+        break;
+    default:
+        // code block if no cases match
+        break;
+}
+```
+
+###### 8.1.3 Conditional Operator
+
+The conditional (ternary) operator is a shorthand for if/else statements, used to assign a value to a variable based on a condition. It is useful for making concise, inline decisions.
+
+```javascript
+var variable = (condition) ? valueIfConditionIsTrue : valueIfConditionIsFalse;
+```
+
+#### 8.2 Iteration Statements
+
+###### 8.2.1 For Loops
+
+For loops are used to execute a block of code a specific number of times, typically when you know in advance how many iterations are required. They are ideal for iterating through sequences with a known number of elements.
+
+```csharp
+for (var i = 0; i < number; i++) {
+    // code to execute on each iteration
+}
+```
+
+###### 8.2.2 Foreach Loops
+
+Foreach loops are used to iterate through each element in a collection or array, executing a block of code for each element. They are useful when you need to access each item in a collection without needing to know the index.
+
+```csharp
+foreach (var element in elements) {
+    // code to execute for each element
+}
+```
+
+###### 8.2.3 While Loops
+
+While loops are used to execute a block of code repeatedly as long as a specified condition remains true. They are useful when the number of iterations is not known beforehand and depends on the condition.
+
+```csharp
+while (i < number) {
+    // code to execute while condition is true
+    i++;
+}
+```
+
+###### 8.2.4 Do-While Loops
+
+Do-while loops are similar to while loops but guarantee that the block of code will be executed at least once, even if the condition is initially false. The condition is evaluated after the loop's body has been executed.
+
+```csharp
+do {
+    // code to execute at least once
+    i++;
+} while (i < number);
+```
+
+###### 8.2.5 Break Statement
+
+The `break` statement is used to exit a loop immediately, stopping any further iterations. It is typically used when a certain condition is met that requires the loop to terminate.
+
+###### 8.2.6 Continue Statement
+
+The `continue` statement is used to skip the current iteration and move directly to the next iteration of the loop. It is useful when you want to bypass certain parts of the loop's code based on a condition.
+
+## 9. Arrays and Lists
+
+#### 9.1 Arrays
+
+An array is a data structure that allows you to store a fixed number of variables of a specific type. In C#, arrays come in two main types: single-dimensional and multi-dimensional arrays. Moreover, the multidimensional arrays in C# can be divided into two types: rectangular arrays and jagged arrays.
+
+###### 9.1.1 Single-Dimensional Arrays
+
+Single-dimensional arrays are the simplest form of arrays in C#. They represent a series of elements stored in a linear sequence. To declare a single-dimensional array, you specify the data type followed by square brackets `[]` and then the number of elements you wish to store within those brackets.
+
+```csharp
+int[] numbers = new int[5];  // Array with 5 elements of type int
+```
+
+Alternatively, you can use object initialization syntax to declare and initialize the array in one step:
+
+```csharp
+int[] numbers = new int [5] { 1, 2, 3, 4, 5 };  // Array with 5 elements initialized
+```
+
+###### 9.1.2 Rectangular Arrays
+
+Rectangular arrays are arrays where each row has the same number of columns, forming a grid or matrix. To declare a rectangular array, you specify the size of each dimension within the square brackets.
+
+```csharp
+int[,] matrix = new int[3, 4];  // A 3x4 matrix (3 rows and 4 columns)
+```
+
+You can also use object initialization syntax:
+
+```csharp
+int[,] matrix = new int[3, 4] {
+    { 1, 2, 3, 4 },
+    { 5, 6, 7, 8 },
+    { 9, 10, 11, 12 }
+};
+```
+
+###### 9.1.3 Jagged Arrays
+
+Jagged arrays are arrays of arrays, meaning each row can have a different number of columns. This makes them more flexible but also more complex to manage. They are particularly useful when working with data structures that do not fit neatly into a grid. To declare a jagged array, you first define the number of rows, and then each row is initialized separately:
+
+```csharp
+int[][] jaggedArray = new int[3][];  // Array with 3 rows
+jaggedArray[0] = new int[4];  // First row with 4 columns
+jaggedArray[1] = new int[2];  // Second row with 2 columns
+jaggedArray[2] = new int[3];  // Third row with 3 columns
+```
+
+When working with multi-dimensional arrays, it's important to note that the .NET Common Language Runtime (CLR) is optimized for single-dimensional arrays. As a result, operations on single-dimensional arrays, even in complex structures like matrices, might be more efficient if implemented as jagged arrays rather than rectangular arrays.
+
+###### 9.1.4 Array Properties and Methods
+
+All arrays in C# are instances of the `Array` class in the `System` namespace. This class provides several useful properties and methods that help you manipulate arrays efficiently.
+
+| **Property/Method**                | **Description**                                          |
+| ---------------------------------- | -------------------------------------------------------- |
+| `Array.Length(array)`              | Returns the total number of elements in the array.       |
+| `Array.IndexOf(array, element)`    | Returns the index of the first occurrence of an element. |
+| `Array.Clear(array, start, end)`   | Clears elements in a specified range of the array.       |
+| `Array.Copy(source, dest, length)` | Copies a range of elements from one array to another.    |
+| `Array.Sort(array)`                | Sorts the elements of the array in ascending order.      |
+| `Array.Reverse(array)`             | Reverses the order of elements in the array.             |
+
+#### 9.2 Lists
+
+###### 9.2.1 Static vs Dynamic Collections
+
+Arrays in C# are static data structures, meaning their size is fixed at the time of initialization. Once you declare an array, you cannot change its size. This can be limiting in situations where you do not know the number of elements in advance. To overcome the limitations of arrays, C# provides a dynamic data structure called a list. A list can grow or shrink as needed, making it ideal for scenarios where the number of elements is unknown at the outset. 
+
+###### 9.2.2 Declaring a List
+
+To declare a list, you use the `List` class followed by the data type in angle brackets. Lists are part of the `System.Collections.Generic` namespace and are implemented through the `List<T>` class, where `T` specifies the type of elements the list will store.
+
+```csharp
+using System.Collections.Generic;
+
+List<int> numbers = new List<int>();  // Declares an empty list of integers
+```
+
+You can also use object initialization syntax to populate the list at the time of declaration:
+
+```csharp
+List<string> names = new List<string> { "Alice", "Bob", "Charlie" };
+```
+
+###### 9.2.3 List Properties and Methods
+
+The `List<T>` class provides several useful methods that allow you to manipulate the elements within the list easily:
+
+| **Method**                            | **Description**                                                   |
+| ------------------------------------- | ----------------------------------------------------------------- |
+| `Add(T item)`                         | Adds an element to the end of the list.                           |
+| `AddRange(IEnumerable<T> collection)` | Adds a collection of elements to the list.                        |
+| `Remove(T item)`                      | Removes the first occurrence of a specific element from the list. |
+| `RemoveAt(int index)`                 | Removes the element at the specified index.                       |
+| `IndexOf(T item)`                     | Returns the index of the first occurrence of a specific element.  |
+| `Contains(T item)`                    | Checks if a specific element exists in the list.                  |
+| `Count`                               | Gets the number of elements currently in the list.                |
+
+## 10. Interacting with the Console
+
+#### 10.1 Writing to the Console
+
+The `Console.WriteLine()` method is used to output a message or a value to the console. It automatically appends a newline character at the end, so each call to `Console.WriteLine()` will start a new line in the console.
+
+```csharp
+Console.WriteLine("Hello, World!");
+```
+
+#### 10.2 Reading from the Console
+
+The `Console.ReadLine()` method is used to read a line of input from the console. It pauses the program execution until the user inputs text and presses the Enter key, returning the input as a string.
+
+```csharp
+string input = Console.ReadLine();
+```
+
+## 11. Working with Random Numbers
+
+The `Random` class in C# is used to generate random numbers and is part of the `System` namespace. To start using it, you first create an instance of the `Random` class. Once you have this instance, you can call various methods to generate random numbers. One of the most commonly used methods is `Next(int minValue, int maxValue)`, which generates a random integer that is greater than or equal to `minValue` and less than `maxValue`.
+
+```csharp
+Random random = new Random();
+int randomNumber3 = random.Next(1, 11); // Generates a random number between 1 and 10
+```
+
+## 12. Working with Date and Time
+
+#### 12.1 DateTime
+
+###### 12.1.1 Declaring a DateTime
+
+The `DateTime` class in C# is a structure defined within the `System` namespace, used to represent and work with dates and times. When creating an instance of `DateTime`, you can specify the year, month, day, hour, minute, and second as arguments.
+
+```csharp
+DateTime specificDate = new DateTime(2024, 8, 8, 14, 30, 0); // August 8, 2024, 14:30:00
+```
+
+###### 12.1.2 Current Date and Time
+
+To initialize a `DateTime` instance with the current date and time, you can use the static properties `DateTime.Now` or `DateTime.Today`. `Now` provides the current date and time, while `Today` gives the current date with the time set to 00:00:00.
+
+```csharp
+DateTime now = DateTime.Now;
+DateTime today = DateTime.Today;
+```
+
+###### 12.1.3 Accessing Date and Time Components
+
+Once you have a `DateTime` instance, you can access individual components like the year, month, day, hour, minute, and second using properties.
+
+```csharp
+int year = now.Year;
+int month = now.Month;
+int day = now.Day;
+int hour = now.Hour;
+int minute = now.Minute;
+int second = now.Second;
+```
+
+###### 12.1.4 Modifying DateTime Instances
+
+Although `DateTime` instances are immutable (meaning they cannot be changed after creation), you can create modified copies using methods like `AddYears()`, `AddMonths()`, `AddDays()`, `AddHours()`, `AddMinutes()`, and `AddSeconds()`:
+
+```csharp
+DateTime nextYear = now.AddYears(1);
+DateTime nextMonth = now.AddMonths(1);
+DateTime nextDay = now.AddDays(1);
+```
+
+###### 12.1.5 Formatting DateTime as a String
+
+`DateTime` instances can be converted into strings using various methods, each offering a different level of detail:
+
+| **Method**            | **Description**                                                   |
+| --------------------- | ----------------------------------------------------------------- |
+| `ToLongDateString()`  | Returns the full date as a string.                                |
+| `ToShortDateString()` | Returns the short date as a string.                               |
+| `ToLongTimeString()`  | Returns the full time as a string.                                |
+| `ToShortTimeString()` | Returns the short time as a string.                               |
+| `ToString()`          | Returns the date and time as a string. Accepts format specifiers. |
+
+#### 12.2 TimeSpan
+
+###### 12.2.1 Declaring a TimeSpan
+
+The `TimeSpan` class, also within the `System` namespace, represents a duration of time, such as the difference between two `DateTime` instances. You can create a `TimeSpan` by specifying days, hours, minutes, and seconds.
+
+```csharp
+TimeSpan duration = new TimeSpan(1, 2, 30, 0); // 1 day, 2 hours, 30 minutes
+```
+
+Alternatively, you can use static methods like `FromDays()`, `FromHours()`, `FromMinutes()`, and `FromSeconds()` to create a `TimeSpan`.
+
+###### 12.2.2 Subtracting Dates
+
+When you subtract one `DateTime` instance from another, the result is a `TimeSpan`:
+
+```csharp
+DateTime startDate = new DateTime(2024, 8, 8);
+DateTime endDate = new DateTime(2024, 8, 10);
+TimeSpan difference = endDate - startDate; // 2 days
+```
+
+###### 12.2.3 TimeSpan Properties and Methods
+
+`TimeSpan` provides properties to access its components, both as whole units and total values:
+
+| **Property**   | **Description**                                    |
+| -------------- | -------------------------------------------------- |
+| `Days`         | The whole number of days in the `TimeSpan`.        |
+| `Hours`        | The whole number of hours in the `TimeSpan`.       |
+| `Minutes`      | The whole number of minutes in the `TimeSpan`.     |
+| `Seconds`      | The whole number of seconds in the `TimeSpan`.     |
+| `TotalDays`    | The total number of days (including fractions).    |
+| `TotalHours`   | The total number of hours (including fractions).   |
+| `TotalMinutes` | The total number of minutes (including fractions). |
+| `TotalSeconds` | The total number of seconds (including fractions). |
+
+###### 12.2.4 Modifying TimeSpan Instances
+
+You can also modify `TimeSpan` instances using the `Add()` or `Subtract()` methods, which take another `TimeSpan` as an argument.
+
+```csharp
+TimeSpan additionalTime = TimeSpan.FromHours(2);
+TimeSpan newTimeSpan = duration.Add(additionalTime);
+```
+
+###### 12.2.5 Converting TimeSpan to String
+
+Like `DateTime`, `TimeSpan` can be converted to a string using the `ToString()` method.

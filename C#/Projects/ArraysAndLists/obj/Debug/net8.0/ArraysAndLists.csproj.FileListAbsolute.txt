@@ -1,0 +1,15 @@
+D:\From zero to software developer\C#\Projects\ArraysAndLists\obj\Debug\net8.0\ArraysAndLists.GeneratedMSBuildEditorConfig.editorconfig
+D:\From zero to software developer\C#\Projects\ArraysAndLists\obj\Debug\net8.0\ArraysAndLists.AssemblyInfoInputs.cache
+D:\From zero to software developer\C#\Projects\ArraysAndLists\obj\Debug\net8.0\ArraysAndLists.AssemblyInfo.cs
+D:\From zero to software developer\C#\Projects\ArraysAndLists\obj\Debug\net8.0\ArraysAndLists.csproj.CoreCompileInputs.cache
+D:\From zero to software developer\C#\Projects\ArraysAndLists\obj\Debug\net8.0\ArraysAndLists.sourcelink.json
+D:\From zero to software developer\C#\Projects\ArraysAndLists\bin\Debug\net8.0\ArraysAndLists.exe
+D:\From zero to software developer\C#\Projects\ArraysAndLists\bin\Debug\net8.0\ArraysAndLists.deps.json
+D:\From zero to software developer\C#\Projects\ArraysAndLists\bin\Debug\net8.0\ArraysAndLists.runtimeconfig.json
+D:\From zero to software developer\C#\Projects\ArraysAndLists\bin\Debug\net8.0\ArraysAndLists.dll
+D:\From zero to software developer\C#\Projects\ArraysAndLists\bin\Debug\net8.0\ArraysAndLists.pdb
+D:\From zero to software developer\C#\Projects\ArraysAndLists\obj\Debug\net8.0\ArraysAndLists.dll
+D:\From zero to software developer\C#\Projects\ArraysAndLists\obj\Debug\net8.0\refint\ArraysAndLists.dll
+D:\From zero to software developer\C#\Projects\ArraysAndLists\obj\Debug\net8.0\ArraysAndLists.pdb
+D:\From zero to software developer\C#\Projects\ArraysAndLists\obj\Debug\net8.0\ArraysAndLists.genruntimeconfig.cache
+D:\From zero to software developer\C#\Projects\ArraysAndLists\obj\Debug\net8.0\ref\ArraysAndLists.dll

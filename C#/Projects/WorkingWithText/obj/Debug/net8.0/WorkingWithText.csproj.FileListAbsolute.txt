@@ -1,0 +1,15 @@
+D:\From zero to software developer\C#\Projects\WorkingWithText\bin\Debug\net8.0\WorkingWithText.exe
+D:\From zero to software developer\C#\Projects\WorkingWithText\bin\Debug\net8.0\WorkingWithText.deps.json
+D:\From zero to software developer\C#\Projects\WorkingWithText\bin\Debug\net8.0\WorkingWithText.runtimeconfig.json
+D:\From zero to software developer\C#\Projects\WorkingWithText\bin\Debug\net8.0\WorkingWithText.dll
+D:\From zero to software developer\C#\Projects\WorkingWithText\bin\Debug\net8.0\WorkingWithText.pdb
+D:\From zero to software developer\C#\Projects\WorkingWithText\obj\Debug\net8.0\WorkingWithText.GeneratedMSBuildEditorConfig.editorconfig
+D:\From zero to software developer\C#\Projects\WorkingWithText\obj\Debug\net8.0\WorkingWithText.AssemblyInfoInputs.cache
+D:\From zero to software developer\C#\Projects\WorkingWithText\obj\Debug\net8.0\WorkingWithText.AssemblyInfo.cs
+D:\From zero to software developer\C#\Projects\WorkingWithText\obj\Debug\net8.0\WorkingWithText.csproj.CoreCompileInputs.cache
+D:\From zero to software developer\C#\Projects\WorkingWithText\obj\Debug\net8.0\WorkingWithText.sourcelink.json
+D:\From zero to software developer\C#\Projects\WorkingWithText\obj\Debug\net8.0\WorkingWithText.dll
+D:\From zero to software developer\C#\Projects\WorkingWithText\obj\Debug\net8.0\refint\WorkingWithText.dll
+D:\From zero to software developer\C#\Projects\WorkingWithText\obj\Debug\net8.0\WorkingWithText.pdb
+D:\From zero to software developer\C#\Projects\WorkingWithText\obj\Debug\net8.0\WorkingWithText.genruntimeconfig.cache
+D:\From zero to software developer\C#\Projects\WorkingWithText\obj\Debug\net8.0\ref\WorkingWithText.dll
