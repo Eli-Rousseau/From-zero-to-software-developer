@@ -1,4 +1,4 @@
-# C#
+# C#: Part. 1 - Fundamentals
 
 ## 1. Introduction to C# and .NET Framework
 
@@ -950,3 +950,173 @@ TimeSpan newTimeSpan = duration.Add(additionalTime);
 ###### 12.2.5 Converting TimeSpan to String
 
 Like `DateTime`, `TimeSpan` can be converted to a string using the `ToString()` method.
+
+## 13 Working with Files, Directories, and Paths
+
+In C#, dealing with files, directories, and paths is an essential part of many applications. The .NET framework provides several classes to help manage these tasks effectively. Below, we will explore these classes, how to use them, and compare their advantages and disadvantages.
+
+#### 13.1 File Class
+
+The `File` class provides static methods to perform various operations on files, such as creating, copying, deleting, moving, and opening files. Since the methods are static, you do not need to create an instance of the `File` class to use them.
+
+###### 13.1.1 Declaration and Usage
+
+```csharp
+using System.IO;
+
+// Example: Reading a file
+string content = File.ReadAllText(@"C:\example\file.txt");
+
+// Example: Writing to a file
+File.WriteAllText(@"C:\example\file.txt", "Hello, World!");
+```
+
+###### 13.1.2 Useful Methods
+
+| Method                                             | Description                                      |
+| -------------------------------------------------- | ------------------------------------------------ |
+| `ReadAllText(string path)`                         | Reads all text from a file.                      |
+| `WriteAllText(string path, string contents)`       | Writes text to a file, overwriting if it exists. |
+| `Copy(string sourceFileName, string destFileName)` | Copies a file to a new location.                 |
+| `Delete(string path)`                              | Deletes the specified file.                      |
+| `Exists(string path)`                              | Checks if the specified file exists.             |
+
+#### 13.2 FileInfo Class
+
+The `FileInfo` class provides instance methods for working with files, offering more control and potentially better performance when multiple operations are performed on the same file.
+
+###### 13.2.1 Declaration and Usage
+
+```csharp
+using System.IO;
+
+// Example: Creating a FileInfo instance
+FileInfo fileInfo = new FileInfo(@"C:\example\file.txt");
+
+// Example: Checking file existence
+if (fileInfo.Exists)
+{
+    // Perform operations with fileInfo
+}
+```
+
+###### 13.2.2 Useful Methods
+
+| Method                        | Description                        |
+| ----------------------------- | ---------------------------------- |
+| `CopyTo(string destFileName)` | Copies the file to a new location. |
+| `Delete()`                    | Deletes the file.                  |
+| `MoveTo(string destFileName)` | Moves the file to a new location.  |
+| `Create()`                    | Creates a new file.                |
+| `OpenRead()`                  | Opens the file for reading.        |
+
+#### 13.3 Directory Class
+
+The `Directory` class provides static methods to perform various operations on directories, such as creating, deleting, moving, and checking the existence of directories.
+
+###### 13.3.1 Declaration and Usage
+
+```csharp
+using System.IO;
+
+// Example: Creating a directory
+Directory.CreateDirectory(@"C:\example\newfolder");
+
+// Example: Checking if a directory exists
+bool exists = Directory.Exists(@"C:\example\newfolder");
+```
+
+###### 13.3.2 Useful Methods
+
+| Method                                | Description                                      |
+| ------------------------------------- | ------------------------------------------------ |
+| `CreateDirectory(string path)`        | Creates a new directory.                         |
+| `Delete(string path, bool recursive)` | Deletes a directory and its contents.            |
+| `Exists(string path)`                 | Checks if the directory exists.                  |
+| `GetFiles(string path)`               | Retrieves all files from the directory.          |
+| `GetDirectories(string path)`         | Retrieves all subdirectories from the directory. |
+
+### 13.4 DirectoryInfo Class
+
+The `DirectoryInfo` class provides instance methods for working with directories, offering more control and efficiency when multiple operations are required on the same directory.
+
+###### 13.4.1 Declaration and Usage
+
+```csharp
+using System.IO;
+
+// Example: Creating a DirectoryInfo instance
+DirectoryInfo dirInfo = new DirectoryInfo(@"C:\example\newfolder");
+
+// Example: Checking directory existence
+if (dirInfo.Exists)
+{
+    // Perform operations with dirInfo
+}
+```
+
+###### 13.4.2 Useful Methods
+
+| Method                       | Description                             |
+| ---------------------------- | --------------------------------------- |
+| `Create()`                   | Creates the directory.                  |
+| `Delete(bool recursive)`     | Deletes the directory and its contents. |
+| `GetFiles()`                 | Retrieves all files from the directory. |
+| `GetDirectories()`           | Retrieves all subdirectories.           |
+| `MoveTo(string destDirName)` | Moves the directory to a new location.  |
+
+#### 13.5 Path Class
+
+The `Path` class provides static methods to work with file and directory path strings, allowing you to perform operations like combining paths, extracting file extensions, and getting directory names.
+
+###### 13.5.1 Declaration and Usage
+
+```csharp
+using System.IO;
+
+// Example: Combining paths
+string fullPath = Path.Combine(@"C:\example", "file.txt");
+
+// Example: Getting file extension
+string extension = Path.GetExtension(@"C:\example\file.txt");
+```
+
+###### 13.5.2 Useful Methods
+
+| Method                           | Description                                   |
+| -------------------------------- | --------------------------------------------- |
+| `Combine(params string[] paths)` | Combines multiple strings into a single path. |
+| `GetExtension(string path)`      | Returns the file extension.                   |
+| `GetFileName(string path)`       | Returns the file name and extension.          |
+| `GetDirectoryName(string path)`  | Returns the directory name from the path.     |
+| `GetFullPath(string path)`       | Returns the absolute path for the given path. |
+
+## 14. Debugging
+
+#### 14.1 Importance and Process of Debugging
+
+Debugging is a crucial aspect of software development in C#. It involves identifying and fixing bugs or unexpected behavior in the code. The process typically begins by setting breakpoints at strategic points in the application and running the code in debug mode. When execution reaches a breakpoint, the program pauses, allowing the developer to inspect variable values and flow control. This helps in pinpointing the exact location and cause of a problem. After making corrections, the application is run again to ensure that the issue is resolved.
+
+#### 14.2 Main Debug Functionalities and Windows
+
+C# provides several powerful debugging tools and windows in the integrated development environment (IDE):
+
+- **Breakpoints**: These are markers placed in the code where execution will pause, allowing for inspection.
+- **Step Over**: This command allows you to execute the next line of code without stepping into any method calls.
+- **Step Into**: This command steps into a method call, allowing you to see the execution inside the method.
+- **Step Out**: This command steps out of the current method, returning control to the calling method.
+
+#### 14.3 Key Debug Windows
+
+- **Watch Window**: Lets you track the values of specific variables throughout the execution of the program.
+- **Call Stack Window**: Displays the sequence of method calls that led to the current point in the execution.
+- **Autos Window**: Automatically shows variables that are likely to be of interest based on the current line of code.
+- **Locals Window**: Automatically displays all variables within the current scope, providing an overview of the local state.
+
+#### 14.4 Side Effects
+
+Side effects in programming refer to unintended changes in the state of the program or the environment that occur when a function or method is executed. These can lead to unpredictable behavior and are generally avoided in well-structured code, especially during debugging.
+
+#### 14.5 Defensive Programming
+
+Defensive programming is a practice aimed at improving software reliability by anticipating and guarding against potential errors. It involves validating inputs to ensure they conform to expected formats or values, and raising exceptions when they do not. This approach helps prevent bugs and ensures that the program behaves correctly even in unexpected situations.
