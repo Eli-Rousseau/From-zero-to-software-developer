@@ -1,0 +1,15 @@
+D:\From zero to software developer\C#\Projects\StackOverFlow\bin\Debug\net8.0\StackOverFlow.exe
+D:\From zero to software developer\C#\Projects\StackOverFlow\bin\Debug\net8.0\StackOverFlow.deps.json
+D:\From zero to software developer\C#\Projects\StackOverFlow\bin\Debug\net8.0\StackOverFlow.runtimeconfig.json
+D:\From zero to software developer\C#\Projects\StackOverFlow\bin\Debug\net8.0\StackOverFlow.dll
+D:\From zero to software developer\C#\Projects\StackOverFlow\bin\Debug\net8.0\StackOverFlow.pdb
+D:\From zero to software developer\C#\Projects\StackOverFlow\obj\Debug\net8.0\StackOverFlow.GeneratedMSBuildEditorConfig.editorconfig
+D:\From zero to software developer\C#\Projects\StackOverFlow\obj\Debug\net8.0\StackOverFlow.AssemblyInfoInputs.cache
+D:\From zero to software developer\C#\Projects\StackOverFlow\obj\Debug\net8.0\StackOverFlow.AssemblyInfo.cs
+D:\From zero to software developer\C#\Projects\StackOverFlow\obj\Debug\net8.0\StackOverFlow.csproj.CoreCompileInputs.cache
+D:\From zero to software developer\C#\Projects\StackOverFlow\obj\Debug\net8.0\StackOverFlow.sourcelink.json
+D:\From zero to software developer\C#\Projects\StackOverFlow\obj\Debug\net8.0\StackOverFlow.dll
+D:\From zero to software developer\C#\Projects\StackOverFlow\obj\Debug\net8.0\refint\StackOverFlow.dll
+D:\From zero to software developer\C#\Projects\StackOverFlow\obj\Debug\net8.0\StackOverFlow.pdb
+D:\From zero to software developer\C#\Projects\StackOverFlow\obj\Debug\net8.0\StackOverFlow.genruntimeconfig.cache
+D:\From zero to software developer\C#\Projects\StackOverFlow\obj\Debug\net8.0\ref\StackOverFlow.dll

@@ -1,0 +1,15 @@
+D:\From zero to software developer\C#\Projects\Database\bin\Debug\net8.0\Database.exe
+D:\From zero to software developer\C#\Projects\Database\bin\Debug\net8.0\Database.deps.json
+D:\From zero to software developer\C#\Projects\Database\bin\Debug\net8.0\Database.runtimeconfig.json
+D:\From zero to software developer\C#\Projects\Database\bin\Debug\net8.0\Database.dll
+D:\From zero to software developer\C#\Projects\Database\bin\Debug\net8.0\Database.pdb
+D:\From zero to software developer\C#\Projects\Database\obj\Debug\net8.0\Database.GeneratedMSBuildEditorConfig.editorconfig
+D:\From zero to software developer\C#\Projects\Database\obj\Debug\net8.0\Database.AssemblyInfoInputs.cache
+D:\From zero to software developer\C#\Projects\Database\obj\Debug\net8.0\Database.AssemblyInfo.cs
+D:\From zero to software developer\C#\Projects\Database\obj\Debug\net8.0\Database.csproj.CoreCompileInputs.cache
+D:\From zero to software developer\C#\Projects\Database\obj\Debug\net8.0\Database.sourcelink.json
+D:\From zero to software developer\C#\Projects\Database\obj\Debug\net8.0\Database.dll
+D:\From zero to software developer\C#\Projects\Database\obj\Debug\net8.0\refint\Database.dll
+D:\From zero to software developer\C#\Projects\Database\obj\Debug\net8.0\Database.pdb
+D:\From zero to software developer\C#\Projects\Database\obj\Debug\net8.0\Database.genruntimeconfig.cache
+D:\From zero to software developer\C#\Projects\Database\obj\Debug\net8.0\ref\Database.dll

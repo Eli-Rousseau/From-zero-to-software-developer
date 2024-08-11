@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\From zero to software developer\\C#\\Projects\\Stack\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{360D8424-D356-4158-A29F-E1DA603CC13E}|Stack.csproj|d:\\from zero to software developer\\c#\\projects\\stack\\stack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{360D8424-D356-4158-A29F-E1DA603CC13E}|Stack.csproj|solutionrelative:stack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{360D8424-D356-4158-A29F-E1DA603CC13E}|Stack.csproj|d:\\from zero to software developer\\c#\\projects\\stack\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{360D8424-D356-4158-A29F-E1DA603CC13E}|Stack.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Stack.cs",
+              "DocumentMoniker": "D:\\From zero to software developer\\C#\\Projects\\Stack\\Stack.cs",
+              "RelativeDocumentMoniker": "Stack.cs",
+              "ToolTip": "D:\\From zero to software developer\\C#\\Projects\\Stack\\Stack.cs",
+              "RelativeToolTip": "Stack.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAWAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-11T17:45:58.911Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\From zero to software developer\\C#\\Projects\\Stack\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\From zero to software developer\\C#\\Projects\\Stack\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAArAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-11T17:43:52.606Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

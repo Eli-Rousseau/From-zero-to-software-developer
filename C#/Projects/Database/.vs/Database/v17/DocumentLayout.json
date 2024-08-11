@@ -1,0 +1,88 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\From zero to software developer\\C#\\Projects\\Database\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{1AFD3D4A-7D83-4AB1-848D-CDFFC96B35E8}|Database.csproj|d:\\from zero to software developer\\c#\\projects\\database\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1AFD3D4A-7D83-4AB1-848D-CDFFC96B35E8}|Database.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1AFD3D4A-7D83-4AB1-848D-CDFFC96B35E8}|Database.csproj|d:\\from zero to software developer\\c#\\projects\\database\\dbcommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1AFD3D4A-7D83-4AB1-848D-CDFFC96B35E8}|Database.csproj|solutionrelative:dbcommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1AFD3D4A-7D83-4AB1-848D-CDFFC96B35E8}|Database.csproj|d:\\from zero to software developer\\c#\\projects\\database\\dbconnection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1AFD3D4A-7D83-4AB1-848D-CDFFC96B35E8}|Database.csproj|solutionrelative:dbconnection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1AFD3D4A-7D83-4AB1-848D-CDFFC96B35E8}|Database.csproj|d:\\from zero to software developer\\c#\\projects\\database\\sqlconnection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1AFD3D4A-7D83-4AB1-848D-CDFFC96B35E8}|Database.csproj|solutionrelative:sqlconnection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "SqlConnection.cs",
+              "DocumentMoniker": "D:\\From zero to software developer\\C#\\Projects\\Database\\SqlConnection.cs",
+              "RelativeDocumentMoniker": "SqlConnection.cs",
+              "ToolTip": "D:\\From zero to software developer\\C#\\Projects\\Database\\SqlConnection.cs",
+              "RelativeToolTip": "SqlConnection.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAeAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-11T21:49:25.046Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DBConnection.cs",
+              "DocumentMoniker": "D:\\From zero to software developer\\C#\\Projects\\Database\\DBConnection.cs",
+              "RelativeDocumentMoniker": "DBConnection.cs",
+              "ToolTip": "D:\\From zero to software developer\\C#\\Projects\\Database\\DBConnection.cs",
+              "RelativeToolTip": "DBConnection.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-11T21:35:10.898Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DBCommand.cs",
+              "DocumentMoniker": "D:\\From zero to software developer\\C#\\Projects\\Database\\DBCommand.cs",
+              "RelativeDocumentMoniker": "DBCommand.cs",
+              "ToolTip": "D:\\From zero to software developer\\C#\\Projects\\Database\\DBCommand.cs",
+              "RelativeToolTip": "DBCommand.cs",
+              "ViewState": "AQIAABMAAAAAAAAAAAAQwAgAAAALAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-11T21:33:28.225Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\From zero to software developer\\C#\\Projects\\Database\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\From zero to software developer\\C#\\Projects\\Database\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAeAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-11T21:14:19.764Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

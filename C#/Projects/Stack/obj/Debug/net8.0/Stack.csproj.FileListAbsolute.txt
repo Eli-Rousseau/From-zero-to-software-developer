@@ -1,0 +1,15 @@
+D:\From zero to software developer\C#\Projects\Stack\bin\Debug\net8.0\Stack.exe
+D:\From zero to software developer\C#\Projects\Stack\bin\Debug\net8.0\Stack.deps.json
+D:\From zero to software developer\C#\Projects\Stack\bin\Debug\net8.0\Stack.runtimeconfig.json
+D:\From zero to software developer\C#\Projects\Stack\bin\Debug\net8.0\Stack.dll
+D:\From zero to software developer\C#\Projects\Stack\bin\Debug\net8.0\Stack.pdb
+D:\From zero to software developer\C#\Projects\Stack\obj\Debug\net8.0\Stack.GeneratedMSBuildEditorConfig.editorconfig
+D:\From zero to software developer\C#\Projects\Stack\obj\Debug\net8.0\Stack.AssemblyInfoInputs.cache
+D:\From zero to software developer\C#\Projects\Stack\obj\Debug\net8.0\Stack.AssemblyInfo.cs
+D:\From zero to software developer\C#\Projects\Stack\obj\Debug\net8.0\Stack.csproj.CoreCompileInputs.cache
+D:\From zero to software developer\C#\Projects\Stack\obj\Debug\net8.0\Stack.sourcelink.json
+D:\From zero to software developer\C#\Projects\Stack\obj\Debug\net8.0\Stack.dll
+D:\From zero to software developer\C#\Projects\Stack\obj\Debug\net8.0\refint\Stack.dll
+D:\From zero to software developer\C#\Projects\Stack\obj\Debug\net8.0\Stack.pdb
+D:\From zero to software developer\C#\Projects\Stack\obj\Debug\net8.0\Stack.genruntimeconfig.cache
+D:\From zero to software developer\C#\Projects\Stack\obj\Debug\net8.0\ref\Stack.dll
