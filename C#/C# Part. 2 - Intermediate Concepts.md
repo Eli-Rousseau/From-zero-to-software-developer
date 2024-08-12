@@ -542,3 +542,53 @@ public class Dog : Animal
     }
 }
 ```
+
+## 7. Interfaces
+
+An interface in C# is a construct that defines a contract of methods, properties, events, or indexers that a class or struct must implement. Unlike classes, interfaces do not provide any implementation; they simply specify what members a class must implement. This is crucial for achieving loose coupling in software design, as it allows different classes to interact through a shared contract without depending on each other's internal details.
+
+#### 7.1 Declaring an Interface
+
+To declare an interface in C#, you use the `interface` keyword followed by the interface name, which typically starts with an uppercase "I" to distinguish it from classes. Inside the interface, you declare methods without any implementation. Here's an example:
+
+```csharp
+public interface IAnimal
+{
+    void Speak();
+    void Move();
+}
+
+// Concrete class provides interface implemntation
+public class Dog : IAnimal
+{
+    public void Speak()
+    {
+        Console.WriteLine("Bark!");
+    }
+
+    public void Move()
+    {
+        Console.WriteLine("The dog runs.");
+    }
+}
+```
+
+#### 7.2 Importance of Interfaces in Unit Testing
+
+Interfaces play a significant role in unit testing by enabling the isolation of components. In unit testing, you test individual units of functionality, typically methods, to ensure they work correctly. However, methods often rely on other classes, making isolation difficult. By programming against interfaces rather than concrete classes, you can create mock or fake implementations of those interfaces to simulate the behavior of dependencies.
+
+#### 7.3 Interfaces and Extensibility
+
+Interfaces enhance the extensibility of applications by allowing you to change the behavior of a system without modifying its existing code. When you design against interfaces, you can later introduce new implementations that conform to these interfaces without altering the original codebase. This aligns with the Open/Closed Principle, which states that a system should be open for extension but closed for modification.
+
+#### 7.4 Polymorphism Through Interfaces
+
+Interfaces also facilitate polymorphism, allowing objects of different classes to be treated uniformly based on a shared interface. When multiple classes implement the same interface, they can be used interchangeably, enabling polymorphic behavior.
+
+```csharp
+IAnimal animal = new Dog();
+animal.Speak();  // Output: Bark!
+
+animal = new Cat();
+animal.Speak();  // Output: Meow!
+```

@@ -6,13 +6,8 @@ namespace MyFIrstApplication
     {
         static void Main(string[] args)
         {
-            Console.WriteLine((int) 'a');
-
+            var text = "This is just some test text to extract the kth word.";
+            Console.WriteLine(text.KthWordInString(20));
         }
-    }
-
-    public enum ShippingMethod
-    {
-        regularShipping
     }
 }

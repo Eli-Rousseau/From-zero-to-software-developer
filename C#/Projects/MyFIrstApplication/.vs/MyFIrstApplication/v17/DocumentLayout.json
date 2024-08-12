@@ -1,12 +1,54 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\From zero to software developer\\C#\\Projects\\MyFIrstApplication\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{DABA3B90-BF6F-4BC0-925B-5FFBB768294E}|MyFIrstApplication\\MyFIrstApplication.csproj|d:\\from zero to software developer\\c#\\projects\\myfirstapplication\\myfirstapplication\\stringextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DABA3B90-BF6F-4BC0-925B-5FFBB768294E}|MyFIrstApplication\\MyFIrstApplication.csproj|solutionrelative:myfirstapplication\\stringextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DABA3B90-BF6F-4BC0-925B-5FFBB768294E}|MyFIrstApplication\\MyFIrstApplication.csproj|d:\\from zero to software developer\\c#\\projects\\myfirstapplication\\myfirstapplication\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DABA3B90-BF6F-4BC0-925B-5FFBB768294E}|MyFIrstApplication\\MyFIrstApplication.csproj|solutionrelative:myfirstapplication\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "StringExtensions.cs",
+              "DocumentMoniker": "D:\\From zero to software developer\\C#\\Projects\\MyFIrstApplication\\MyFIrstApplication\\StringExtensions.cs",
+              "RelativeDocumentMoniker": "MyFIrstApplication\\StringExtensions.cs",
+              "ToolTip": "D:\\From zero to software developer\\C#\\Projects\\MyFIrstApplication\\MyFIrstApplication\\StringExtensions.cs",
+              "RelativeToolTip": "MyFIrstApplication\\StringExtensions.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-12T21:45:27.621Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\From zero to software developer\\C#\\Projects\\MyFIrstApplication\\MyFIrstApplication\\Program.cs",
+              "RelativeDocumentMoniker": "MyFIrstApplication\\Program.cs",
+              "ToolTip": "D:\\From zero to software developer\\C#\\Projects\\MyFIrstApplication\\MyFIrstApplication\\Program.cs",
+              "RelativeToolTip": "MyFIrstApplication\\Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-12T21:37:59.868Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
