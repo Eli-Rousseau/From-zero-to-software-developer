@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mariam's Fashion Blog</title>
+  </head>
+  <body>
+    <div id="header">
+      <h1>Mariam's Fashion Blog</h1>
+      <span>a blog written by Eli Rousseau.</span>
+    </div>
+    <div id="table of contents">
+      <h2>Table of Contents</h2>
+      <ul>
+        <li><a href="#section1">Who's Mariam?</a></li>
+        <li><a href="#section2">What's in her Wardrobe?</a></li>
+        <li><a href="#section3">Upcomming Plans?</a></li>
+      </ul>
+    </div>
+    <div id="section1">
+      <h2>Who's Mariam</h2>
+      <p>Mariam is what we'd call a fashion guru these days. She spends a lot of time browsing and hunting on online clothing platforms to find the perfect addition to her latest outfit. She was raised in a modest family with a mum who graduated from fashion school. Her mother never had the chance to live her designer dream, but she was able to indulge this in Mariam throughout her childhood. Since she was young, Mariam has been drawn to all kinds of colours, patterns and eye-catching designs for her outfits.</p>
+    </div>
+    <div id="section2">
+      <h2>What's in her Wardrobe?</h2>
+      <p>Recently, Mariam has been particularly drawn to vintage designer collections from the early 2000s. She was particularly taken with the collections from <a href="https://nl.wikipedia.org/wiki/Roberto_Cavalli" target="_blank">Roberto Cavalli</a> and <a href="https://nl.wikipedia.org/wiki/John_Galliano" target="_blank">John Galliano</a>, two of the most influential designers of the early 2000s. Meanwhile, she's picked up lots of different items from various collections. She's on the lookout for a few key pieces from different collections and putting them together in what she calls a <em>"set"</em>. These sets feature stand-out tops, jeans, skirts, dresses, cardigans, handbags and matching shoes. Her collection has been growing over the past couple of years, and she now has some of the most iconic pieces every fashion girl would have dreamed of. To give you a better idea of what I mean, let's take a look at some of her latest outfits:</p>
+      <img src="./blog1.jpg" alt="Mariam's first outfit" height="375" width="250" />
+      <p>In this photo, Mariam is trying on a new pair of purple heeled sandals marked on sales to match the purple set of Roberto Cavalli she was wearing that day.</p>
+      <img src="./blog2.jpg" alt="Mariam's second outfit" height="260" width="460" />
+      <p>In the second picture, you can see Mariam enjoying a great brunch during her school break. For the occasion she decided to wear one of her latest finds, a cardigan from the brand Roberto Cavalli in an animal print.</p>
+      <img src="./blog3.jpg" alt="Mariams' third outfit" height="450" width="250" />
+      <p>We've seen a lot of Roberto Cavalli recently. However, Cavalli is not the be-all and end-all, as she would say. In this picture, you can see her trying on a jacket that would become one of her favourites. It's signed Prada and made from animal fur.</p>
+    </div>
+    <div id="section3">
+      <h2>Upcomming Plans?</h2>
+      <p><em>"All these clothes look immaculate, but at what cost"</em> would you ask me. Sometimes, her passion for clothes ends up being the biggest expense in her monthly budget. However, she's been saving up in the hope of being able to afford a ticket for the next fashion week. It's always been her dream to walk the catwalk herself and show off clothes designed by her favourite contemporary fashion artists. <br>Add this blog to your favourites and join us to keep up to date with the next chapter of Mariam's fashion journey.</p>
+    </div>
+  </body>
+</html>
