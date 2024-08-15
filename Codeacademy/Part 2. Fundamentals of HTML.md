@@ -142,7 +142,236 @@ When coding in HTML, errors can occur, but unlike other programming languages, H
 
 ## 3. Tables
 
+#### 3.1 Table Elements
+
+The table summarizes the syntax and attributes related to creating and structuring tables in HTML.
+
+| **HTML Element** | **Purpose**                                      | **Common Attributes** | **Attribute Purpose**                                                                       |
+| ---------------- | ------------------------------------------------ | --------------------- | ------------------------------------------------------------------------------------------- |
+| `<table>`        | Contains all the tabular data                    | None                  | N/A                                                                                         |
+| `<tr>`           | Defines a row in the table                       | None                  | N/A                                                                                         |
+| `<td>`           | Defines a cell within a table row                | `colspan`, `rowspan`  | `colspan`: Number of columns to span across <br> `rowspan`: Number of rows to span across   |
+| `<th>`           | Defines a header cell (title) within a table row | `scope`               | `scope="col"`: Specifies header for a column <br> `scope="row"`: Specifies header for a row |
+| `<thead>`        | Sections off the table’s header                  | None                  | N/A                                                                                         |
+| `<tbody>`        | Sections off the body of the table               | None                  | N/A                                                                                         |
+| `<tfoot>`        | Sections off the bottom part of the table        | None                  | N/A                                                                                         |
+
+#### 3.2 Table Structure
+
+Below is an example of an HTML table that uses all the elements described.
+
+```html
+<!-- Start of the table -->
+<table border="1">
+
+    <!-- Table Header Section -->
+    <thead>
+        <tr>
+            <th scope="col">Day</th>
+            <th scope="col">Event</th>
+            <th scope="col">Time</th>
+        </tr>
+    </thead>
+
+    <!-- Table Body Section -->
+    <tbody>
+        <tr>
+            <th scope="row">Monday</th>
+            <td>Meeting with Team</td>
+            <td>10:00 AM</td>
+        </tr>
+        <tr>
+            <th scope="row">Tuesday</th>
+            <!-- Cell spanning across 2 columns -->
+            <td colspan="2">Workshop on HTML</td>
+        </tr>
+        <tr>
+            <th scope="row">Wednesday</th>
+            <td>Client Presentation</td>
+            <!-- Cell spanning across 2 rows -->
+            <td rowspan="2">2:00 PM</td>
+        </tr>
+        <tr>
+            <th scope="row">Thursday</th>
+            <td>Team Building Activity</td>
+        </tr>
+    </tbody>
+
+    <!-- Table Footer Section -->
+    <tfoot>
+        <tr>
+            <td colspan="3">All events are subject to change</td>
+        </tr>
+    </tfoot>
+
+</table>
+```
+
 ## 4. Semantic HTML
+
+#### 4.1 The Importance of Semantic HTML
+
+Semantic HTML involves using HTML elements that convey the meaning and structure of the content, rather than just focusing on presentation. Elements like `<header>`, `<article>`, and `<footer>` provide context, improving web accessibility by helping screen readers and browsers interpret the content better. This practice also enhances SEO by aiding search engines in indexing and prioritizing content, and it makes the code more readable and understandable for developers, leading to more organized and meaningful web pages.
+
+#### 4.2 Semenantic Elements
+
+###### 4.2.1 Header
+
+The `<header>` element serves as a container for introductory content or navigational links, such as headings (`<h1>` to `<h6>`) and navigation menus. It is typically placed at the top of the `<body>` section or within specific sections like `<article>` or `<section>`. This element enhances the organization and accessibility of a webpage by grouping relevant introductory content together. 
+
+```html
+<header>
+  <h1>Welcome to My Website</h1>
+  <nav>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+```
+
+###### 4.2.2 Nav
+
+The `<nav>` element defines a section dedicated to navigational links, making it easier for users to find their way around the website. It is often used within the `<header>` element but can also appear independently in other sections of the document. The `<nav>` tag helps in organizing navigation links in a way that improves the structure and usability of the page.
+
+```html
+<nav>
+  <ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+```
+
+###### 4.2.3 Main
+
+The `<main>` element is used to encapsulate the primary content of a webpage, distinguishing it from other parts like navigation and footer. It is placed directly within the `<body>` section and should only appear once per page. This element emphasizes the central content, making it easier for screen readers and search engines to understand the main focus of the page.
+
+```html
+<main>
+  <h1>Main Content Area</h1>
+  <p>This is where the core content of the page goes.</p>
+</main>
+```
+
+###### 4.2.4 Footer
+
+The `<footer>` element contains information typically found at the end of a page, such as copyright details, contact information, or links to related documents. It is usually positioned at the bottom of the `<body>` section, separate from the `<main>` element. The `<footer>` tag helps in structuring the page by grouping relevant end-of-page information together.
+
+```html
+<footer>
+  <p>© 2024 My Website. All rights reserved.</p>
+  <p><a href="#top">Back to top</a></p>
+</footer>
+```
+
+###### 4.2.5 Section
+
+The `<section>` element groups related content into thematic areas, such as chapters or sections of an article. It can be used within `<article>` or independently in the `<body>` section to organize content into logical blocks. This element improves the structure and readability of the document by segmenting it into meaningful parts.
+
+```html
+<section>
+  <h2>Introduction</h2>
+  <p>This section provides an overview of the topic.</p>
+</section>
+```
+
+###### 4.2.6 Article
+
+The `<article>` element is used for standalone content that could be distributed independently, such as news articles or blog posts. It is often used within the `<main>` element or as a standalone block to define self-contained pieces of content. The `<article>` tag enhances the document’s structure by defining distinct content blocks.
+
+```html
+<article>
+  <h2>Breaking News</h2>
+  <p>Details about the latest breaking news story.</p>
+</article>
+```
+
+###### 4.2.7 Aside
+
+The `<aside>` element offers supplementary content that complements but isn't crucial to the main content, such as sidebars or related links. It is commonly used alongside `<article>` or `<section>` to provide additional context or information. This element helps in organizing related, but secondary content that enhances the primary material.
+
+```html
+<aside>
+  <h3>Related Articles</h3>
+  <ul>
+    <li><a href="#">Article 1</a></li>
+    <li><a href="#">Article 2</a></li>
+  </ul>
+</aside>
+```
+
+###### 4.2.8 Figure and Figcaption
+
+The `<figure>` element groups media content, such as images or diagrams, and includes the `<figcaption>` element for descriptive text. The `<figcaption>` element provides a caption or description for the media within the `<figure>`, ensuring that the media and its description stay together even if the layout changes. This semantic grouping improves accessibility and content clarity.
+
+```html
+<figure>
+  <img src="example.jpg" alt="An example image">
+  <figcaption>An example of a caption for the image.</figcaption>
+</figure>
+```
+
+###### 4.2.9 Audio
+
+The `<audio>` element embeds audio content into a webpage and includes the `controls` and `autoplay`attributes for built-in playback controls like play and mute. The `<source>` element within `<audio>` specifies the audio file's location and type, ensuring proper playback across different browsers. This setup facilitates seamless integration of audio content with user control options.
+
+```html
+<audio controls autoplay>
+  <source src="audio/mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+```
+
+###### 4.2.9 Video
+
+The `<video>` element embeds video content and supports attributes like `controls`, `autoplay`, and `loop` to manage playback options. The `controls` attribute provides built-in controls for video playback, while `autoplay` starts the video automatically, and `loop` makes the video replay continuously. This element is crucial for integrating video content with customizable playback options.
+
+```html
+<video controls autoplay loop>
+  <source src="video.mp4" type="video/mp4">
+  Your browser does not support the video element.
+</video>
+```
+
+#### 4.3 Structure of Semantic Elements
+
+Here is a schematic representation of a potential hierarchical organization for semantic elements in an HTML file:
+
+```
+<html>
+  <head>
+    <!-- Metadata, title, and links to stylesheets -->
+  </head>
+  <body>
+    <header>
+      <!-- Site header with navigation -->
+    </header>
+
+    <main>
+      <section>
+        <!-- Primary content section -->
+        <article>
+          <!-- Standalone content -->
+        </article>
+        <aside>
+          <!-- Supplementary content -->
+        </aside>
+      </section>
+      <section>
+        <!-- Another section of primary content -->
+      </section>
+    </main>
+
+    <footer>
+      <!-- Site footer with additional information -->
+    </footer>
+  </body>
+</html>
+```
 
 ## 5. Looking for HTML Documentation
 
