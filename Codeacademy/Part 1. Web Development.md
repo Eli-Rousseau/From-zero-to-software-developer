@@ -77,3 +77,37 @@ SQL (Structured Query Language) is used to query and analyze data stored in tabl
 ## 3. What is Programming?
 
 Programming is the process of creating a set of instructions for a computer to execute, much like following a recipe. It involves thinking up the steps (programming) and then translating them into a language the computer can understand (coding). Over time, programming has evolved from using simple punch cards to advanced coding languages and interfaces. This skill enables us to effectively communicate with computers, turning them into powerful tools that enhance various aspects of our lives, from work to daily interactions. Learning to code can be challenging, but it empowers us to build and innovate in countless ways.
+
+## 4. Setting up a Project
+
+#### 4.1 Development Environment
+
+Text editors, or code editors, assist developers in writing and managing code by offering features such as syntax highlighting, automatic indentation, customizable color schemes, and plug-ins for error detection. They are crucial tools in a developer’s toolkit. Integrated Development Environments (IDEs) provide additional functionalities like project templates, code compilation, and debugging all within a single interface. While not a full-fledged IDE, Visual Studio Code is a widely-used text editor that provides many IDE-like features, often through extensions. It is well-regarded for being free, open-source, and supported by a strong community and Microsoft.
+
+#### 4.2 Starting a Project
+
+Here is a brief overview of the main steps to start a web development project:
+
+1. Create a Development Folder: Navigate to your file manager or terminal and create a new folder for your new web development project.
+
+2. Open Code Editor: Launch the code edtitor and navigating to the projects directory inside the integrated system explorer of the code editor.
+
+3. Add a File: In the projects' directory add a new file. By convention the homepage of a file is named `index.html`.
+
+4. Begin Coding: Add a boilerplate HTML code to `index.html` like here below. Inside the body content you can start writing the HTML code displayed to the screenSave your file often to prevent losing unsaved work.
+   
+   ```html
+   <html>
+     <head>
+       <title>Hello World</title>
+     </head>
+     <body>
+       <h1>Hello World</h1>
+     </body>
+   </html>
+   ```
+
+5. View Your HTML File in the Browser:  Navigate to your `index.html` file using your file manager or terminal. Double-click or open the file to view it in your default web browser.
+- ```html
+  
+  ```

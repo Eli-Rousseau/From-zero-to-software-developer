@@ -1,0 +1,58 @@
+* {
+    box-sizing: border-box;
+    font-family: Cambria;
+    margin: 0;
+}
+
+.banner {
+    background-color: lightpink;
+    text-align: center;
+    padding-bottom: 3%;
+    border: 3px solid white;
+}
+
+#banner-title {
+    font-size: 80px;
+    padding: 2% 0 0 0;
+}
+
+#banner-author {
+    font-size: 40px;
+    padding: 0;
+}
+
+.content-table {
+    border: 3px solid white;
+}
+
+#content-table-title {
+    font-size: 50px;
+    padding: 3%;
+}
+
+#content-table-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+#content-table-list li {
+    font-size: 26px;
+    padding: 0 3% 3% 3%;
+}
+
+#content-table-list li:hover {
+    color: white;
+    background-color: lightpink;
+}
+
+#content-table-list a {
+    text-decoration: none;
+}
+
+#content-table-list a:visited {
+    color: black;
+}
+
+#content-table-list a:hover {
+    color: white;
+}
