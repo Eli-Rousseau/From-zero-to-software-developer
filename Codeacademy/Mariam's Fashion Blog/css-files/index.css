@@ -4,55 +4,125 @@
     margin: 0;
 }
 
+/* banner styling */
 .banner {
     background-color: lightpink;
     text-align: center;
-    padding-bottom: 3%;
-    border: 3px solid white;
+    padding: 0 0 3% 0;
 }
 
-#banner-title {
-    font-size: 80px;
-    padding: 2% 0 0 0;
+.banner h1 {
+    font-size: 100px;
+    padding: 3% 0 0 0;
 }
 
-#banner-author {
+.banner span {
     font-size: 40px;
-    padding: 0;
 }
 
+/* navigation styling */
 .content-table {
-    border: 3px solid white;
+    color: black;
 }
 
-#content-table-title {
-    font-size: 50px;
+.content-table h2 {
+    font-size: 60px;
     padding: 3%;
 }
 
-#content-table-list {
+.content-table ul {
     list-style: none;
     padding-left: 0;
 }
 
-#content-table-list li {
-    font-size: 26px;
-    padding: 0 3% 3% 3%;
+.content-table a {
+    text-decoration: none;
 }
 
-#content-table-list li:hover {
+.content-table li {
+    font-size: 35px;
+    padding: 3% 0 3% 3%;
+
+}
+
+.content-table a:visited {
+    color: black;
+}
+
+.content-table li:hover {
     color: white;
     background-color: lightpink;
 }
 
-#content-table-list a {
-    text-decoration: none;
+/* first section styling */
+.first-section h2 {
+    font-size: 60px;
+    padding: 3%;
+    background-color: lightpink;
 }
 
-#content-table-list a:visited {
-    color: black;
+.first-section p {
+    font-size: 30px;
+    text-align: justify;
+    padding: 3%;
 }
 
-#content-table-list a:hover {
-    color: white;
+/* second section styling */
+.second-section h2 {
+    font-size: 60px;
+    padding: 3%;
+    background-color: lightpink;
+}
+
+.second-section p {
+    font-size: 30px;
+    text-align: justify;
+    padding: 3%;
+}
+
+.second-section a:visited {
+    color: dimgrey;
+}
+
+.outfits {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.outfit {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3%;
+    height: 500px;
+    width: 900px;
+}
+
+.outfit img {
+    width: 500px;
+    height: 500px;
+    object-fit: contain;
+}
+
+.outfit figcaption { 
+    font-size: 24px;
+    text-align: justify;
+    width: 400px;
+    padding: 1%;
+}
+
+
+/* third section styling */
+.third-section h2 {
+    font-size: 60px;
+    padding: 3%;
+    background-color: lightpink;
+}
+
+.third-section p {
+    font-size: 30px;
+    text-align: justify;
+    padding: 3%;
 }

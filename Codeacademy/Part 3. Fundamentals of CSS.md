@@ -450,3 +450,63 @@ When using the `float` property to position multiple elements, different heights
   clear: both;
 }
 ```
+
+## 5. Colors
+
+CSS offers various ways to specify colors, including named colors like blue and limegreen, and numeric systems such as RGB and HSL. Named colors use English words, while RGB and HSL provide more precise control by describing colors through numeric values for red, green, blue, hue, saturation, and lightness. This flexibility allows for a broad range of color options in web design.
+
+#### 5.1 Foreground and Background
+
+In CSS, color influences various design elements, primarily styled using the `color` property for an element's text and foreground, and the `background-color` property for its background. These properties enable precise control over the visual presentation of web elements.
+
+```css
+h1 {
+  color: white; /* Sets the text color to white */
+  background-color: black; /* Sets the background color to black */
+}
+```
+
+#### 5.2 Hex and RGB
+
+Colors in web design can be specified using two primary syntaxes: hexadecimal and RGB. The hexadecimal color system uses a hash character (#) followed by six alphanumeric characters in a hexadecimal format (`0-9A-F`). These characters define the intensity of red, green, and blue colors. For instance, black is represented as `#000000`, and white is represented as `#FFFFFF`. Each pair of characters or single character (in the three-character format) corresponds to a value for one of the color components.
+
+```css
+.container {
+    background-color: #FF5733;
+}
+```
+
+In contrast, the RGB color system specifies colors using decimal numbers ranging from 0 to 255 for each color component. The format is `rgb(red, green, blue)`, where each number represents the intensity of red, green, and blue respectively. For example, black in RGB format is `rgb(0, 0, 0)`, and white is `rgb(255, 255, 255)`. 
+
+```css
+.container {
+    background-color: rgb(255, 87, 51);
+}
+```
+
+Both systems allow for a total of 16,777,216 possible colors, as each of the three color components can have 256 different values.
+
+#### 5.3 HSL Color System
+
+The HSL (Hue, Saturation, Lightness) color system in CSS is a powerful method for defining colors, where hue specifies the color angle on a wheel (0-360 degrees), saturation controls the color's intensity (0-100%), and lightness adjusts the color's brightness (0-100%). This system allows for precise color adjustments by varying these three parameters.
+
+```css
+p {
+  color: hsl(120, 100%, 50%); /* Sets the text color to a pure green */
+  background-color: hsl(240, 100%, 50%); /* Sets the background color to a pure blue */
+}
+```
+
+#### 5.4 Opacity
+
+In CSS, you can adjust color transparency using the `hsla` and `rgba` functions, where the additional alpha (opacity) value controls the transparency level. For `hsla`, the alpha value ranges from 0 (fully transparent) to 1 (fully opaque), and it is added as the fourth parameter after the hue, saturation, and lightness values. Similarly, `rgba` extends the RGB color system with an alpha value for transparency.
+
+```css
+.container1 {
+  background-color: hsla(120, 100%, 50%, 0.5); /* Semi-transparent green */
+}
+
+.container2 {
+  color: rgba(255, 0, 0, 0.3); /* Semi-transparent red text */
+}
+```
