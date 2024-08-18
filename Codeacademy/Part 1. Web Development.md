@@ -156,3 +156,17 @@ Computers use numerical IP addresses to communicate, while humans rely on easier
 ###### 4.5.1 Domain Name System
 
 The Domain Name System (DNS) translates domain names into IP addresses. When a domain name is typed into a browser, the computer first checks its cache. If the address isn't there, the request moves up through various servers—the resolver, root server, TLD server, and finally the name server—to find the correct IP address. The DNS process involves several levels, starting with the root server, which directs queries to the appropriate top-level domain (TLD) server. The TLD server, in turn, directs the query to the name server, which knows the exact IP address of the domain.
+
+#### 4.6 Wireframes vs Prototypes
+
+###### 4.6.1 Wireframes
+
+Wireframes, or "skeletons," are low-fidelity, static representations of a product's layout, used to communicate structure, content, and functionality in the early stages of design. Resembling architectural blueprints, they use simple shapes, placeholders, and a grayscale palette to outline the basic design without detailed visuals. Wireframes serve as a foundational tool, allowing design teams to plan and test core ideas before adding visual details, thereby reducing the risk of rework. However, they are limited in user testing and can't convey complex interactions, making them ideal for early-stage planning but less effective for illustrating dynamic design elements.
+
+###### 4.6.2 Prototypes
+
+Prototypes are interactive, middle to high-fidelity representations of a product, simulating user interface interactions to explore and refine ideas. Unlike static wireframes, prototypes allow designers and users to experience the flow and usability of an app or website, making them essential for testing and validating design concepts. Prototypes can range from simple, low-fidelity click-throughs to complex, high-fidelity models that closely resemble the final product. They are invaluable for pitching ideas, understanding user needs, and refining usability, though they are not suitable for documentation. Prototyping helps teams identify potential issues early, ensuring a more user-centered final product.
+
+#### 4.7 Turning a Design into a Functional Website
+
+Transforming a website design or idea into a fully functional site involves structuring content on a grid, similar to architectural blueprints. The process starts by organizing sections like the header, navigation, main banner, and footer using HTML and CSS. Key HTML5 tags such as `<header>`, `<nav>`, `<main>`, `<section>`, and `<footer>` help define the layout, while a style guide ensures design consistency. Visual hierarchy, continuity, and clean, organized code are crucial throughout the process. As you gather content and refine your site, be open to experimenting and making adjustments for a cohesive final design.

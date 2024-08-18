@@ -510,3 +510,258 @@ In CSS, you can adjust color transparency using the `hsla` and `rgba` functions,
   color: rgba(255, 0, 0, 0.3); /* Semi-transparent red text */
 }
 ```
+
+## 6. Typography
+
+#### 6.1 Font Selection and Font Stacks
+
+To change an element's font in CSS, the `font-family` property is used. When specifying multi-word typefaces like 'Times New Roman,' enclose the name in quotation marks to ensure proper recognition. Web-safe fonts, which display consistently across different browsers and operating systems, serve as reliable fallback options when your preferred font isn't available. A collection of fonts listed in order of preference is known as a font stack. Font stacks often include both serif fonts, which have decorative details on the ends of letters, and sans-serif fonts, which lack these details. The keywords `serif` and `sans-serif` can be added at the end of a font stack as a final fallback.
+
+```css
+p {
+  font-family: 'Times New Roman', Georgia, serif;
+}
+```
+
+###### 6.1.1 Web Fonts
+
+Web fonts offer limitless options for customizing your website's typography, allowing you to choose from a variety of fonts hosted online or by using downloadable font files. Free services like Google Fonts and Adobe Fonts provide easy access to fonts through a `<link>` element in your HTML. For paid fonts, you can host the files yourself and use the `@font-face` rule in your CSS. Google Fonts simplifies the process by generating a `<link>` element for the selected font, which you add to your HTML's `<head>` section before using the font in your CSS.
+
+```html
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
+</head>
+
+<style>
+  body {
+    font-family: 'Roboto', sans-serif;
+  }
+</style>
+```
+
+The `@font-face` rule in CSS allows you to embed custom fonts directly into your stylesheet without needing a `<link>` element in your HTML. This method supports various font file formats like OTF, TTF, WOFF, and WOFF2, ensuring compatibility across different browsers. By defining a `@font-face` ruleset, you specify the font's name using the `font-family` property and provide the font files' relative paths using the `src` property. The browser will attempt to load the font in the order specified, starting with the most progressive format. Once defined, you can apply the custom font using the `font-family` property in your CSS.
+
+```css
+@font-face {
+  font-family: 'MyParagraphFont';
+  src: url('fonts/Roboto.woff2') format('woff2'),
+       url('fonts/Roboto.woff') format('woff'),
+       url('fonts/Roboto.ttf') format('truetype');
+}
+
+p {
+  font-family: 'MyParagraphFont', sans-serif;
+}
+```
+
+#### 6.2 Text Boldness
+
+The `font-weight` property in CSS determines the boldness or thinness of text and can be set using either keywords or numerical values. Common keyword values include `normal` (default), `bold`, `lighter` (lighter than the parent element's weight), and `bolder` (bolder than the parent element's weight). Numerical values range from 1 (lightest) to 1000 (boldest), typically used in increments of 100. A value of 400 corresponds to `normal`, while 700 equals `bold`. However, not all fonts support numeric weights or every increment.
+
+```css
+h1 {
+  font-weight: 700; /* Equivalent to 'bold' */
+}
+
+p {
+  font-weight: lighter;
+}
+```
+
+#### 6.3 Italics
+
+The `font-style` property in CSS allows you to italicize text by setting its value to `italic`. The default value is `normal`, which displays text without any italics.
+
+```css
+em {
+  font-style: italic;
+}
+```
+
+#### 6.4 Text Case
+
+The `text-transform` property in CSS allows you to change the case of text. Setting it to `uppercase` converts all text to uppercase, while `lowercase` formats all text in lowercase, regardless of the original case used in the HTML code.
+
+```css
+h1 {
+  text-transform: uppercase;
+}
+
+p {
+  text-transform: lowercase;
+}
+```
+
+#### 6.5 Text Styling
+
+###### 6.5.1 Character Spacing
+
+The `letter-spacing` property in CSS sets the horizontal spacing between characters in an element, which can improve readability for certain fonts or styles. This property accepts length values in units like pixels (`px`) or ems (`em`).
+
+```css
+h1 {
+  letter-spacing: 2px;
+}
+```
+
+###### 6.5.2 Word Spacing
+
+The `word-spacing` property in CSS controls the space between words in an element. Although not commonly adjusted, increasing word spacing can enhance readability, especially in bold or large text. It accepts length values such as pixels (`px`) or ems (`em`).
+
+```css
+h2 {
+  word-spacing: 0.2em;
+}
+```
+
+###### 6.5.3 Line Height
+
+The `line-height` property in CSS sets the height of each line of text within an element. It can be defined using a unitless number, which scales with the font size, or with fixed length values like pixels (`px`), percentages (`%`), or ems (`em`). Unitless values are often preferred for responsiveness. Changing the font size will automatically readjust the line height.
+
+```css
+p {
+  line-height: 1.5; /* Unitless for responsive design */
+}
+```
+
+###### 6.5.4 Aligning Text
+
+The `text-align` property in CSS aligns text within its parent element. Common values include `left`, `right`, `center`, and `justify`, each controlling the horizontal alignment of text within the container.
+
+```css
+h1 {
+  text-align: center;
+}
+```
+
+## 7. Link and Buttons
+
+#### 7.1 Links
+
+Signifiers are visual indicators that guide users on how to interact with elements in a user interface (UI). In the context of web pages, signifiers are crucial for helping users identify interactive elements like links, buttons, and other clickable items. Default styles provided by browsers, such as blue underlined links, act as familiar signifiers that make it easy for users to understand what elements are clickable. These signifiers are essential for maintaining a consistent and intuitive user experience, helping users navigate web pages effectively.
+
+###### 7.1.1 Signifiers for Clickable Links
+
+| **Signifier**             | **Description**                                                                   | **CSS Example**                                                   |
+| ------------------------- | --------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| **Default Link**          | Links are styled with blue text and underlined to indicate they are clickable.    | `a { color: blue; text-decoration: underline; }`                  |
+| **Visited Link**          | Links that have been visited are often styled with purple text.                   | `a:visited { color: purple; }`                                    |
+| **Hover State**           | Changes to the link appearance when a user hovers over it, often changing color.  | `a:hover { color: orange; }`                                      |
+| **Active (Clicked) Link** | Links that are clicked but not yet followed often change color, typically to red. | `a:active { color: red; }`                                        |
+| **Cursor Change**         | The cursor changes to a pointing hand when hovering over a clickable element.     | `a { cursor: pointer; }`                                          |
+| **Tooltip on Hover**      | Additional information can be provided via the `title` attribute, shown on hover. | `<a href="#" title="More info">Hover over me</a>`                 |
+| **Consistent Styling**    | Maintain consistent signifiers across all link states to ensure user recognition. | `a, a:visited, a:hover, a:active { text-decoration: underline; }` |
+| **Pseudo-Class Order**    | Proper ordering of pseudo-classes ensures correct visual feedback on links.       | `a:link, a:visited, a:hover, a:active { ... }`                    |
+
+###### 7.1.2 Browser Default Link Signifiers
+
+The signifiers mentioned—such as the default blue underlined links, purple for visited links, and red for active links—are typically set by default in web browsers. These default styles are part of the browser's "user agent stylesheet," which is a set of CSS rules that the browser automatically applies to all HTML elements to ensure basic readability and functionality, even if no custom styles are provided by the website's designer.
+
+#### 7.2 Buttons
+
+###### 7.2.1 Default Button
+
+In HTML, `<button>` elements have default styles, such as borders and background colors, that give them a recognizable button-like appearance. A button element can then be created using the `<button>` tag in HTML.
+
+```html
+<button>Click me</button>
+```
+
+###### 7.2.2 Skeuomorphic Button
+
+Skeuomorphic button design mimics the look and feel of real-life buttons by creating a raised appearance when unpressed and a pressed appearance when clicked. This can be achieved using CSS, which is preferred over image files due to better performance, scalability, and consistency. CSS3 allows for creating 2-D and 3-D effects that can effectively model button interactions. By using CSS pseudo-classes like `:hover` and `:active`, you can enhance the button's interactivity, providing visual feedback that simulates pressing a physical button.
+
+```css
+button {
+  padding: 5px;
+  border: 1px solid black;
+  border-radius: 5px;
+  text-decoration: none;
+  box-shadow: 0px 5px;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+button:active {
+  margin-top: 5px;
+  color: black;
+  box-shadow: 0px 0px;
+}
+```
+
+In this implementation example, the button has a basic raised appearance due to the `box-shadow`, and when clicked, it simulates being pressed by moving down and removing the shadow.
+
+###### 7.2.3 Flat Button
+
+Flat design features 2-D elements with minimal depth, relying on shape and other visual cues to indicate clickability. Commonly, flat design buttons are simple rectangles, rounded rectangles, or circles, which users instinctively recognize as interactive. Given the lack of traditional 3-D signifiers, these buttons must be visually distinct from other elements and paired with clear, descriptive text to avoid confusion. In CSS, flat design buttons are often styled with minimal borders and background color changes to indicate interaction.
+
+```css
+button {
+  border: solid 1px black;
+}
+
+button:hover {
+  background-color: grey;
+}
+
+button:active {
+  color: white;
+}
+```
+
+This example shows a basic flat design button with a border and a color change in background color and text color when hovered and clicked, respectively.
+
+## 8. Breadcrumbs Navigation
+
+#### 8.1 Primary vs. Secondary Navigation
+
+###### 8.1.1 Primary Navigation
+
+The primary navigation system contains the most crucial links and buttons that should be accessible on every page of a website. This ensures that users can easily find the most important sections regardless of where they are on the site.
+
+###### 8.1.2 Secondary Navigation
+
+Secondary navigation, often referred to as breadcrumb navigation, provides a clickable trail that shows users the path they took to reach the current page. This type of navigation helps users understand the overall structure of the site and their current location within it. The term "breadcrumbs" originates from the story of Hansel and Gretel, where the children drop breadcrumbs to find their way back.
+
+#### 8.2 Types of Breadcrumbs
+
+There are three main types of breadcrumbs:
+
+1. Location-Based Breadcrumbs These breadcrumbs reflect the user's current location within the website's navigation structure. For example, a breadcrumb trail in a shopping website might show: "Shopping > Fashion > Shoes."
+
+2. Attribute-Based Breadcrumbs: based on the attributes of the page or product being viewed. In an online store, this might include attributes like "Flats" and "Brown" for a specific pair of shoes.
+
+3. Path-Based Breadcrumbs: Path-based breadcrumbs reflect the unique journey a user has taken through the site. For instance, a trail might show: "Home > About > Registration." This type is less common and should only be used when there is a compelling reason.
+
+#### 8.3 Considerations when using Breadcrumbs
+
+Breadcrumb navigation helps users who land on a site through direct links or search results by providing a clear sense of their location within the site and enabling easy backward navigation. While useful as a secondary navigation tool, breadcrumbs are most beneficial for larger, complex websites that require additional structure; they are less necessary for smaller sites or when the primary navigation already covers the site's content.
+
+#### 8.4 Design and Implementation of Breadcrumbs
+
+###### 8.4.1 Breadcrumb Layout and Symbols
+
+Breadcrumbs are typically displayed as a horizontal unordered list (`<ul>`), taking up minimal space. Users expect them to be located in the header, left-aligned, and placed below any primary navigation. Commonly, breadcrumbs are separated by symbols like “>” or “/”.
+
+###### 8.4.2 Simple Implementation
+
+To style breadcrumbs in CSS, you can start by ensuring that list items are displayed inline:
+
+```css
+.breadcrumb > li {
+  display: inline;
+}
+```
+
+Next, to separate breadcrumbs with a symbol (e.g., “>”), use the following CSS:
+
+```css
+.breadcrumb li+li::before {
+  padding: 10px;
+  content: ">";
+}
+```
+
+Here, the `+` symbol acts as an adjacent sibling combinator, selecting list items that are next to each other, while `::before` is a pseudo-element used to insert the symbol before the selected element.

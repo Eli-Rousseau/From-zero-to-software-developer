@@ -1,0 +1,61 @@
+/* global style guide */
+html {
+    box-sizing: border-box;
+    font-family: "Work Sans", "Calibri", sans-serif;
+    font-size: 20px;
+}
+
+/* header style */
+.header-title {
+    margin: 0;
+    padding: 3% 3% 0 3%;
+}
+
+.header-title h1 {
+    font-size: 48px;
+}
+
+/* color sections style */
+section div {
+    border: 1px solid black;
+    margin: 1% 3%;
+    padding: 1%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 50px;
+}
+
+.color,
+.code,
+.usage {
+    display: inline;
+}
+
+.code {
+    width: 200px; /* fix the width of the code class */
+}
+
+.color {
+    border: 1px solid black;
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    margin: auto 50px;
+}
+
+.green-color .color {
+    background-color: #556B2F;
+}
+
+.red-color .color {
+    background-color: #CD5C5C;
+}
+
+.blue-color .color {
+    background-color: #1E90FF;
+}
+
+.orange-color .color {
+    background-color: #ff6347;
+}
