@@ -1,0 +1,93 @@
+/* global style rules*/
+* {
+    box-sizing: border-box;
+    font-family: Helvetica;
+    font-size: 22px;
+    color: seashell;
+    background-color: black;
+    opacity: 0.9;
+    margin: 0;
+}
+
+/* header styling */
+header {
+    height: 69px;
+    margin: 0 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header img {
+    height: 50px;
+    width: auto;
+    padding-top: 10px;
+}
+
+header p {
+    display: inline;
+    text-decoration: underline;
+}
+
+/* banner section styling */
+.banner {
+    display: flex;
+    justify-content: center;
+    margin: 0 0 30px 0;
+}
+
+.banner div {
+    width: 1200px;
+    height: 700px;
+    background-image: url(https://content.codecademy.com/courses/freelance-1/unit-4/img-mission-background.jpg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: 1px solid seashell;
+    text-align: center;
+}
+
+.banner h2, 
+.banner h4 {
+    width: 1200px;
+    height: auto;
+    background-color: black;
+    padding: 10px 0;
+}
+
+/* catalogue section styling */
+.catalogue {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    margin: 30px;
+}
+
+.catalogue .catalogue-section {
+    width: 1000px;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    flex-direction: column;
+}
+
+.catalogue #title h2,
+.catalogue #title p {
+    padding: 10px 0;
+}
+
+.catalogue #tea {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.catalogue div img {
+    width: 300px;
+    height: 200px;
+    padding: 10px;
+}

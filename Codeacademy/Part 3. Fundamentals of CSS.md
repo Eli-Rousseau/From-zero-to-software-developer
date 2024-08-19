@@ -765,3 +765,431 @@ Next, to separate breadcrumbs with a symbol (e.g., “>”), use the following C
 ```
 
 Here, the `+` symbol acts as an adjacent sibling combinator, selecting list items that are next to each other, while `::before` is a pseudo-element used to insert the symbol before the selected element.
+
+## 9. Flexbox
+
+#### 9.1 Introduction to Flexbox Layout
+
+The Flexible Box Layout, or flexbox, is a CSS tool that simplifies the positioning of elements on a webpage. It involves two key components: flex containers and flex items. A flex container is any element with its display property set to `flex` or `inline-flex`, and all direct children of this container become flex items. Flexbox provides various properties to control the behavior and alignment of these flex items within their container.
+
+#### 9.2 Creating Flex Containers
+
+###### 9.2.1 Block Flex Containers
+
+Any HTML element can be transformed into a flex container by setting its display property to `flex`, making it an effective tool for creating responsive designs. Flex containers allow their child elements, known as flex items, to adjust their size and position dynamically based on the size and positioning of the container, ensuring adaptability across different screen sizes. When an element is set to `display: flex;`, it remains a block-level element, preventing other elements from appearing on the same line.
+
+```css
+.container {
+  display: flex;
+}
+```
+
+###### 9.2.2 Inline Flex Containers
+
+To create flex containers that behave as inline elements, you can use the `inline-flex` value for the `display` property. Unlike block-level flex containers, which stretch across the full width of the page, inline-flex containers allow div elements to align next to each other on the same line, provided the page is wide enough. This approach is useful when you want to maintain inline behavior while still leveraging the flexibility of flexbox for layout.
+
+```css
+.container {
+  display: inline-flex;
+}
+```
+
+#### 9.3 Horizontal Alignment
+
+The `justify-content` property in CSS controls the alignment of flex items along the main axis (left to right). It has several values that determine how space is distributed between and around flex items within a container.
+
+| **Value**       | **Description**                                                                                   |
+| --------------- | ------------------------------------------------------------------------------------------------- |
+| `flex-start`    | Items are aligned at the start (left) of the container, with no extra space.                      |
+| `flex-end`      | Items are aligned at the end (right) of the container, with no extra space.                       |
+| `center`        | Items are centered in the container, with no extra space before, between, or after.               |
+| `space-around`  | Items have equal space around them, resulting in double space between items.                      |
+| `space-between` | Items have equal space between them, with no extra space before the first or after the last item. |
+
+#### 9.4 Vertical Alignment
+
+The `align-items` property in CSS controls the vertical alignment of flex items within a flex container. It allows for spacing items along the cross axis (top to bottom) and offers five key values to position items in various ways.
+
+| **Value**    | **Description**                                                    |
+| ------------ | ------------------------------------------------------------------ |
+| `flex-start` | Aligns all items at the top of the parent container.               |
+| `flex-end`   | Aligns all items at the bottom of the parent container.            |
+| `center`     | Aligns items in the vertical center of the parent container.       |
+| `baseline`   | Aligns items based on the baseline of their content.               |
+| `stretch`    | Stretches items to fill the container's height (default behavior). |
+
+`min-height`, `max-height`, `min-width`, and `max-width` are properties that ensure an element is at least a certain size or at most a certain size.
+
+#### 9.5 Controlling Flex Item Growth
+
+The `flex-grow` property in CSS controls how flex items expand to fill extra space in a flex container. While flex items naturally shrink when the container is too small, they do not grow to fill available space by default. The `flex-grow` property allows you to specify how flex items should grow relative to each other when there is extra space, with higher values making items grow proportionally more.
+
+```css
+.container {
+  display: flex;
+}
+
+.item {
+  flex-grow: 1; /* All items will grow equally to fill available space */
+}
+
+.item-large {
+  flex-grow: 2; /* This item will grow twice as much as others */
+}
+```
+
+#### 9.6 Controlling Flex Item Shrinkage
+
+The `flex-shrink` property in CSS determines how flex items will shrink relative to each other when the flex container is too small. By default, `flex-shrink` is set to 1, causing items to shrink as needed. Unlike shrinking, flex items do not grow by default since `flex-grow` defaults to 0, requiring explicit declaration to enable growth.
+
+```css
+.container {
+  display: flex;
+}
+
+.item {
+  flex-shrink: 1; /* Items will shrink proportionally if needed */
+}
+
+.item-no-shrink {
+  flex-shrink: 0; /* This item will not shrink when space is tight */
+}
+```
+
+#### 9.7 Defining Item Width
+
+The `flex-basis` property in CSS sets the initial width of a flex item before any stretching or shrinking occurs. It defines the base size of the item, which flex-grow and flex-shrink then modify based on available space in the flex container.
+
+```css
+.container {
+  display: flex;
+}
+
+.item {
+  flex-basis: 200px; /* Sets the initial width of the item to 200px */
+}
+```
+
+The shorthand `flex` property provides a convenient way for specifying how elements stretch and shrink, while simplifying the CSS required. The `flex` property allows you to declare `flex-grow`, `flex-shrink`, and `flex-basis` all in one line.
+
+```css
+.container {
+  display: flex;
+}
+
+.item {
+  flex: 1 2 200px; /* grow shrink base-width */
+}
+```
+
+#### 9.8 Flex Item Wrapping
+
+The `flex-wrap` property controls whether flex items should wrap onto multiple lines or stay on a single line. The property has three values:
+
+| Value          | Description                                                        |
+| -------------- | ------------------------------------------------------------------ |
+| `wrap`         | Items will move to the next line if they don't fit in one row.     |
+| `wrap-reverse` | Items will wrap to the next line, but rows are ordered in reverse. |
+| `nowrap`       | Items will remain on one line, preventing any wrapping.            |
+
+#### 9.9 Multiple Axis Alignment
+
+The `align-content` property in flexbox controls the vertical spacing of multiple rows within a flex container. It adjusts the positioning and distribution of rows relative to the container's vertical space, with options to align them at the top, bottom, center, or evenly spaced.
+
+| Value           | Description                                                                                      |
+| --------------- | ------------------------------------------------------------------------------------------------ |
+| `flex-start`    | Positions all rows at the top of the container with no extra space between them.                 |
+| `flex-end`      | Positions all rows at the bottom of the container with no extra space between them.              |
+| `center`        | Centers all rows within the container with no extra space between them.                          |
+| `space-between` | Distributes rows evenly from top to bottom, with no space above the first or below the last row. |
+| `space-around`  | Distributes rows evenly with equal space above, below, and between each row.                     |
+| `stretch`       | Rows stretch to fill the container's height, default behavior if no height is specified.         |
+
+#### 9.10 Changing Flex Direction
+
+The `flex-direction` property defines the direction of flex items along the main axis of a flex container, which can be horizontal or vertical. By adjusting this property, you can change how items are ordered and positioned within the container, either from left to right, right to left, top to bottom, or bottom to top.
+
+| Value            | Description                                                     |
+| ---------------- | --------------------------------------------------------------- |
+| `row`            | Items are positioned horizontally from left to right (default). |
+| `row-reverse`    | Items are positioned horizontally from right to left.           |
+| `column`         | Items are positioned vertically from top to bottom.             |
+| `column-reverse` | Items are positioned vertically from bottom to top.             |
+
+The shorthand `flex-flow` property is used to declare both the `flex-wrap` and `flex-direction` properties in one line.
+
+```css
+.container {
+    display: flex;
+    flex-flow: column wrap;
+}
+```
+
+#### 9.11 Nesting Flex Containers
+
+Flex containers can be nested within one another, allowing for complex layouts where each container's flex properties control the positioning of both its direct children and any nested flex items. This hierarchical approach enables precise control over layout and alignment at multiple levels within a design.
+
+```css
+/* Parent flex container */
+.parent-container {
+  display: flex;
+  justify-content: center; /* Aligns nested containers horizontally */
+  align-items: center;     /* Aligns nested containers vertically */
+}
+
+/* Nested flex container */
+.child-container {
+  display: flex;
+  flex-direction: column; /* Stacks items vertically */
+  justify-content: space-around; /* Distributes space around items */
+  align-items: flex-start; /* Aligns items to the start of the cross axis */
+}
+```
+
+## 10. Grid
+
+#### 10.1 Introduction to Grid Layout
+
+###### 10.1.1 The Role of Grids in Web Design
+
+Grids consist of intersecting lines that help designers align elements and maintain consistency in their designs. The most common type used in web design is the **column grid**, which divides a page into vertical units, guiding the precise layout of content.
+
+###### 10.1.2 Key Components of a Grid
+
+In web design, a grid consists of three key components: columns, gutters, and margins. Columns are vertical sections that divide the page, typically into 12 or 16 segments, depending on the design and screen size. Gutters are the spaces between columns that prevent content from overlapping, while margins are the spaces on the left and right edges that keep content from touching the edges of the browser window.
+
+###### 10.1.3 Organizing Content with Grid Columns, Rows, and Gutters
+
+Grid columns are vertical containers used to organize content on a webpage, either by grouping related items (dependent columns) or separating unrelated elements like sidebars (independent columns). Content can span multiple columns, allowing flexibility in layout. Rows, the horizontal lines in a grid, group content by height, while gutters—the spaces between columns—provide natural separation between elements both horizontally and vertically. The size of gutters should visually separate columns but be thinner than the columns themselves, with vertical and horizontal gutters varying in size based on design needs.
+
+#### 10.2 Managing Grid Layout
+
+###### 10.2.1 Declaring a Grid
+
+CSS Grid is a powerful tool for creating two-dimensional layouts, allowing designers to align and position elements across rows and columns. A grid layout is established by designating an HTML element as a grid container using the `display: grid` or `display: inline-grid` properties. By default, grids start with a single column, but you can define multiple rows and columns using the `grid-template-columns` and `grid-template-rows` properties. Additionally, the shorthand property `grid-template` can be used to simplify row and column definitions.
+
+```css
+/* Grid container setup */
+.grid-container {
+  display: grid;
+  grid-template-columns: 50% 50%; /* Two columns, each taking 50% of the width */
+  grid-template-rows: 100px 200px; /* Two rows with specific heights */
+}
+
+/* Shorthand example */
+.grid-container {
+  display: grid;
+  grid-template: 100px 200px / 50% 50%; /* Defines rows and columns in one line */
+}
+```
+
+This code creates a grid container with two rows and two columns, using both individual and shorthand property declarations.
+
+###### 10.2.2 Relative Sizing
+
+CSS Grid introduces the `fr` unit, a relative sizing unit designed specifically for grid layouts. The `fr` unit allows developers to allocate space in terms of fractions of the grid's total width or height, making it easier to create responsive designs. Unlike traditional responsive units like percentages, `em`, or `rem`, the `fr` unit efficiently divides available space among grid columns or rows based on specified ratios.
+
+```css
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* First column takes 1/3, second takes 2/3 of the total width */
+  grid-template-rows: 1fr 3fr;    /* First row takes 1/4, second takes 3/4 of the total height */
+}
+```
+
+###### 10.2.3 Repeating Grid Layouts
+
+In CSS Grid, the `repeat()` function allows developers to efficiently define grid rows or columns by repeating a specified pattern multiple times. This function is especially useful when combined with the `fr` unit for responsive layouts. The `repeat()` function can also accept multiple values as its second parameter, enabling the creation of complex grid structures with minimal code.
+
+```css
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Creates 3 equal-width columns */
+  grid-template-rows: repeat(2, 100px 200px); /* Creates 4 rows: alternating 100px and 200px height */
+}
+```
+
+###### 10.2.4 Limiting Size of Grid Items
+
+The `minmax()` function in CSS Grid allows developers to create responsive grids that adjust based on the browser size, preventing rows or columns from becoming too large or too small. By setting a minimum and maximum size, `minmax()` ensures that grid elements maintain a balanced layout regardless of the screen size.
+
+```css
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(100px, 1fr)); /* Creates 3 columns with a minimum width of 100px and maximum width that expands proportionally */
+}
+```
+
+###### 10.2.5 Spacing Grid Items
+
+In CSS Grid, the `row-gap` and `column-gap` properties add space between rows and columns, respectively, without affecting the outer edges of the grid. The shorthand property `gap` simplifies this by allowing you to set both row and column gaps simultaneously.**
+
+```css
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 20px;       /* Adds 20px space between rows */
+  column-gap: 15px;    /* Adds 15px space between columns */
+  /* or use the shorthand */
+  gap: 20px 15px;      /* Adds 20px between rows and 15px between columns */
+}
+```
+
+#### 10.3 Spanning Grid Items Across Grid
+
+###### 10.3.1 Spanning Across Multiple Rows
+
+In CSS Grid, the `grid-row-start` and `grid-row-end` properties allow a single grid item to span multiple rows by specifying the starting and ending grid lines. These lines are numbered based on the grid's rows, starting at 1. The shorthand `grid-row` property can be used to combine `grid-row-start` and `grid-row-end`, with the starting row placed before the slash and the ending row after.
+
+```css
+.grid-item {
+  grid-row: 2 / 5; /* Start at row 2 and end at row 4 */
+}
+```
+
+###### 10.3.2 Spanning Across Multiple Columns
+
+In CSS Grid, the `grid-column-start` and `grid-column-end` properties allow a grid item to span multiple columns by specifying the starting and ending grid lines. These grid lines are numbered sequentially based on the grid's columns, starting at 1. The shorthand `grid-column` property can be used to combine `grid-column-start` and `grid-column-end`, with the starting column before the slash and the ending column after.
+
+```css
+.grid-item {
+  grid-column: 2 / 4; /* Start at column 2 and end at column 3 */
+}
+```
+
+###### 10.3.3 Span Keyword
+
+The `span` keyword in CSS Grid allows for more accurate sizing of grid items by specifying the number of rows or columns an item should span, rather than relying on specific grid line numbers. This approach helps avoid off-by-one errors when calculating the ending grid line, making it easier to control how many grid tracks an item occupies.
+
+```css
+.grid-item {
+  grid-column: 2 / span 2; /* Spans 2 columns starting from column index 2 */
+  grid-row: 1 / span 3;    /* Spans 3 rows starting from row index 1 */
+}
+```
+
+###### 10.3.4 Spanning Across Multiple Rows and Columns
+
+The `grid-area` property in CSS Grid allows for further shorthand by combining the starting and ending positions of both rows and columns into a single property. It takes four values separated by slashes, specifying `grid-row-start`, `grid-column-start`, `grid-row-end`, and `grid-column-end` in that order, making it easier to define the placement of grid items within the grid.
+
+```css
+.grid-item {
+  grid-area: 1 / 2 / span 3 / 4; /* Starts at row 1, column 2, ends at row 5, column 4 */
+}
+```
+
+#### 10.4 Naming Grid Areas
+
+The `grid-template-areas` property in CSS Grid allows you to define named areas within a grid container, which can then be referenced by properties such as `grid-row-start`, `grid-row-end`, `grid-column-start`, `grid-column-end`, and `grid-area` to position grid items. This property is applied directly to the grid container to enhance layout organization and readability.
+
+```css
+.container {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "sidebar content"
+    "footer footer";
+  grid-template: repeat(3, 1fr) / repeat(2, 1fr) 
+}
+
+.header {
+  grid-area: header;
+}
+
+.sidebar {
+  grid-area: sidebar;
+}
+
+.content {
+  grid-area: content;
+}
+
+.footer {
+  grid-area: footer;
+}
+```
+
+#### 10.5 Overlapping Elements
+
+CSS Grid Layout allows for easy overlapping of elements by using the `grid-area` property, which sets the starting and ending positions for both rows and columns of grid items. For managing the stacking order of overlapping elements, the `z-index` property can be utilized to control which elements appear on top.
+
+```css
+.container {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "content sidebar"
+    "footer footer";
+  position: relative;
+}
+
+.header {
+  grid-area: header;
+}
+
+.sidebar {
+  grid-area: sidebar;
+  z-index: 1; /* Sidebar will appear on top of content */
+}
+
+.content {
+  grid-area: content;
+  z-index: 0; /* Content will appear beneath sidebar */
+}
+
+.footer {
+  grid-area: footer;
+}
+```
+
+#### 10.6 Grid Alignment
+
+| **Property**      | **Description**                                                                                 | **Values**                                                                                                                                                                                                                                                                                                                     |
+| ----------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `justify-items`   | Positions grid items along the inline (row) axis.                                               | `start` - Aligns items to the left.<br>`end` - Aligns items to the right.<br>`center` - Centers items.<br>`stretch` - Stretches items to fill the grid area.                                                                                                                                                                   |
+| `justify-content` | Positions the entire grid within its container along the row axis.                              | `start` - Aligns grid to the left.<br>`end` - Aligns grid to the right.<br>`center` - Centers grid horizontally.<br>`stretch` - Stretches grid to fill container.<br>`space-around` - Equal space around each item.<br>`space-between` - Equal space between items.<br>`space-evenly` - Equal space between items and at ends. |
+| `align-items`     | Positions grid items along the block (column) axis.                                             | `start` - Aligns items to the top.<br>`end` - Aligns items to the bottom.<br>`center` - Centers items.<br>`stretch` - Stretches items to fill the grid area.                                                                                                                                                                   |
+| `align-content`   | Positions the rows within the grid container along the column axis.                             | `start` - Aligns grid to the top.<br>`end` - Aligns grid to the bottom.<br>`center` - Centers grid vertically.<br>`stretch` - Stretches grid to fill container.<br>`space-around` - Equal space around each row.<br>`space-between` - Equal space between rows.<br>`space-evenly` - Equal space between rows and at ends.      |
+| `justify-self`    | Specifies how an individual item is positioned along the row axis, overriding `justify-items`.  | `start` - Aligns item to the left.<br>`end` - Aligns item to the right.<br>`center` - Centers item.<br>`stretch` - Stretches item to fill its grid area.                                                                                                                                                                       |
+| `align-self`      | Specifies how an individual item is positioned along the column axis, overriding `align-items`. | `start` - Aligns item to the top.<br>`end` - Aligns item to the bottom.<br>`center` - Centers item.<br>`stretch` - Stretches item to fill its grid area.                                                                                                                                                                       |
+
+#### 10.7 Implicit Grid
+
+In scenarios where the quantity of grid items is uncertain, such as in online shopping results, CSS Grid's implicit grid takes over, automatically adding rows or columns as needed to accommodate additional content. The `grid-auto-rows` and `grid-auto-columns` properties allow you to define the size of these automatically added tracks, while `grid-auto-flow` controls whether new items fill rows first or columns first. The `dense` option in `grid-auto-flow` ensures that any gaps in the grid are filled efficiently by smaller elements.
+
+```css
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 150px; /* Sets height for new rows */
+  grid-auto-flow: row dense; /* Fills rows first, then fills gaps with smaller items */
+}
+
+.item {
+  /* Additional styles for grid items */
+}
+```
+
+## 11. Responsive Design
+
+#### 11.1 Introduction to Responsive Design and Spacing
+
+###### 11.1.1 Responsive Design
+
+When designing web content, responsive design is essential for adapting layouts to different screen sizes, ensuring content remains accessible and visually appealing across devices. Responsive grids adjust the number of columns based on screen size, preventing content from becoming cramped and allowing design elements to have sufficient space. This approach maximizes content visibility and enhances the user experience.
+
+###### 11.1.2 Spacing
+
+Whitespace, or negative space, plays a crucial role in creating balanced web layouts by enhancing usability and prioritizing content. There are two types of whitespace:
+
+1. Passive Whitespace (or micro whitespace) refers to the small, often unnoticed spaces between elements in a design, like the spacing between letters, lines of text, or padding around images. It's usually not intentionally added but comes naturally with the use of fonts or design tools.
+
+2. Active Whitespace (or macro whitespace) is the space that is deliberately added by the designer to structure the content and guide the user’s experience on the page. It’s used strategically to create separation between different sections of content, making the page easier to navigate.
+
+Proper use of both types of whitespace helps create more visually appealing and user-friendly designs.
+
+#### 11.2 Relative Measurements
+
+###### 11.2.1 Font Sizes
+
+Relative measurements in CSS, such as `em` and `rem`, offer flexibility over hard-coded pixel values, allowing web layouts to adapt seamlessly to different screen sizes. The `em` unit is based on the font size of its parent element, while the `rem` unit is based on the root element, typically the `<html>` tag. This ensures that content scales consistently across various devices, maintaining the website's proportions.
