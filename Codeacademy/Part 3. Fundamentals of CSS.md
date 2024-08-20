@@ -1190,6 +1190,170 @@ Proper use of both types of whitespace helps create more visually appealing and 
 
 #### 11.2 Relative Measurements
 
-###### 11.2.1 Font Sizes
+###### 11.2.1 Text Sizes
 
 Relative measurements in CSS, such as `em` and `rem`, offer flexibility over hard-coded pixel values, allowing web layouts to adapt seamlessly to different screen sizes. The `em` unit is based on the font size of its parent element, while the `rem` unit is based on the root element, typically the `<html>` tag. This ensures that content scales consistently across various devices, maintaining the website's proportions.
+
+###### 11.2.2 Height and Width
+
+Percentages in CSS allow for the responsive sizing of non-text HTML elements relative to their parent container. This method is commonly applied to box-model properties such as width, height, padding, borders, margins, and positioning (top, bottom, left, right). By using percentages, elements automatically adjust their size based on the dimensions of their parent element, ensuring flexible and scalable designs across different screen sizes. Note that percentages for height and width are based on the parent's dimensions, while padding and margin percentages are based on the parent's width (not on the height).
+
+###### 11.2.3 Min/Max Dimensions
+
+Relative measurements in CSS maintain consistent layouts across different screen sizes, but elements can become too small or large. To prevent this, you can set minimum and maximum dimensions using `min-width`, `max-width`, `min-height`, and `max-height` to define the minimum and maximum size limits for an element's width and height.
+
+#### 11.3 Scaling of Images and Videos
+
+To ensure that images and videos scale proportionally within a container, set the `overflow` to `hidden` to hide content exceeding the container's size. By setting the width to 100% and the height to `auto`, the media will scale correctly while maintaining its aspect ratio. Additionally, setting the display to `block` prevents alignment issues with other content.
+
+```css
+.container {
+  overflow: hidden;
+}
+
+img, video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+```
+
+#### 11.4 Scaling Background Images
+
+To scale background images responsively in CSS, use `background-size: cover;` which ensures the image covers the entire element while maintaining its proportions. This setting prevents the image from repeating and centers it within the element. If the image exceeds the container's dimensions, only a portion will be visible.
+
+```css
+body {
+  background-image: url('your-image-url.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+```
+
+#### 11.5 Media Queries
+
+###### 11.5.1 Viewport Meta Tag
+
+To enable responsive design across different devices, the HTML `<meta>` viewport tag is crucial. It instructs the browser on how to scale and render a webpage based on the device's viewport size, which varies between mobile and desktop. The tag typically sets the width of the viewport to match the device's width and establishes an initial zoom level, ensuring content scales appropriately without requiring user adjustments.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Other head elements -->
+  </head>
+  <!-- Body content -->
+</html>
+```
+
+###### 11.5.2 Responsive Design with Media Queries
+
+CSS media queries enable responsive design by applying different styles based on the screen size of a device. Using the `@media` keyword, specific conditions such as `max-width` can be set to target devices of certain sizes, ensuring the website adapts its layout accordingly. The `only screen` directive specifies the media type (screen), and logical operators like `and` allow chaining conditions to fine-tune the responsiveness.
+
+```css
+@media only screen and (max-width: 480px) {
+  /* CSS styles for screens 480px wide or smaller */
+  body {
+    background-color: lightblue;
+  }
+}
+```
+
+###### 11.5.3 Targeting High-Resolution Screens with Media Queries
+
+CSS media queries can be used to target screens based on their resolution, ensuring that high-quality media is only served to devices that can properly display it. By using the `min-resolution` and `max-resolution` features, developers can specify the conditions under which high-resolution content is loaded, helping to optimize performance and avoid unnecessary data usage on lower-resolution screens.
+
+```css
+@media only screen and (min-resolution: 300dpi) {
+  /* CSS styles for screens with at least 300dpi resolution */
+  img {
+    content: url('high-res-image.png');
+  }
+}
+```
+
+###### 11.5.4 Detecting Screen Orientation with Media Queries
+
+The `orientation` media feature in CSS allows you to apply different styles based on whether a device's screen is in landscape (wider than it is tall) or portrait (taller than it is wide) mode. This feature helps ensure optimal layout and design across different device orientations.
+
+```css
+@media only screen and (orientation: landscape) {
+  /* CSS styles for landscape orientation */
+  body {
+    background-color: lightblue;
+  }
+}
+
+@media only screen and (orientation: portrait) {
+  /* CSS styles for portrait orientation */
+  body {
+    background-color: lightcoral;
+  }
+}
+```
+
+###### 11.5.5 Combining Media Queries with `and` and `or`
+
+In CSS, media queries can be combined using the `and` and `or` operators to create more specific conditions for applying styles. The `and` operator allows you to chain multiple conditions together, meaning all conditions must be met for the styles to apply. The `or` operator, which is represented by a comma, allows you to specify alternative conditions, meaning the styles will apply if any one of the conditions is met.
+
+For example, you might want to apply certain styles only when the device is in landscape mode **and** has a screen width of at least 768 pixels. Alternatively, you could use an `or` operator to apply the styles when the device is either in portrait mode **or** the screen width is less than 480 pixels.
+
+```css
+/* Example of using 'and' */
+@media only screen and (orientation: landscape) and (min-width: 768px) {
+  /* CSS styles for landscape mode with at least 768px width */
+  body {
+    background-color: lightgreen;
+  }
+}
+
+/* Example of using 'or' with a comma-separated list */
+@media only screen and (orientation: portrait), (max-width: 480px) {
+  /* CSS styles for portrait mode or screens smaller than 480px */
+  body {
+    background-color: lightpink;
+  }
+}
+```
+
+In the first media query, the styles are applied only if both conditions are true— the device must be in landscape orientation and have a minimum width of 768 pixels. In the second query, the styles apply if the device is either in portrait orientation **or** has a width of 480 pixels or less.
+
+###### 11.5.6 Media Query Breakpoints
+
+Media query breakpoints are specific screen widths at which the layout of a webpage may break or appear misaligned, prompting the need for adjustments in CSS. Rather than setting breakpoints for every possible device size, the recommended approach is to observe where your content naturally "breaks" as the browser window is resized. These natural breakpoints are then used to create a responsive design that adapts to different screen sizes, providing the best possible user experience. Each project may require different breakpoints, tailored to its unique content and layout needs.
+
+This table lists common screen width breakpoints to help ensure your website looks great across a variety of devices.
+
+| **Device Type**    | **Screen Width Breakpoint** |
+| ------------------ | --------------------------- |
+| Mobile             | ≤ 480px                     |
+| Tablet             | ≤ 768px                     |
+| Tablet (Landscape) | ≤ 1024px                    |
+| Laptop             | ≤ 1600px                    |
+| Desktop            | > 1600px                    |
+
+#### 11.6 Efficiently Simulate Device Views with DevTools
+
+To save time testing your website on various devices, use DevTools Device Mode in the brower to simulate how your site appears and performs on different screens. You can toggle the device toolbar with a shortcut, manually resize the viewport, or use preset sizes for quick adjustments. Rotate the viewport to test landscape mode, and display CSS breakpoints for precise control. DevTools also provides a list of predefined devices like iPhones and Pixels to further streamline your testing process.
+
+###### 11.6.1 Reset Rules
+
+Here are some recommended reset rules for normalizing CSS across different browsers and ensuring a consistent layout:
+
+```css
+* {
+    box-sizing: border-box;
+    font-size: 1vw;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+```
+
+## 12. Resources for Web Development Troubleshooting
+
+Documentation is essential for understanding a language's features, and for web development, [Mozilla Developer Network (MDN)](https://developer.mozilla.org/en-US/) is the go-to resource for comprehensive documentation on CSS, HTML, JavaScript, and more. Additionally, using Google to search for solutions and visiting forums like Stack Overflow can provide valuable insights from experienced developers. Stack Overflow allows you to explore multiple solutions to common problems and even pose your own questions to the community.

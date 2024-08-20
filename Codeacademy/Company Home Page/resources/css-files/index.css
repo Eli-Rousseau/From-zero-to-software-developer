@@ -1,0 +1,63 @@
+/* Global styling */
+* {
+    box-sizing: border-box;
+    font-family: "Calibri", sans-serif;
+    color: black;
+    font-size: 1vw;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+  
+
+/* header section */
+header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+    background-image: url("https://images.pexels.com/photos/3008514/pexels-photo-3008514.jpeg");
+    background-size: cover;
+    background-position: center;
+    width: auto;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+header .titles h1 {
+    font-size: 6rem;
+    color: white;
+    margin-bottom: 0;
+    margin: 0;
+}
+
+header .titles h2 {
+    font-size: 1.875rem;
+    color: white;
+    margin-top: 0;
+}
+
+header .titles {
+    margin-bottom: 10%;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+header .button a {
+    font-size: 3rem;
+    color: white;
+    text-decoration: none;
+    border: 0.25rem solid white;
+    border-radius: 5rem;
+    padding: 0 2%;
+}
+
+header .button a:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+    color: black;
+}
+
+/* about us section */
