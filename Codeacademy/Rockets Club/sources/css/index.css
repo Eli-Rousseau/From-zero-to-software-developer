@@ -1,0 +1,142 @@
+/* global styling */
+
+@font-face {
+    font-family: "Blade";
+    src: url("../fonts/Blade.ttf") format("truetype");
+}
+
+* {
+    box-sizing: border-box;
+    font-size: 1vw;
+    font-family: "Blade", sans-serif;
+    color: rgb(12, 12, 12);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* header section */
+header {
+    width: 100vw;
+    height: 15vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(12, 12, 12, 0.8);
+    position: fixed;
+    z-index: 10;
+}
+
+header img {
+    width: auto;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    padding: 1% 0;
+}
+
+header nav {
+    width: auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    margin: 0;
+    padding: 0;
+}
+
+header nav img {
+    display: none;
+}
+
+header nav a {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    margin: 0;
+    padding: 0 15%;
+    color: rgb(255, 255, 255);
+}
+
+
+header nav a:hover {
+    color: whitesmoke;
+    background-color: rgba(12, 12, 12, 0.5);
+    text-decoration: none;
+}
+
+header nav a:active {
+    color: rgb(240, 8, 64);
+}
+
+@media only screen and (max-width: 768px) {
+    
+    header nav a {
+        display: none;
+    }
+
+    header nav img {
+        display: block;
+        width: auto;
+        height: 75%;
+        margin: 20%;
+    }
+}
+
+/* banner video styling */
+.banner {
+    width: auto;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.banner video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%) scale(1.5);
+}
+
+/* footer styling */
+footer {
+    width: 100%;
+    height: auto;
+    display: flex;
+    padding: 2% 3%;
+    background-color: rgba(12, 12, 12, 1);;
+}
+
+footer a {
+    width: 100%;
+    height: auto;
+    margin: auto 3%;
+    padding: 0 8%;
+}
+
+footer a img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+@media only screen and (max-width: 450px) {
+
+    footer {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    footer a {
+        padding: 0 45%;
+        margin: 3%;
+    }
+}

@@ -1212,8 +1212,9 @@ To ensure that images and videos scale proportionally within a container, set th
 }
 
 img, video {
-  width: 100%;
-  height: auto;
+  width: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 ```
