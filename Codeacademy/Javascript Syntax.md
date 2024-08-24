@@ -517,8 +517,6 @@ do {
   console.log(`Counter: ${counter}`);
   counter++;
 } while (counter < 3);
-
-
 ```
 
 #### 7.6 Controlling Loops Flows
@@ -714,6 +712,7 @@ JavaScript provides several built-in methods for working with objects. These inc
 | `Object.assign()`   | Copies properties from one or more source objects to a target object.                         |
 | `Object.entries()`  | Returns an array of a given object's own enumerable string-keyed property [key, value] pairs. |
 | `Object.keys()`     | Returns an array of a given object's own enumerable property names.                           |
+| `Object.values()`   | Returns an array of a given object's own enumerable property values.                          |
 
 ## 9. Abstraction and Functions
 
@@ -755,25 +754,136 @@ executeFunction(greet); // Outputs: Hello, world!
 
 In this example, `greet` is a callback function passed as an argument to `executeFunction`. Notice that `greet` is passed without parentheses to ensure the function itself, not its return value, is passed to `executeFunction`.
 
+## 10. Iterators
 
+#### 10.1 Iteration Methods
 
+In JavaScript, iteration methods, also known as iterators, are built-in methods specifically designed to manipulate arrays and return values. These methods allow us to perform operations on each element of an array, often by passing a callback function to the method. This approach streamlines the process of working with arrays, making code more concise and readable.
 
+#### 10.2 Using `.forEach()` Method
 
+The `.forEach()` method is one of the most common iteration methods. It executes a provided function once for each array element. The callback function is passed as an argument to `.forEach()` and is executed for each element in the array, with the current element being passed as a parameter to the callback.
 
+```javascript
+const numbers = [1, 2, 3, 4];
+numbers.forEach(number => {
+    console.log(number * 2);
+});
+// Outputs: 2, 4, 6, 8
+```
 
-## X. Web Development with JavaScript
+#### 10.3 Using `.map()` Method
 
-#### X.1 Using JavaScript in the Web Browser Developer Console
+The `.map()` method is another important iterator. It also takes a callback function as an argument but differs from `.forEach()` by returning a new array. Each element in the new array is the result of applying the callback function to the corresponding element in the original array.
+
+```javascript
+const numbers = [1, 2, 3, 4];
+const doubled = numbers.map(number => number * 2);
+console.log(doubled);
+// Outputs: [2, 4, 6, 8]
+```
+
+#### 10.4 Using `.filter()` Method
+
+The `.filter()` method is used to create a new array with elements that meet a certain condition. Like `.map()`, `.filter()` takes a callback function as an argument. This function should return `true` or `false` for each element, determining whether the element should be included in the new array.
+
+```javascript
+const numbers = [1, 2, 3, 4, 5];
+const evenNumbers = numbers.filter(number => number % 2 === 0);
+console.log(evenNumbers);
+// Outputs: [2, 4]
+```
+
+#### 10.5 Using `.findIndex()` Method
+
+The `.findIndex()` method in JavaScript helps locate the index of the first element in an array that satisfies a given condition specified in a callback function. When `.findIndex()` is called on an array, it evaluates each element against the condition provided in the callback. If an element meets the condition, `.findIndex()` returns the index of that element. If no element matches the condition, the method returns `-1`.
+
+```javascript
+const numbers = [10, 20, 30, 40];
+const index = numbers.findIndex(number => number > 25);
+console.log(index);
+// Outputs: 2 (the index of 30)
+```
+
+#### 10.6 Using `.reduce()` Method
+
+The `.reduce()` method iterates over an array, applying a callback function that accumulates a single value from the array’s elements. This method is particularly useful for summing values, concatenating strings, or combining array elements into a single result. The callback function takes two arguments: an accumulator and the current element.
+
+```javascript
+const numbers = [1, 2, 3, 4];
+const sum = numbers.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+console.log(sum);
+// Outputs: 10
+```
+
+#### 10.7 Using `.some()` Method
+
+The `.some()` method checks whether at least one element in an array passes the test provided by a callback function. If any element satisfies the condition, `.some()` returns `true`; otherwise, it returns `false`. This method does not modify the original array.
+
+```javascript
+const numbers = [1, 3, 5, 7];
+const hasEven = numbers.some(number => number % 2 === 0);
+console.log(hasEven);
+// Outputs: false
+```
+
+#### 10.8 Using the `.every()` Method
+
+The `.every()` method tests whether all elements in an array pass a given condition implemented by a callback function. If all elements satisfy the condition, `.every()` returns `true`; otherwise, it returns `false`.
+
+```javascript
+const numbers = [2, 4, 6, 8];
+const allEven = numbers.every(number => number % 2 === 0);
+console.log(allEven);
+// Outputs: true
+```
+
+## 11. Debugging JavaScript Code
+
+#### 11.1 Dealing with Bugs
+
+Encountering bugs is a natural part of programming and an opportunity to strengthen your code. Debugging allows you to identify weaknesses, improve security, and learn from mistakes. All programmers, regardless of experience, face errors frequently, especially as their code becomes more complex. When errors occur, follow a systematic approach.
+
+#### 11.2 Understanding Error Stack Traces
+
+Errors appear as red text when code fails to run due to issues that a compiler cannot interpret. The compiler generates an error stack trace, which includes the file path, line number, error type, and a description of the error. To debug effectively, always identify the specific line where the error occurred, determine the type of error, and understand the accompanying error message.
+
+#### 11.3 Common Error Types
+
+- **SyntaxError:** Occurs due to typos or incorrect code structure, such as unmatched brackets or invalid semicolons. This error means the code is not interpretable by the compiler.
+- **ReferenceError:** Happens when you try to use a variable that hasn’t been declared. Ensure all variables are properly defined before use.
+- **TypeError:** Arises when you attempt to perform an operation on an incorrect data type, like using a string method on a number.
+
+#### 11.4 Debugging Process
+
+To resolve errors efficiently:
+
+1. Run your code and check the stack trace for error details.
+2. Navigate to the file and line number indicated to locate the bug.
+3. Fix the identified bug and rerun your code.
+4. Repeat the process until no more errors are present.
+
+#### 11.5 Handling Silent Bugs
+
+Even if your code runs without errors, it might still contain logic bugs that produce incorrect results. To locate these issues, use `console.log()` to print variables and track the code’s execution flow. This method helps identify where the logic goes wrong, even when no error is thrown.
+
+#### 11.6 Using Documentation and Online Resources
+
+When debugging, refer to JavaScript documentation like the MDN Web Docs for detailed explanations of JavaScript features. If stuck, search online, particularly on forums like Stack Overflow, where you can find solutions to most coding problems shared by the programming community.
+
+## 12. Web Development with JavaScript
+
+#### 12.1 Using JavaScript in the Web Browser Developer Console
 
 JavaScript, alongside HTML and CSS, is a fundamental language in web development. While JS code is typically embedded in HTML using the `<script>` element, modern browsers offer a console through their developer tools for executing JS code directly. This console acts as a REPL (Read-Evaluate-Print-Loop), allowing developers to test and debug code by interacting with the page's DOM (Document Object Model) and logging output. It also displays messages logged by JS code and information on network requests and security errors.
 
 To open the developer console, you usually right-click on a webpage and select "Inspect" or "Inspect Element," then navigate to the "Console" tab. On Windows, you can access it via the Settings and more (3-dot icon) > More tools > Developer tools, and then click on the Console tab. The console is valuable for running JS code both independently and in relation to the page content. It facilitates quick testing and temporary modifications, with changes disappearing upon a page refresh, which is ideal for testing without altering the actual code.
 
-#### X.2 JavaScript Runtime Environments
+#### 12.2 JavaScript Runtime Environments
 
 A runtime is a system that translates code written in a high-level, human-readable programming language into machine code that a computer can execute. It will determine where the programs run and the global objects and functions it can access during execution. JavaScript traditionally runs in a **browser's runtime environment**, where it powers front-end applications with access to browser-specific features like the `window` object. However, with the creation of the **Node runtime environment** in 2009, JavaScript can now also be used for back-end development. Node enables JavaScript to run outside the browser, providing access to server-side features such as the file system, databases, and networks. These distinct environments define the differences between front-end and back-end JavaScript applications.
 
-#### X.3 Setting Up Node.js and Starting a JavaScript Project
+#### 12.3 Setting Up Node.js and Starting a JavaScript Project
 
 To set up the Node.js environment on your computer, start by visiting the Node.js website and downloading the "LTS" (Long Term Support) version. After downloading, follow the installation instructions provided. Once installed, open a terminal window and verify the installation by running the command `node -v`, which should display the installed Node version.
 
