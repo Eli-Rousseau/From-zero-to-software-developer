@@ -555,7 +555,7 @@ This updates the local repository and moves the `origin/master` pointer to the n
 git merge origin/master
 ```
 
-###### 5.5.3 Pulling a Repository
+###### 5.2.3 Pulling a Repository
 
 To bring changes from a remote repository into your local repository, combine the fetch and merge commands using:
 
@@ -569,7 +569,7 @@ This command pulls the latest commits from the remote repository and adds them t
 git pull --rebase
 ```
 
-###### 5.5.4 Pushing a Repository
+###### 5.2.4 Pushing a Repository
 
 To synchronize the master branch on your local machine with the remote repository, use:
 
@@ -579,7 +579,7 @@ git push
 
 This command updates the remote repository, moving the origin/master pointer to the latest commit on the master branch. If the local master branch is ahead of origin/master, but the remote repository has diverged, you must first synchronize your local repository with the remote repository before the push command will be valid.
 
-###### 5.5.5 Sharing Tags
+###### 5.2.5 Sharing Tags
 
 To share a local tag with collaborators on the central repository, use:
 
@@ -593,11 +593,11 @@ To remove a tag from the remote repository, use:
 git push origin --delete <tag-name>
 ```
 
-###### 5.5.6 GitHub Releases
+###### 5.2.6 GitHub Releases
 
 GitHub's releases feature allows you to package software with source code, binary files, and release notes. You can create a new release in the repository's release settings, add tags, a release title, and notes, and attach binary files. The tag is added to the latest commit of the centralized repository, providing a convenient way to distribute software packages.
 
-###### 5.5.7 Sharing Branches
+###### 5.2.7 Sharing Branches
 
 Local branches in Git are private by default and need to be explicitly pushed to the centralized repository for collaboration. To share a branch, switch to it and use:
 
@@ -668,14 +668,14 @@ Rewriting history can be risky and should adhere to the golden rule of not rewri
 
 ###### 6.2.1 Remove Commit from History
 
-Git allows complete removal of a commit from history using the revert command. The effects of different options are:
+Git allows complete removal of a commit from history using the reset command. The effects of different options are:
 
 - `--soft`: Moves the HEAD pointer to the specified commit without changing the staging area or working directory, effectively just removing the commit.
 - `--mixed`: Moves the HEAD pointer and changes the staging area but leaves the working directory unchanged, unstaging files.
 - `--hard`: Moves the HEAD pointer and resets both the staging area and working directory to match the specified commit, discarding all local changes.
 
 ```bash
-git revert --hard HEAD~1
+git reset --hard HEAD~1
 ```
 
 ###### 6.2.2 Reverting Commits in History
