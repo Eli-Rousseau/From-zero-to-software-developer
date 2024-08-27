@@ -243,8 +243,228 @@ CSS offers a variety of measurement units that can be broadly categorized into a
 
 #### 5.6 Positioning
 
+###### 5.6.1 Positioning Elements
+
+The `position` property in CSS allows you to control how and where HTML elements are positioned on the page. By default, elements are positioned statically, meaning they appear in the normal document flow. However, this property can be altered to change the element's behavior and placement:
+
+| **Value**    | **Description**                                                                                   | **Syntax**            |
+| ------------ | ------------------------------------------------------------------------------------------------- | --------------------- |
+| **static**   | Default positioning, follows normal document flow.                                                | `position: static;`   |
+| **relative** | Position relative to the element's normal position, moves using `top`, `right`, `bottom`, `left`. | `position: relative;` |
+| **absolute** | Position relative to the nearest positioned ancestor, removed from the document flow.             | `position: absolute;` |
+| **fixed**    | Position relative to the viewport, remains fixed during scrolling.                                | `position: fixed;`    |
+| **sticky**   | Behaves like relative until a scroll threshold is reached, then acts like fixed.                  | `position: sticky;`   |
+
+The `z-index` property can be used in conjunction with these positioning methods to control the stacking order of overlapping elements, with higher values bringing elements to the front.
+
+###### 5.6.1 Floating Elements
+
+The `float` property in CSS allows elements to be aligned to the left or right within their container. When an element is floated, it is removed from the normal document flow, which means other elements in the same container will wrap around it. However, this can lead to layout issues, such as collapsing parent containers.
+
+To manage these issues, the `clear` property is used to prevent elements from wrapping around floated elements. This is particularly useful to ensure proper layout and prevent overlapping. A common technique to clear floats and maintain layout integrity is the "clearfix" method, which uses the `::after` pseudo-element to add a block element that clears the float.
+
+```css
+.clearfix::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+```
+
+While floats can be powerful, they are often tricky to work with due to layout complications. As a result, more modern layout techniques, like Flexbox and Grid, are preferred in contemporary web design.
+
 #### 5.7 Flex Box
+
+###### 5.7.1 Introduction to Flexbox
+
+The Flexible Box Layout, or Flexbox, is a CSS layout model that arranges elements in a single direction—either row or column. It simplifies the alignment, distribution, and spacing of items within a container. To start using Flexbox, the container's `display` property is set to `flex`. This changes how its child elements are laid out, allowing them to behave as flex items within the defined flex container.
+
+###### 5.7.2 Flex Direction
+
+The `flex-direction` property determines the primary axis direction within the flex container.
+
+| **Value**        | **Description**                                         |
+| ---------------- | ------------------------------------------------------- |
+| `row`            | Aligns items in a horizontal row (default).             |
+| `row-reverse`    | Aligns items in a horizontal row but in reverse order.  |
+| `column`         | Aligns items in a vertical column.                      |
+| `column-reverse` | Aligns items in a vertical column but in reverse order. |
+
+###### 5.7.3 Main Axis and Cross Axis
+
+In Flexbox, layout control revolves around two axes:
+
+- **Main Axis:** Defined by the `flex-direction` property (row or column).
+- **Cross Axis:** Perpendicular to the main axis, automatically managed by Flexbox.
+
+###### 5.7.4 Justifying and Aligning Items
+
+Flexbox offers powerful control over how items are aligned within their container using the `justify-content` and `align-items` properties:
+
+- **`justify-content`:** Aligns items along the main axis (horizontal for `row`, vertical for `column`). This property helps distribute the space between items in various ways.
+
+| **Value**       | **Description**                                             |
+| --------------- | ----------------------------------------------------------- |
+| `flex-start`    | Aligns items to the start of the container.                 |
+| `flex-end`      | Aligns items to the end of the container.                   |
+| `center`        | Centers items in the container.                             |
+| `space-between` | Distributes items with space between them.                  |
+| `space-around`  | Distributes items with space around them.                   |
+| `space-evenly`  | Distributes items with equal space around and between them. |
+
+- **`align-items`:** Aligns items along the cross axis. This property is useful for controlling how items stack vertically in a horizontal row or horizontally in a vertical column.
+
+| **Value**    | **Description**                                  |
+| ------------ | ------------------------------------------------ |
+| `flex-start` | Aligns items to the start of the cross axis.     |
+| `flex-end`   | Aligns items to the end of the cross axis.       |
+| `center`     | Centers items along the cross axis.              |
+| `stretch`    | Stretches items to fill the container (default). |
+| `baseline`   | Aligns items along their baseline.               |
+
+###### 5.7.4 Wrapping Flex Items
+
+By default, Flexbox tries to fit all items in a single line, but the `flex-wrap` property allows items to wrap onto multiple lines.
+
+| **Value**      | **Description**                                  |
+| -------------- | ------------------------------------------------ |
+| `nowrap`       | All items are kept on one line (default).        |
+| `wrap`         | Items wrap onto multiple lines as needed.        |
+| `wrap-reverse` | Items wrap onto multiple lines in reverse order. |
+
+###### 5.7.5 Aligning Content on Multiple Lines
+
+When items wrap onto multiple lines, the `align-content` property controls how the lines themselves are aligned along the cross axis.
+
+| **Value**       | **Description**                                       |
+| --------------- | ----------------------------------------------------- |
+| `flex-start`    | Lines are packed toward the start of the cross axis.  |
+| `flex-end`      | Lines are packed toward the end of the cross axis.    |
+| `center`        | Lines are centered in the container.                  |
+| `space-between` | Lines are evenly distributed with space between them. |
+| `space-around`  | Lines are evenly distributed with space around them.  |
+| `stretch`       | Lines stretch to fill the container.                  |
+
+###### 5.7.6 Sizing Flex Items
+
+Flexbox offers several properties to control the size and growth of individual flex items:
+
+| **Property**  | **Description**                                         |
+| ------------- | ------------------------------------------------------- |
+| `flex-basis`  | Sets the initial size of the item.                      |
+| `flex-grow`   | Defines the growth factor of the item.                  |
+| `flex-shrink` | Defines the shrink factor of the item.                  |
+| `flex`        | Shorthand for `flex-grow`, `flex-shrink`, `flex-basis`. |
+
+###### 5.7.7 Controlling Individual Item Alignment
+
+The `align-self` property allows individual flex items to override the alignment set by `align-items`.
+
+| **Value**    | **Description**                                 |
+| ------------ | ----------------------------------------------- |
+| `flex-start` | Aligns the item to the start of the cross axis. |
+| `flex-end`   | Aligns the item to the end of the cross axis.   |
+| `center`     | Centers the item along the cross axis.          |
+| `baseline`   | Aligns the item along its baseline.             |
+| `stretch`    | Stretches the item to fill the container.       |
 
 #### 5.8 Grid Layouts
 
-#### 5.9 Media Queries
+###### 5.8.1 Defining a Grid Layout
+
+Grid layouts in CSS allow you to organize elements into both rows and columns simultaneously. This makes grids particularly useful for structuring the entire layout of a webpage, such as headers, sidebars, content areas, and footers. 
+
+- **Defining a Grid Container:** To create a grid, the container's `display` property is set to `grid`. Then, the `grid-template-rows` and `grid-template-columns` properties are used to specify the number and size of rows and columns.
+
+- **Using the `repeat()` Function:** The `repeat()` function simplifies the creation of grids with repetitive rows or columns.
+
+- **Shorthand Notation:** The `grid-template` shorthand allows you to define both rows and columns in a single line. 
+
+- **Fraction Unit:** The `fr` (fraction) unit is unique to grids, enabling you to allocate a fraction of the available space to grid items.
+
+| **Property**            | **Description**                                                 |
+| ----------------------- | --------------------------------------------------------------- |
+| `grid-template-rows`    | Defines the number and size of rows.                            |
+| `grid-template-columns` | Defines the number and size of columns.                         |
+| `grid-template`         | Shorthand for `grid-template-rows` and `grid-template-columns`. |
+
+###### 5.8.2 Aligning Grid Items
+
+Once a grid is established, the `justify-items` and `align-items` properties control the alignment of items within the grid cells.
+
+| **Property**    | **Description**                                   |
+| --------------- | ------------------------------------------------- |
+| `justify-items` | Aligns items horizontally within their grid area. |
+| `align-items`   | Aligns items vertically within their grid area.   |
+
+###### 5.8.3 Aligning the Entire Grid
+
+To align the entire grid within its container, use the `justify-content` and `align-content` properties. These properties control how the grid as a whole is positioned within the container.
+
+| **Property**      | **Description**                                           |
+| ----------------- | --------------------------------------------------------- |
+| `justify-content` | Aligns the entire grid horizontally within the container. |
+| `align-content`   | Aligns the entire grid vertically within the container.   |
+
+###### 5.8.4 Adding Gaps Between Grid Items
+
+To create space between the rows and columns of the grid, the `row-gap`, `column-gap`, and `gap` properties are used.
+
+| **Property** | **Description**                                 |
+| ------------ | ----------------------------------------------- |
+| `row-gap`    | Sets the space between rows in the grid.        |
+| `column-gap` | Sets the space between columns in the grid.     |
+| `gap`        | Shorthand for setting both row and column gaps. |
+
+###### 5.8.5 Positioning Grid Items
+
+To place items within specific grid cells, use the `grid-row`, `grid-column`, and `grid-area` properties.
+
+| **Property**  | **Description**                                               |
+| ------------- | ------------------------------------------------------------- |
+| `grid-row`    | Specifies the rows a grid item will occupy.                   |
+| `grid-column` | Specifies the columns a grid item will occupy.                |
+| `grid-area`   | Shorthand for specifying the row and column an item occupies. |
+
+###### 5.8.6 Defining Named Grid Areas
+
+CSS Grid allows you to create named grid areas, which can make your grid layout more semantic and easier to manage. Named areas are defined in the grid container using the `grid-template-areas` property, and individual grid items are then assigned to these areas using the `grid-area` property.
+
+| **Property**          | **Description**                               |
+| --------------------- | --------------------------------------------- |
+| `grid-template-areas` | Defines named areas in the grid layout.       |
+| `grid-area`           | Assigns a grid item to a specific named area. |
+
+#### 5.9 Hiding Elements
+
+In CSS, elements can be hidden using either the `display` or `visibility` properties, each with different effects:
+
+- **`display: none;`** Completely removes the element from the document, making it invisible and eliminating the space it would have occupied.
+
+- **`visibility: hidden;`** Makes the element invisible while still preserving the space it occupies in the layout. 
+
+These properties are useful for controlling the visibility of elements without removing them entirely from the DOM, depending on the desired layout and user experience.
+
+#### 5.10 Media Queries
+
+Media queries are essential in CSS for building responsive websites that adapt to different devices, such as smartphones, tablets, and desktops. They allow you to apply different styles based on features like screen size, orientation, and resolution. The preferred approach is often "mobile-first" design, where the site is optimized for mobile devices first, and then enhanced for larger screens.
+
+When developing responsive designs, you can use the web development tools in Microsoft Edge to simulate different devices. By toggling the device simulation mode, you can view and test your website as it would appear on various screen sizes, including smartphones and tablets.
+
+To create a media query, use the `@media` rule followed by conditions like `min-width` or `max-width`. This allows you to introduce breakpoints where the design needs adjustment.
+
+```css
+/* Styles for screens wider than 768px (typically tablets and desktops) */
+@media screen and (min-width: 768px) {
+  body {
+    font-size: 18px;
+  }
+}
+
+/* Styles for screens wider than 1024px (desktops) */
+@media screen and (min-width: 1024px) {
+  body {
+    font-size: 20px;
+  }
+}
+```

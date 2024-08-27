@@ -5,53 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
-      table :first-child {
-        background-color: aquamarine;
+      .container {
+        display: grid;
+        grid-template-rows: 100px 100px;
+        grid-template-columns: 100px 100px 100px;
+        justify-items:
       }
     </style>
   </head>
   <body>
-    <!-- Start of the table -->
-    <table>
-      <!-- Table Header Section -->
-      <thead>
-        <tr>
-          <th scope="col">Day</th>
-          <th scope="col">Event</th>
-          <th scope="col">Time</th>
-        </tr>
-      </thead>
-
-      <!-- Table Body Section -->
-      <tbody>
-        <tr>
-          <th scope="row">Monday</th>
-          <td>Meeting with Team</td>
-          <td>10:00 AM</td>
-        </tr>
-        <tr>
-          <th scope="row">Tuesday</th>
-          <!-- Cell spanning across 2 columns -->
-          <td colspan="2">Workshop on HTML</td>
-        </tr>
-        <tr>
-          <th scope="row">Wednesday</th>
-          <td>Client Presentation</td>
-          <!-- Cell spanning across 2 rows -->
-          <td rowspan="2">2:00 PM</td>
-        </tr>
-        <tr>
-          <th scope="row">Thursday</th>
-          <td>Team Building Activity</td>
-        </tr>
-      </tbody>
-
-      <!-- Table Footer Section -->
-      <tfoot>
-        <tr>
-          <td colspan="3">All events are subject to change</td>
-        </tr>
-      </tfoot>
-    </table>
+    <div class="container"></div>
   </body>
 </html>
