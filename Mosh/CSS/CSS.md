@@ -468,3 +468,117 @@ To create a media query, use the `@media` rule followed by conditions like `min-
   }
 }
 ```
+
+## 6. Typography
+
+#### 6.1 Styling Fonts
+
+CSS provides several properties to style and customize fonts, allowing you to control the appearance of text on your webpage. These properties enable you to select specific fonts, adjust their size, weight, style, and color, ensuring your text matches the desired design and readability requirements.
+
+| **Property**  | **Description**                                                                                                                                                                                                                                                                              | **Syntax**                          |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| `font-family` | Specifies the font for an element, with options to prioritize multiple fonts in a stack, ensuring fallback options if the primary font is unavailable. Fonts are categorized into `serif`, `sans-serif`, and `monospace`, with web-safe fonts often included for cross-device compatibility. | `font-family: "Arial", sans-serif;` |
+| `font-weight` | Defines the boldness of text, with values ranging from 100 to 900.                                                                                                                                                                                                                           | `font-weight: bold;`                |
+| `font-style`  | Applies styles like italic to text elements.                                                                                                                                                                                                                                                 | `font-style: italic;`               |
+| `font-size`   | Sets the size of text using absolute or relative units, or keywords.                                                                                                                                                                                                                         | `font-size: 16px;`                  |
+| `color`       | Sets the color of the text.                                                                                                                                                                                                                                                                  | `color: #333333;`                   |
+
+#### 6.2 Custom Fonts
+
+###### 6.2.1 Embedding Custom Fonts
+
+In addition to web-safe fonts, custom fonts can be obtained from online sources like FontSquirrel, Fonts.com, and MyFonts.com. Custom fonts are available in various formats such as TTF, OTF, EOT, WOFF, and WOFF2, with WOFF and WOFF2 being preferred for web use due to their compression and efficiency. If you have a font in a heavier format like TTF, you can convert it to WOFF or WOFF2 using a web font generator like FontSquirrel. After converting and downloading the web font kit, you can include the fonts in your project. To use these web fonts, define a `@font-face` rule at the top of your stylesheet, specifying the font's name, file source, weight, and style. Once registered, the custom fonts can be used throughout your stylesheet.
+
+```css
+@font-face {
+    font-family: 'CustomFont';
+    src: url('fonts/CustomFont.woff2') format('woff2'),
+         url('fonts/CustomFont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Applying the custom font */
+body {
+    font-family: 'CustomFont', sans-serif;
+}
+```
+
+###### 6.2.2 Managing Flashes of Unstyled Text
+
+When a website loads, if the embedded font isn't downloaded immediately, a web-safe fallback font might be displayed temporarily, causing a flash of unstyled text (FOUT). This can lead to layout shifts and a poor user experience. To control this behavior, the `font-display` property within the `@font-face` rule can be used with different values: 
+
+- **auto**: The default behavior.
+- **swap**: Displays the fallback font first and then swaps it with the custom font once it's loaded.
+- **fallback**: Uses the custom font if it loads within a short window; otherwise, the fallback font remains.
+- **block**: Hides the text until the custom font is loaded.
+- **optional**: The custom font is used if available, but it's not essential for display.
+
+###### 6.2.3 Using Font Services
+
+Web font services, like Google Web Fonts, offer a wide range of fonts, some free and others requiring a subscription. These services simplify font usage by providing filters to help find the right font and guidelines to integrate them into your website. Typically, this involves adding a `<link>` element to your HTML to connect to the service's domain and referencing a stylesheet that includes the necessary `@font-face` rules, with the fonts being served directly from the service's servers.
+
+#### 6.3 System Font Stack for Native Appearance
+
+The system font stack allows a webpage to use the default fonts of the user's operating system, ensuring a native look and improving performance by eliminating the need for font downloads, thus preventing any flash of unstyled text (FOUT). However, the appearance may vary across different operating systems due to differences in default fonts. To implement the system font stack, you can specify a list of fonts that correspond to the default fonts across various operating systems.
+
+```css
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+```
+
+#### 6.4 Text Sizing
+
+When sizing text in CSS, it's advisable to use relative measurement units instead of absolute ones like pixels, as relative units provide better consistency across different devices. Preferred units include percentages (%), viewport units (vw, vh), and especially `em` and `rem`. `rem` is often favored because it bases the measurement on the root element's font size, typically 16px by default. A common practice is to set the `html` font size to 62.5%, equating to 10px, making it easier to calculate other font sizes. For visualizing font sizes across different typefaces, tools like [type-scale.com](https://typescale.com/) can be very helpful.
+
+#### 6.5 Text Spacing
+
+In CSS, spacing text elements effectively horizontally and vertically is key to improving readability and design. 
+
+| **Property**     | Axis       | **Description**                                                                                                                                                                                               | **General Syntax**       |
+| ---------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `margin`         | Vertical   | Controls the vertical space between elements.                                                                                                                                                                 | `margin: value;`         |
+| `line-height`    | Vertical   | Adjusts the space between lines of text; use unitless values for proportional scaling.                                                                                                                        | `line-height: value;`    |
+| `letter-spacing` | Horizontal | Increases or decreases the spacing between letters.                                                                                                                                                           | `letter-spacing: value;` |
+| `word-spacing`   | Horizontal | Increases or decreases the spacing between words.                                                                                                                                                             | `word-spacing: value;`   |
+| `width`          | Horizontal | Sets the width of an element; can be used to control line length. Research suggests that an ideal line length is 50-70 characters, so setting the `width` to `50ch` characters can help achieve this balance. | `width: value;`          |
+
+#### 6.6 Formatting Text
+
+CSS offers several properties to format and enhance the presentation of text elements on a webpage.
+
+| **Property**      | **Description**                                         | **General Syntax**           |
+| ----------------- | ------------------------------------------------------- | ---------------------------- |
+| `text-align`      | Controls the horizontal alignment of text.              | `text-align: left`           |
+| `text-indent`     | Adds indentation to the first line of text.             | `text-indent: value;`        |
+| `text-decoration` | Adds decoration like underline or line-through to text. | `text-decoration: underline` |
+| `text-transform`  | Transforms text to uppercase, lowercase, or capitalize. | `text-transform: uppercase`  |
+| `white-space`     | Controls text wrapping and whitespace handling.         | `white-space: nowrap`        |
+| `column-count`    | Splits text into multiple columns.                      | `column-count: number;`      |
+| `column-gap`      | Controls the space between columns.                     | `column-gap: value;`         |
+| `column-rule`     | Adds a border between columns.                          | `column-rule: value;`        |
+
+## 7. Images
+
+#### 7.1 Images Types and Formats
+
+#### 7.2 Background Images
+
+#### 7.3 CSS Sprites
+
+#### 7.4 Data URLs
+
+#### 7.5 Clipping Images
+
+#### 7.6 Applying Filters
+
+#### 7.7 Supporting High-Density Screens
+
+#### 7.8 Resolution Switching
+
+#### 7.9 Using Modern Image Formats
+
+#### 7.10 Art Direction
+
+#### 7.11 Scalable Vector Graphics
