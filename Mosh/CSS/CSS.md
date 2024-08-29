@@ -563,22 +563,473 @@ CSS offers several properties to format and enhance the presentation of text ele
 
 #### 7.1 Images Types and Formats
 
+In computing, images fall into two main categories:
+
+- **Raster images** are composed of pixels and include formats like JPG, PNG, GIF, and WebP. They are commonly produced by cameras, scanners, or image-editing software. The quality and file size of raster images depend on their resolution, with higher resolutions leading to larger file sizes. While these images can support various color depths, transparency, and animations, it's important to balance quality and file size for web use.
+
+- **Vector images** are created from mathematical equations using lines and curves, and are typically saved in SVG (Scalable Vector Graphics) format. Unlike raster images, vector images are resolution-independent, meaning they can be scaled to any size without losing sharpness, making them ideal for logos and icons.
+
 #### 7.2 Background Images
+
+To set a background for an element in CSS, various properties allow you to control the appearance and behavior of the background image.
+
+| **Property**              | **Description**                                                                                                                         | **Syntax**                                  |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| **background-image**      | Sets the background image of an element.                                                                                                | `background-image: url(image.jpg);`         |
+| **background-repeat**     | Determines how the background image is repeated.                                                                                        | `background-repeat: no-repeat`              |
+| **background-position**   | Sets the position of the background image.                                                                                              | `background-position: horizontal vertical;` |
+| **background-size**       | Defines the size of the background image. The `cover` value ensures the entire container is filled while keeping the image proportions. | `background-size: width height`             |
+| **background-attachment** | Controls the scrolling behavior of the background image.                                                                                | `background-attachment: fixed``             |
 
 #### 7.3 CSS Sprites
 
+To reduce server load and optimize image delivery on a webpage, CSS sprites combine multiple images into a single file. This technique minimizes the number of HTTP requests made to the server by consolidating various images—such as icons or logos—into one larger image. Using a tool like [CSS Sprite Tool](https://cssspritestool.com/), you can create a CSS sprite and generate a corresponding stylesheet with rules for displaying each image segment. By applying background properties to container elements in your HTML, you can effectively use the combined sprite image while keeping the number of server requests to a minimum. Note that CSS sprites are best suited for small images and may require recreation if new images need to be added. This approach helps to streamline resource loading and improve page performance.
+
 #### 7.4 Data URLs
+
+Data URLs are a technique used to reduce HTTP requests by embedding images directly within a document or stylesheet. By converting an image into a long string of characters using a Data URL generator, such as [CSS Portal’s Image to Data](https://www.cssportal.com/image-to-data/), you can include the image data directly in your HTML or CSS. This method eliminates the need for additional image file requests, as the data is embedded within the document itself. However, Data URLs often result in larger file sizes compared to the original images and can increase the complexity of your HTML. Additionally, this approach may lead to slower rendering on mobile devices due to the increased size and processing required.
 
 #### 7.5 Clipping Images
 
+To crop or clip parts of an image using CSS, you can utilize a CSS clip path generator like [Clippy](https://bennettfeely.com/clippy/). This interactive tool allows you to define various shapes and cut portions of an image visually. It generates the corresponding CSS property values needed to apply these shapes and crop the image accordingly. This method provides a straightforward way to customize image clipping without manually writing complex CSS code.
+
 #### 7.6 Applying Filters
+
+CSS enables the application of visual effects to images using the `filter` property. Filters can modify image appearance through various functions like `grayscale`, `blur`, `contrast`, `brightness`, and `saturate`. Each function accepts specific values to adjust the intensity of the effect. Multiple filters can be combined to create complex visual effects.
+
+```css
+/* Example of applying multiple filters to an image */
+img {
+  filter: grayscale(50%) blur(5px) contrast(120%) brightness(80%) saturate(150%);
+}
+```
 
 #### 7.7 Supporting High-Density Screens
 
+High-density screens, with a **device pixel ratio (DPR)** greater than one, require higher-resolution images to maintain sharpness. **Physical resolution** refers to the actual number of pixels on a device, while **logical resolution** is how the screen behaves, appearing as though it has fewer pixels. The DPR is the ratio of physical to logical pixels, and it determines how sharp images will appear on these screens. For example, a high DPR (like 2x or 3x) means that more physical pixels are used to display the same logical space, resulting in sharper images.
+
+To accommodate this, you can create larger versions of raster images using editing tools like Photoshop and name them using a convention like `@2x` or `@3x` based on the DPR. These images can then be provided to the browser using the `srcset` attribute in the `<img>` element, ensuring that the correct image is displayed based on the screen's DPR. This ensures that images appear crisp and clear on high-density screens without compromising quality.
+
+```html
+<img src="image.jpg" 
+     srcset="image.jpg 1x, image@2x.jpg 2x, image@3x.jpg 3x" 
+     alt="Optimized Image">
+```
+
+This approach is recommended for key visuals that need to retain high quality on various screens. However, it’s essential to use this technique selectively, primarily for images where maintaining quality across different screens is crucial.
+
 #### 7.8 Resolution Switching
+
+Devices have varying screen resolutions, and serving the same image to all devices can lead to inefficient resizing, increasing the browser's workload and potentially slowing down performance. This issue, known as **resolution switching**, arises when the browser resizes a single image to fit different screen sizes. To optimize this, you can provide multiple versions of an image at different sizes (small, medium, large) and let the browser choose the most appropriate one based on the device's screen resolution and pixel ratio.
+
+Using the `srcset` attribute in the `<img>` element allows you to specify different image versions with their respective widths. The browser will then select the best fit for the device. Additionally, the `sizes` attribute can be used to define how much of the viewport the image should occupy, based on screen size, similar to media queries.
+
+```html
+<img src="image.jpg"
+     srcset="image.jpg 400w, image@2x.jpg 800w, image@3x.jpg 1200w"
+     sizes="(max-width: 500px) 100vw, 50vw"
+     alt="Responsive Image">
+```
+
+This method allows for efficient image delivery, enhancing performance across devices by reducing unnecessary resizing. Tools like the [Responsive Image Breakpoints Generator](https://www.responsivebreakpoints.com/) can help determine the optimal image sizes and breakpoints.
 
 #### 7.9 Using Modern Image Formats
 
+WebP is a modern raster image format that offers significantly smaller file sizes compared to traditional formats like JPEG and PNG, while maintaining similar or better quality. This reduction in size leads to faster loading times and improved website performance. To convert images to WebP, you can use image editing software, online tools like [CloudConvert](https://cloudconvert.com/jpg-to-webp), or command-line tools.
+
 #### 7.10 Art Direction
 
-#### 7.11 Scalable Vector Graphics
+Art direction allows you to display different versions of an image (e.g., zoomed-in or cropped) based on the screen size or device. This technique requires both the original and cropped images to be available in your project. By using the `<picture>` element and defining conditions with the `<source>` element's `media` attribute, you can serve the appropriate image based on the screen width.
+
+```html
+<picture>
+  <source media="(max-width: 500px)" srcset="cropped-image.jpg" />
+  <source media="(min-width: 501px)" srcset="uncropped-image.jpg" />
+  <img src="uncropped-image.jpg" alt="Responsive Image">
+</picture>
+```
+
+#### 7.11 Icon Fonts
+
+Icon fonts are a versatile way to incorporate icons into your web design. Popular icon fonts include Font Awesome, Ionicons, and Material Design Icons. [Font Awesome](https://fontawesome.com/), for example, offers a free and subscription-based plan. After initializing a kit on Font Awesome, you receive a script tag to include in the `<head>` section of your HTML document. This enables access to their icon library.
+
+To use an icon, find it in their catalog, and copy the provided HTML code. You can wrap the icon in a `<span>` element to apply custom CSS. You can control the icon's color, size, and other styling properties just like you would with regular text.
+
+```html
+<head>
+  <script src="https://kit.fontawesome.com/yourkit.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <span class="icon-container">
+    <i class="fas fa-home"></i>
+  </span>
+</body>
+```
+
+To style the icon:
+
+```css
+.icon-container {
+  color: #007bff;
+  font-size: 24px;
+}
+```
+
+## 8. Forms
+
+#### 8.1 Build Forms
+
+To create a basic form, start with the `<form>` element. Inside the form, you can add multiple input fields using the `<input>` element, each defined by a `type` attribute such as `"text"` for a text field. Labels for these inputs can be added using the `<label>` element, which is inline by default and can be linked to a specific input by setting the `for` attribute to match the input's `id`. Additionally, you can include a `<button>` element with `type="submit"` to create a submit button or `type="reset"` to create a reset button.
+
+```html
+<form>
+  <label for="username">Username:</label>
+  <input type="text" id="username" />
+
+  <label for="password">Password:</label>
+  <input type="password" id="password" />
+
+  <button type="submit">Submit</button>
+  <button type="reset">Reset</button>
+</form>
+```
+
+This structure provides the foundation for creating interactive forms on your webpage.
+
+#### 8.2 Style Forms and Frameworks
+
+CSS offers a variety of properties to style form elements effectively. For input fields, consider using properties like `font-family`, `border`, `border-radius`, `outline`, `box-shadow`, and `transition` to enhance the appearance and interactivity. For buttons, properties such as `font-family`, `background-color`, `border`, `border-radius`, and `outline` are key to creating visually appealing designs. Additionally, applying styles to pseudo-class selectors like `:focus` and `:hover` can improve user experience.
+
+Styling forms and buttons can be time-consuming, so using CSS frameworks like Bootstrap, Foundation, Semantic UI, UI Kit, Materialize, or Milligram can greatly increase efficiency. These frameworks provide pre-designed styles and components that can be easily integrated into your project by adding the necessary classes to your HTML elements.
+
+Bootstrap is one of the most popular frameworks, offering comprehensive styles for forms and other components, though it may impact performance on slower connections due to its size. Alternatively, minimalistic frameworks like Milligram provide a lightweight option that maintains good performance without sacrificing modern design.
+
+To use a framework like Milligram, you can include it via CDN in the `<head>` of your HTML file and start applying the provided styles by following the framework's documentation.
+
+#### 8.3 Text Fields
+
+Text fields are a fundamental input control element in forms, allowing users to enter and edit text. The `<input>` element with a `type="text"` attribute is used to create single-line text fields, while the `<textarea>` element is employed for multi-line text input. Both elements share a couple of key attributes:
+
+| **Attribute** | **Description**                                                                                |
+| ------------- | ---------------------------------------------------------------------------------------------- |
+| `value`       | Prepopulates the text field with a default value that users can edit.                          |
+| `placeholder` | Displays placeholder text inside the text field, which disappears once the user begins typing. |
+| `required`    | Ensures that an input will be supplemented to the field.                                       |
+| `readonly`    | Makes the text field uneditable; the user can view but not modify the content.                 |
+| `disabled`    | Disables the text field entirely, preventing any interaction.                                  |
+| `maxlength`   | Limits the maximum number of characters that can be entered in the text field.                 |
+| `autofocus`   | Automatically focuses on the text field when the page loads, allowing immediate text input.    |
+
+Unlike the `<input>` element, the `<textarea>` uses its inner text content to prepopulate the field rather than a `value` attribute.
+
+The `<textarea>` element allows users to input multiple lines of text. To control its resizing, the CSS `resize` property can be used, with the default being resizable by users, and setting `resize: none;` to disable resizing.
+
+In addition to the standard text input field, various other specialized input types can be used in forms to capture text in a more specific way:
+
+| **Input Type** | **Description**                                                          |
+| -------------- | ------------------------------------------------------------------------ |
+| `text`         | Allows the user to freely enter text in the input field.                 |
+| `number`       | Restricts input to numeric values only, facilitating numeric data entry. |
+| `password`     | Masks the entered text to keep it confidential (e.g., for passwords).    |
+| `date`         | Provides a date picker to enter a date value.                            |
+| `datetime`     | Allows input of both date and time values.                               |
+| `email`        | Validates and allows entry of a valid email address.                     |
+
+#### 8.4 Data Lists
+
+To provide users with a list of suggestions as they type in a text field, you can use the `<datalist>` element in your form. Inside the `<datalist>`, you can define multiple `<option>` elements representing the suggestions. To link the `<datalist>` with the text field, set the `list` attribute of the `<input>` element to the identifier (ID) of the `<datalist>`. Additionally, to prevent the browser's default autocomplete feature from interfering, set the `autocomplete` attribute of the `<input>` element to `off`.
+
+```html
+<form>
+  <input type="text" list="input-list" autocomplete="off" />
+  <datalist id="input-list">
+    <option>first-input</option>
+    <option>second-input</option>
+    <option>third-input</option>
+  </datalist>
+</form>
+```
+
+#### 8.5 Drop-Down List
+
+To display a dropdown list in forms, use the `<select>` element, which contains multiple `<option>` elements representing the choices available. The `selected` attribute can be applied to an `<option>` to make it the default selection. The `<select>` element also supports the `multiple` attribute, allowing users to select more than one option. If the dropdown has many options, you can organize them into categories using the `<optgroup>` element, which groups related options under a common label.
+
+```html
+<form>
+  <select>
+    <optgroup label="Number Category">
+      <option>Option 1</option>
+      <option>Option 2</option>
+    </optgroup>
+    <optgroup label="Letter Category">
+      <option>Option A</option>
+      <option>Option B</option>
+    </optgroup>
+  </select>
+</form>
+```
+
+#### 8.6 Check Boxes
+
+Checkboxes in forms are created using the `<input>` element with the `type` attribute set to `"checkbox"`. Each checkbox can be associated with a label using the `<label>` element, where the `for` attribute is matched to the `id` of the corresponding checkbox. To make a checkbox selected by default, include the `checked` attribute within the `<input>` element.
+
+```html
+<form>
+  <input type="checkbox" id="box" checked>
+  <label for="box">Check this box</label>
+</form>
+```
+
+#### 8.7 Radio Buttons
+
+Radio buttons allow users to select only one option from a group of choices in a form. This is achieved using the `<input>` element with the `type` attribute set to `"radio"`. To group radio buttons so that only one can be selected at a time, you must assign the same `name` attribute to each radio button in the group. Labels can be associated with each radio button using the `<label>` element, where the `for` attribute is set to match the `id` of the corresponding radio button. Additionally, you can use the `checked` attribute to preselect a radio button when the page loads.
+
+```html
+<form>
+  <div>
+    <input type="radio" id="option1" name="choices" checked>
+    <label for="option1">Option 1</label>
+  </div>
+
+  <div>
+    <input type="radio" id="option2" name="choices">
+    <label for="option2">Option 2</label>
+  </div>
+
+  <div>
+    <input type="radio" id="option3" name="choices">
+    <label for="option3">Option 3</label>
+  </div>
+</form>
+```
+
+#### 8.8 Sliders
+
+To allow users to select a numeric value within a specified range, you can use an `<input>` element with the `type` attribute set to `"range"`. This creates a slider control. You can customize the slider's range by specifying the `min` and `max` attributes, which define the minimum and maximum values the slider can handle. The `value` attribute sets the initial position of the slider.
+
+```html
+<form>
+  <input type="range" min="0" max="100" value="50">
+</form>
+```
+
+#### 8.9 File Inputs
+
+To enable users to select files in a form, use an `<input>` element with the `type` attribute set to `"file"`. This input field opens a file explorer dialog, allowing users to choose files from their device. To allow multiple file selections, add the `multiple` attribute. To restrict the file types that can be selected, use the `accept` attribute to specify acceptable file formats.
+
+```html
+<form>
+  <input type="file" multiple accept=".jpg, .png, .pdf">
+</form>
+```
+
+#### 8.10 Grouping Input Fields
+
+To group related input fields within a form, use the `<fieldset>` element. This element creates a container around the input fields and provides a visual grouping. Inside the `<fieldset>`, add a `<legend>` element to serve as a label or title for the grouped fields. This helps in organizing and categorizing form controls, improving both accessibility and user experience.
+
+```html
+<form>
+  <fieldset>
+    <legend>First Group</legend>
+    <!-- Any number of related input fields-->
+  </fieldset>
+
+  <fieldset>
+    <legend>Second Group</legend>
+    <!-- Any number of related input fields-->
+  </fieldset>
+</form>
+```
+
+#### 8.11 Hidden Fields
+
+Hidden fields are used in forms to include data that should not be visible or editable by the user but needs to be sent to the server when the form is submitted. This can include identifiers or other data required for processing but not meant to be displayed. To create a hidden field, use the `<input>` element with the `type` attribute set to "hidden". The `name` attribute assigns a unique identifier to the field, and the `value` attribute sets the data that will be submitted.
+
+```html
+<form action="/submit" method="post">
+  <!-- Visible fields -->
+  <label for="username">Username:</label>
+  <input type="text" id="username" name="username">
+
+  <!-- Hidden field -->
+  <input type="hidden" name="userID" value="12345">
+
+  <button type="submit">Submit</button>
+</form>
+```
+
+#### 8.12 Submitting Forms
+
+Forms can be submitted using either a `<button>` element of type "submit" or an `<input>` element of type "submit". The `<button>` element allows for more customization, such as including icons or other content within the button, whereas the `<input>` element does not support such customization. To specify where and how to send the form data, use the `action` and `method` attributes of the `<form>` element. The `action` attribute defines the URL to which the form data will be sent, while the `method` attribute determines how the data is transmitted—using "GET" to append data to the URL or "POST" to include data in the request body.
+
+```html
+<form action="/submit" method="post">
+  <!-- Form fields here -->
+
+  <!-- Submit button with icon -->
+  <button type="submit">Submit</button>
+
+  <!-- OR -->
+
+  <!-- Submit input without icon -->
+  <input type="submit" value="Submit">
+</form>
+```
+
+## 9. Animations
+
+#### 9.1 Transformations
+
+CSS transformations allow you to manipulate elements in various ways directly within your stylesheet. Transformations can rotate, scale, skew, or translate elements, enhancing visual effects and layouts. Multiple transformations can be combined into a single `transform` property, and transformations can also be applied along the z-axis or rotated along the x or y-axis.
+
+| Property           | Description                                                                                       | Syntax Example           |
+| ------------------ | ------------------------------------------------------------------------------------------------- | ------------------------ |
+| `rotate()`         | Rotates an element around its center point.                                                       | `rotate(45deg)`          |
+| `scale()`          | Scales an element up or down in size.                                                             | `scale(1.5)`             |
+| `skew()`           | Skews an element along the x and/or y axis.                                                       | `skew(20deg, 10deg)`     |
+| `translate()`      | Moves an element horizontally and/or vertically.                                                  | `translate(50px, 100px)` |
+| `perspective()`    | Defines the perspective from which an element is viewed.                                          | `perspective(500px)`     |
+| `translateZ()`     | Moves an element horizontally along the z-axis. (Apply this in combination with `perspective()`.) | `translateX(100px)`      |
+| `rotateX()`        | Rotates an element around the x-axis. (Apply this in combination with `perspective()`.)           | `rotateX(45deg)`         |
+| `rotateY()`        | Rotates an element around the y-axis. (Apply this in combination with `perspective()`.)           | `rotateY(45deg)`         |
+| `transform-origin` | Sets the origin point for transformations.                                                        | `transform-origin: 0 0`  |
+
+#### 9.2 Transitions
+
+The `transition` property in CSS allows you to create smooth animations for property changes applied to elements. By specifying the properties you want to animate, along with the duration and timing function, you can control how these changes unfold. The timing function dictates the pace of the transition—whether it progresses linearly, speeds up, or slows down. Additionally, you can set a delay to start the transition after a specified period. Transitions can also be applied to multiple properties, enabling a coordinated animation effect.
+
+```css
+selector {
+  transition: property duration timing-function delay;
+}
+```
+
+#### 9.3 Animations
+
+CSS animations allow you to create complex animations for web elements by controlling their motion and timing. To define an animation, you use the `@keyframes` rule, where you assign a name to the animation and specify keyframes at different percentages of the animation's duration. Each keyframe defines a style at a specific point in time, allowing for smooth transitions between styles. Once the keyframes are set, you apply the animation to an element using the `animation-name` property, and you can control the duration, iteration count, and timing function with additional properties.
+
+```css
+/* Define the keyframes */
+@keyframes slideIn {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Apply the animation to an element */
+.box {
+  animation-name: slideIn;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+```
+
+| Property                    | Description                                                      |
+| --------------------------- | ---------------------------------------------------------------- |
+| `animation-name`            | Specifies the name of the `@keyframes` animation to apply.       |
+| `animation-duration`        | Defines the length of time an animation should take to complete. |
+| `animation-timing-function` | Sets the speed curve of the animation (e.g., linear, ease).      |
+| `animation-iteration-count` | Specifies how many times the animation should repeat.            |
+
+You can also explore online resources like [Animate.css](https://animate.style/), which offers a wide range of pre-built animations. To use these animations, simply include the provided stylesheet in the `<head>` section of your HTML document and apply the appropriate class to the elements you want to animate. This approach saves time and provides access to high-quality animations with minimal effort.
+
+## 10. Writting Clean and Maintanable CSS Code
+
+#### 10.1 Best Practices for Writing CSS Code
+
+- **Follow Naming Conventions**:  
+  Consistent naming conventions (like kebab case, camel case, or Pascal case) make your CSS more readable and maintainable. This consistency helps in quickly identifying and understanding the purpose of each class.
+
+- **Create Logical Sections in Your Stylesheet**:  
+  Organize your stylesheet into sections like basic styles, typography, forms, etc. This makes it easier to navigate and update specific areas of your code, improving maintainability.
+
+- **Avoid Overly Specific Selectors**:  
+  Using overly specific selectors can make your CSS difficult to maintain, as slight changes in HTML structure may break styles. Stick to simpler, more general selectors to ensure flexibility.
+
+- **Minimize the Use of `!important`**:  
+  Overusing `!important` can make your CSS harder to debug and override. Use it sparingly to maintain a clean and controllable style hierarchy.
+
+- **Sort CSS Properties**:  
+  Sorting CSS properties (e.g., alphabetically) within a rule helps to keep the code clean and consistent, making it easier to read and maintain.
+
+- **Leverage Style Inheritance**:  
+  Take advantage of CSS inheritance to avoid repetitive code. This practice reduces redundancy and ensures a more efficient and maintainable stylesheet.
+
+- **Extract Repetitive Patterns**:  
+  Identify and extract repetitive patterns into reusable classes or variables. This reduces code duplication and makes your CSS easier to update and manage.
+
+#### 10.2 CSS Variables
+
+CSS variables, also known as custom properties, are a powerful tool for reducing repetition and making your stylesheets more maintainable. By defining variables, you can centralize common values (such as colors, sizes, and fonts) and easily reuse them throughout your CSS code. This approach simplifies updates and ensures consistency across your styles.
+
+To create CSS variables, use the `:root` pseudo-class selector, which represents the highest-level parent in your HTML document. Inside the `:root` selector, you can define your custom properties with a name and value. To reference these variables elsewhere in your stylesheet, use the `var()` function with the variable's name as the argument.
+
+```css
+:root {
+  --primary-color: #3498db;
+}
+
+body {
+  color: var(--primary-color);
+}
+```
+
+#### 10.3 Object-Oriented CSS
+
+Object-Oriented CSS (OOCSS) is a methodology aimed at making CSS more maintainable, scalable, and reusable by applying principles from object-oriented programming to styling. OOCSS is based on two main principles:
+
+1. **Separate the Container from its Elements:** 
+   This principle highlights the importance of keeping container (parent element or wrapper) styles separate from the styles of their contained elements (child elements), allowing for independent styling of elements regardless of their container. By doing so, you avoid redundancy and increase flexibility, enabling you to style an element like a button just once and reuse it across different containers without the need for redefinition. To implement this, define styles for containers and elements separately, using classes to ensure elements retain their appearance no matter which container they are placed in, such as styling a `.card` container and a `.button` element independently.
+   
+   ```css
+   .card {
+   padding: 20px;
+   border: 1px solid #ccc;
+   }
+   
+   .button {
+   padding: 10px 20px;
+   background-color: #3498db;
+   color: #fff;
+   }
+   ```
+
+2. **Separate Structure and Skin:**
+   
+   Structure refers to the layout and positioning of elements, while skin encompasses visual aspects like colors, borders, and backgrounds; this principle suggests keeping these two elements separate in CSS. By doing so, you can change the visual appearance (skin) of an element without altering its layout (structure), enhancing modularity and simplifying style maintenance and updates. To apply this, use separate classes for structure and skin, such as a class for button layout (`.btn-layout`) and another for its color scheme (`.btn-primary`), enabling flexible style combinations.
+   
+   ```css
+   .btn-layout {
+   display: inline-block;
+   padding: 10px 20px;
+   text-align: center;
+   }
+   
+   .btn-primary {
+   background-color: #3498db;
+   color: #fff;
+   }
+   
+   .btn-secondary {
+   background-color: #e74c3c;
+   color: #fff;
+   }
+   ```
+
+#### 10.4 BEM Convention
+
+The BEM (Block Element Modifier) naming convention is a methodology for organizing and naming CSS classes to make code more readable, maintainable, and scalable. In BEM, a webpage is conceptualized as a collection of blocks or modules, each of which may contain elements that can be modified. The naming structure is broken down into three parts:
+
+1. **Block**: The standalone entity that represents a component or section of the page (e.g., `header`, `menu`).
+2. **Element**: A part of the block that performs a specific function, represented by a double underscore (`__`) followed by the element's name (e.g., `menu__item`).
+3. **Modifier**: A variation of a block or element, used to define a different state or style, represented by a double hyphen (`--`) followed by the modifier's name (e.g., `menu__item--active`).
+
+BEM is important because it creates a clear and consistent naming structure that reduces conflicts, improves collaboration, and makes it easier to understand and maintain the code. By following BEM, developers can more easily locate and update specific components and ensure that styles are applied consistently across different parts of a project.
+
+To apply BEM, identify the main blocks on your page, define the elements within those blocks, and use modifiers to represent variations or states. For example, in a navigation menu (`menu` block), individual items would be elements (`menu__item`), and an active item could have a modifier (`menu__item--active`).
