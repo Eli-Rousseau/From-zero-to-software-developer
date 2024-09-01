@@ -667,14 +667,14 @@ Rewriting history can be risky and should adhere to the golden rule of not rewri
 
 ###### 6.2.1 Remove Commit from History
 
-Git allows complete removal of a commit from history using the revert command. The effects of different options are:
+Git allows complete removal of a commit from history using the reset command. The effects of different options are:
 
 - `--soft`: Moves the HEAD pointer to the specified commit without changing the staging area or working directory, effectively just removing the commit.
 - `--mixed`: Moves the HEAD pointer and changes the staging area but leaves the working directory unchanged, unstaging files.
 - `--hard`: Moves the HEAD pointer and resets both the staging area and working directory to match the specified commit, discarding all local changes.
 
 ```bash
-git revert --hard HEAD~1
+git reset --hard HEAD~1
 ```
 
 ###### 6.2.2 Reverting Commits in History
