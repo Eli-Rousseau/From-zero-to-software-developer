@@ -49,6 +49,12 @@ const myConstant = 100;
 myConstant = 200; // Error: Assignment to constant variable
 ```
 
+#### 2.4 Variable Scope
+
+In JavaScript, the scope of a variable or constant defines the context in which it is accessible within a program. Variables declared with `let` or `const` are block-scoped, meaning they are only accessible within the block (e.g., a loop, function, or conditional) where they are defined. This is known as local scope.
+
+On the other hand, variables declared outside of any block have a global scope, making them accessible throughout the entire program. However, defining global variables is generally considered bad practice because they can inadvertently override local variables, leading to unpredictable behavior in your code. By keeping variables as local as possible, you minimize potential conflicts and maintain better control over the program's state.
+
 ## 3. Data Types
 
 #### 3.1 Primitive Data Types
@@ -87,24 +93,7 @@ In JavaScript, reference types are used to store collections of data and more co
 | **Array**          | Represents an ordered list of elements, which can be of any type.                               | `[1, 2, 3]`, `["apple", "banana", "cherry"]` |
 | **Function**       | Represents a block of code designed to perform a specific task and can be executed when called. | `function greet() { return "Hello"; }`       |
 
-###### 2.6.1 Arrays
-
-In JavaScript, arrays are used to store collections of elements, which can include objects, numbers, strings, and more. An array is initialized by declaring a variable with the `let` or `const` keyword, followed by assigning the array using square brackets `[]`, with elements separated by commas. Arrays use a zero-based index to determine the position of each element, allowing access through index values within square brackets. Both the length and type of elements in an array are dynamic, meaning they can change during runtime.
-
-Arrays are technically objects, meaning they possess properties and methods accessible through dot or bracket notation. For example, the `length` property of an array returns the number of elements it contains.
-
-```javascript
-// Initializing an array
-const fruits = ["apple", "banana", "cherry"];
-
-// Accessing elements by index
-console.log(fruits[0]); // Output: "apple"
-
-// Accessing the length property
-console.log(fruits.length); // Output: 3
-```
-
-###### 2.6.2 Functions
+###### 2.6.1 Functions
 
 A function in JavaScript is a block of code designed to perform a specific task or calculate a value. To declare a function, use the `function` keyword followed by the function's name, parentheses for parameters, and curly braces to enclose the function's logic. Functions can accept input through parameters, which are specified in the function definition and passed as arguments when calling the function. The `return` keyword is used to send a value back to the caller after execution.
 
@@ -167,11 +156,11 @@ Comparison operators are used to compare two values and determine their relation
 
 Logical operators are used to combine or negate boolean values and expressions, allowing for more complex conditions in logical statements. They evaluate expressions to return a boolean result based on the logical relationships between operands.
 
-| **Operator** | **Description**                                                        |
-| ------------ | ---------------------------------------------------------------------- |
-| `&&`         | Logical AND: Returns `true` if both operands are `true`                |
-| `\||`        | Logical OR: Returns `true` if at least one of both operands are `true` |
-| `!`          | Logical NOT: Negates the boolean value of the operand                  |
+| **Operator** | **Description**                                         |
+| ------------ | ------------------------------------------------------- |
+| `&&`         | Logical AND: Returns `true` if both operands are `true` |
+| `\|          | `                                                       |
+| `!`          | Logical NOT: Negates the boolean value of the operand   |
 
 ###### 4.4.1 Truthy/Falsy Values
 
@@ -485,4 +474,338 @@ console.log(message);
 // Output: 
 // Hello, Eli!
 // Welcome to the world of JavaScript.
+```
+
+## 7. Arrays
+
+#### 7.1 Creating and Accessing Array Elements
+
+In JavaScript, arrays are used to store collections of elements, which can include objects, numbers, strings, and more. An array is initialized by declaring a variable with the `let` or `const` keyword, followed by assigning the array using square brackets `[]`, with elements separated by commas. Arrays use a zero-based index to determine the position of each element, allowing access through index values within square brackets. Both the length and type of elements in an array are dynamic, meaning they can change during runtime.
+
+Arrays are technically objects, meaning they possess properties and methods accessible through dot or bracket notation. For example, the `length` property of an array returns the number of elements it contains.
+
+```javascript
+// Initializing an array
+const fruits = ["apple", "banana", "cherry"];
+
+// Accessing elements by index
+console.log(fruits[0]); // Output: "apple"
+
+// Accessing the length property
+console.log(fruits.length); // Output: 3
+```
+
+#### 7.2 Adding New Elements
+
+In JavaScript, there are several methods available for adding elements to an array. 
+
+| Method      | Description                                                                                  |
+| ----------- | -------------------------------------------------------------------------------------------- |
+| `push()`    | Adds one or more elements to the end of an array.                                            |
+| `unshift()` | Adds one or more elements to the start of an array, shifting existing elements to the right. |
+| `splice()`  | Adds one or more elements at a specified index within the array.                             |
+
+#### 7.3 Finding Elements
+
+JavaScript provides various methods to find elements in an array, whether they are primitive or reference types. These methods allow for efficient searching and retrieval of elements based on specific criteria.
+
+| Method          | Description                                                                                                                    | Usage for |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------ | --------- |
+| `indexOf()`     | Returns the index of the first occurrence of a primitive type in the array. If not found, returns `-1`.                        | Primitive |
+| `lastIndexOf()` | Returns the index of the last occurrence of a primitive type in the array. If not found, returns `-1`.                         | Primitive |
+| `includes()`    | Checks if a primitive type is present in the array, returning `true` or `false`.                                               | Primitive |
+| `find()`        | Takes a callback function and returns the first element that satisfies the provided testing function (predicate).              | Reference |
+| `findIndex()`   | Takes a callback function and returns the index of the first element that satisfies the provided testing function (predicate). | Reference |
+
+#### 7.4 Removing Elements
+
+In JavaScript, you can remove elements from an array using several methods, each serving different purposes depending on the position of the element you want to remove.
+
+| **Method** | **Description**                                         |
+| ---------- | ------------------------------------------------------- |
+| `pop()`    | Removes and returns the last element of the array.      |
+| `shift()`  | Removes and returns the first element of the array.     |
+| `splice()` | Removes one or more elements starting at a given index. |
+
+#### 7.5 Combining and Slicing
+
+In JavaScript, arrays can be combined or split using specific methods designed for these purposes.
+
+| **Method** | **Description**                                                                  |
+| ---------- | -------------------------------------------------------------------------------- |
+| `concat()` | Combines two or more arrays into a new array without altering the originals.     |
+| `slice()`  | Extracts a portion of an array into a new array, without modifying the original. |
+
+The spread operator (`...`) in JavaScript is a powerful tool for combining multiple arrays into a single array. It allows you to easily access and merge all the elements from different arrays.
+
+```javascript
+const first = [1, 2, 3];
+const second = [4, 5, 6];
+const combined = [...first, ...second];
+
+console.log(combined); // Output: [1, 2, 3, 4, 5, 6]
+```
+
+#### 7.6 Join and Split
+
+JavaScript provides methods to convert arrays to strings and vice versa.
+
+| Method    | Description                                                                                               |
+| --------- | --------------------------------------------------------------------------------------------------------- |
+| `join()`  | Combines all elements of an array into a single string, using a specified separator between each element. |
+| `split()` | Splits a string into an array of substrings based on a specified separator.                               |
+
+#### 7.7 Sorting and Reversing
+
+JavaScript provides methods to sort and reverse the order of array elements. When dealing with arrays of primitive types, these methods can be used directly. For arrays containing objects (reference types), a callback function should be provided to the `sort()` method to define the sorting logic.
+
+| Method      | Description                                                                                                         |
+| ----------- | ------------------------------------------------------------------------------------------------------------------- |
+| `sort()`    | Sorts the elements of an array in place. For reference types, a callback function is needed to determine the order. |
+| `reverse()` | Reverses the order of elements in an array in place.                                                                |
+
+#### 7.8 Array Iteration Methods
+
+###### 7.8.1 Iterating Over Arrays with `.forEach()`
+
+The `.forEach()` method is a fundamental array iteration tool in JavaScript. It executes a provided callback function once for each element in an array. The current element is passed as a parameter to the callback, allowing you to perform operations on each element. This method does not return a new array or modify the original array, making it ideal for scenarios where side effects, like logging or updating external variables, are desired.
+
+###### 7.8.2 Testing All Elements with `.every()`
+
+The `.every()` method checks whether all elements in an array satisfy a condition specified by a callback function. If every element passes the test, `.every()` returns `true`; otherwise, it returns `false`. This method is useful for validating that all elements in an array meet a specific requirement, such as being of a certain type or value.
+
+###### 7.8.3 Checking for Any Matching Element with `.some()`
+
+The `.some()` method evaluates whether at least one element in an array meets a condition set by a callback function. If any element satisfies the condition, `.some()` returns `true`; if none do, it returns `false`. This method is helpful for quickly checking if an array contains elements that match a specific criterion without processing the entire array.
+
+###### 7.8.4 Filtering Elements with `.filter()`
+
+The `.filter()` method creates a new array containing only the elements that meet a condition defined by a callback function. The callback should return `true` for elements to be included in the new array and `false` for those to be excluded. This method is essential for extracting subsets of data from an array based on specific criteria.
+
+###### 7.8.5 Transforming Elements with `.map()`
+
+The `.map()` method is used to generate a new array by applying a callback function to each element of the original array. Unlike `.forEach()`, which simply executes the function, `.map()` returns an array of transformed elements. This method is perfect for scenarios where you need to create a modified version of an array, such as converting all elements to a different format or type.
+
+###### 7.8.6 Accumulating Values with `.reduce()`
+
+The `.reduce()` method processes an array by applying a callback function that accumulates a single output value from the array’s elements. The callback takes two arguments: an accumulator, which holds the accumulated result, and the current element. This method is powerful for tasks like summing numbers, concatenating strings, or merging array elements into a single result. It can also be initialized with an optional initial value for the accumulator.
+
+## 8. Functions
+
+#### 8.1 Declaring Functions
+
+A function in JavaScript is a block of code designed to perform a specific task or calculate a value. To declare a function, use the `function` keyword followed by the function's name, parentheses for parameters, and curly braces to enclose the function's logic. Functions can accept input through parameters, which are specified in the function definition and passed as arguments when calling the function. The `return` keyword is used to send a value back to the caller after execution.
+
+```javascript
+// Declaring a function
+function addNumbers(a, b) {
+  return a + b; // Returning the sum of a and b
+}
+
+// Calling the function with arguments
+const result = addNumbers(5, 3); // result is 8
+console.log(result); // Output: 8
+```
+
+#### 8.2 Function Declarations vs. Function Expressions
+
+In JavaScript, functions can be defined in two primary ways: 
+
+1. A **function declaration** involves simply writing the `function` keyword followed by the function name and its body. This approach allows the function to be hoisted, meaning it can be invoked before it is actually defined in the code.
+   
+   ```javascript
+   addNumbers(1, 2) // Call can be placed before declaration
+   
+   function addNumbers(a, b) {
+     return a + b;
+   }
+   ```
+
+2. A **function expression** involves assigning a function to a variable. This function can be anonymous, meaning it doesn’t have a name, and is invoked using the variable it’s assigned to. Unlike function declarations, function expressions are not hoisted, so they must be defined before they are called. This distinction between function declarations and expressions is crucial for understanding how JavaScript handles function execution and variable scope.
+   
+   ```javascript
+   let addNumbers = function(a, b) {
+       return a + b;
+   };
+   
+   
+   addNumbers(1, 2) // Call must be placed after expression 
+   ```
+
+#### 8.3 Arrow Functions
+
+Arrow functions in JavaScript are a more concise way to write functions, introduced in ES6. Unlike regular functions, arrow functions do not have their own `this` context. Arrow functions can be written in various ways depending on the number of parameters and the complexity of the function body.
+
+```javascript
+// Regular Function
+function add(a, b) {
+    return a + b;
+}
+
+// Arrow Function with Multiple Parameters
+const addArrow = (a, b) => {
+    return a + b;
+};
+
+// Arrow Function with One Parameter
+const square = x => {
+    return x * x;
+};
+
+// Arrow Function with No Parameters
+const greet = () => {
+    return 'Hello World';
+};
+
+// Arrow Function with Single Line of Code in Body
+const multiply = (a, b) => a * b;
+```
+
+#### 8.4 Variable Arguments in Functions
+
+In JavaScript, every function has access to a special object called `arguments`, which holds key-value pairs representing the index and value of each argument passed to the function. This can be particularly useful when designing functions that need to handle an unknown number of arguments.
+
+```javascript
+function variableArgs() {
+    console.log(arguments);
+}
+
+variableArgs('a', 'b', 'c'); // Output: { '0': 'a', '1': 'b', '2': 'c' }
+```
+
+For more flexibility with varying numbers of arguments, JavaScript provides the **rest operator** (`...`). By including the rest operator followed by a name like `args` in a function's parameter list, you can capture all the arguments passed to the function as an array. This makes it easier to work with functions that need to handle a variable number of inputs.
+
+```javascript
+function variableArgs(...args) {
+    console.log(args);
+}
+
+variableArgs('a', 'b', 'c');Output: //  [ 'a', 'b', 'c' ]
+```
+
+#### 8.5 Setting Default Parameters
+
+In JavaScript ES6, you can set default values for function parameters. This means that if no arguments are provided when the function is called, the default values will be used. Default parameters are particularly useful for making functions more flexible and preventing errors when not all arguments are supplied. It is a best practice to place default parameters at the end of the function's parameter list to avoid any confusion with positional arguments.
+
+```javascript
+// Function with default parameters
+function greet(name = "Guest", greeting = "Hello") {
+    console.log(`${greeting}, ${name}!`);
+}
+
+// Function calls with different arguments
+greet();                      // Output: "Hello, Guest!"
+greet("Eli");               // Output: "Hello, Eli!"
+greet("Eli", "Good morning"); // Output: "Good morning, Eli!"
+```
+
+#### 8.6 Getters and Setters
+
+In JavaScript, getters and setters are special types of functions within objects that allow controlled access and modification of object properties. 
+
+- **Getters** are used to retrieve or access the value of an object's property. By prefixing a method with the `get` keyword, you create a getter method, which allows you to access the property as if it were a regular variable.
+
+- **Setters** are used to change or mutate the value of an object's property. By prefixing a method with the `set` keyword, you create a setter method, which requires a parameter to update the property value.
+
+```javascript
+// Object with getter and setter methods
+const person = {
+    firstName: "Eli",
+    lastName: "Rousseau",
+
+    // Getter for fullName
+    get fullName() {
+        return `${this.firstName} ${this.lastName}`;
+    },
+
+    // Setter for fullName
+    set fullName(name) {
+        const parts = name.split(" ");
+        this.firstName = parts[0];
+        this.lastName = parts[1];
+    }
+};
+
+// Accessing the fullName using the getter
+console.log(person.fullName); // Output: "Eli Rousseau"
+
+// Updating the fullName using the setter
+person.fullName = "Jane Smith";
+
+// Checking the updated values
+console.log(person.firstName); // Output: "Eli"
+console.log(person.lastName);  // Output: "Rousseau"
+```
+
+#### 8.7 Error Handling
+
+Error handling is a defensive programming technique used to ensure that a program can gracefully manage unexpected situations, such as incorrect input or uninitialized variables. When an error is detected, an exception can be thrown, effectively halting normal program execution and allowing the error to be handled in a controlled manner.
+
+In JavaScript, you can throw an error using the `Error()` constructor, which creates a new error object. This object can include a custom message that describes the error. To handle these exceptions, you use a `try...catch` block. The `try` block contains the code that might throw an exception, while the `catch` block contains the code that will execute if an exception is thrown, allowing you to handle the error gracefully—such as by displaying an error message to the user.
+
+```javascript
+// Function to demonstrate error handling
+function divide(a, b) {
+    try {
+        // Check if the denominator is zero
+        if (b === 0) {
+            // Throw an error if division by zero is attempted
+            throw new Error("Cannot divide by zero.");
+        } else {
+            return a / b;
+        }
+    } catch (error) {
+        // Handle the error by logging it
+        console.error("Error caught: " + error.message);
+    }
+}
+
+// Example usage
+const result = divide(10, 0); // This will throw and catch an error
+```
+
+#### 8.8 Understanding the `this` Keyword
+
+###### 8.8.1 Scope
+
+The `this` keyword in JavaScript is context-dependent and can refer to different objects depending on where and how it is used:
+
+- **Global Context:** When used outside of any object, `this` refers to the global object. In a browser environment, this global object is the `Window` object, while in a Node.js environment, it is an empty global object.
+
+- **Constructor Functions:** When using `this` inside a constructor function (invoked with the `new` keyword), it refers to the new, empty object being created by the constructor.
+
+- **Object Methods:** Within a method of an object, `this` refers to the object that owns the method. This allows methods to access and manipulate the properties of their object.
+
+###### 8.8.2 Inheritance
+
+When `this` is used within a regular function nested inside an object method, it often refers to the global object rather than the object itself, which can lead to unexpected behavior. 
+
+```javascript
+const person = {
+    name: 'Eli',
+    greet: function() {
+        const innerFunction = function() {
+            console.log(`Hello, my name is ${this.name}`)
+        };
+        innerFunction();
+    }
+};
+
+person.greet(); // Outputs: Hello, my name is undefined
+```
+
+However, arrow functions, introduced in ES6, do not have their own `this` context; instead, they inherit `this` from their enclosing lexical scope. This feature makes ensures that arrow functions will avoid issues related to the `this` keyword in nested functions.
+
+```javascript
+const person = {
+    name: 'Eli',
+    greet: function() {
+        const innerFunction = () => {
+            console.log(`Hello, my name is ${this.name}`);
+        };
+        innerFunction();
+    }
+};
+
+person.greet(); // Outputs: Hello, my name is Eli
 ```
