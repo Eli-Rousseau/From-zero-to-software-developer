@@ -452,15 +452,76 @@ console.log(original.age); // Output: 25 (original remains unchanged)
 console.log(copy.age);     // Output: 30 (copy is independent of the original)
 ```
 
-#### 6.10 Garbage Collector
+#### 6.10 Private Properties and Methods
+
+In JavaScript, abstraction can be achieved by making properties and methods private within a constructor function. Instead of using the `this` keyword, which would expose properties and methods as part of the object’s public interface, you can define them as local variables or constants within the constructor. These private members can still be accessed by other methods within the object due to JavaScript’s **closure mechanism**. Closures allow an inner function to access variables from its parent function, preserving the state of these variables even after the parent function has completed execution. This distinction between scope and closure is vital: while scope is temporary and reinitializes with each function call, closure retains the state of variables across multiple invocations.
+
+```javascript
+function User(name, password) {
+    // Private properties
+    const _name = name;
+    const _password = password;
+
+    // Public method
+    this.getName = function() {
+        return _name;
+    };
+
+    // Private method
+    function validatePassword(input) {
+        return input === _password;
+    }
+
+    // Public method
+    this.login = function(inputPassword) {
+        return validatePassword(inputPassword) ? "Login succesfull" : "Invalid password";
+    };
+}
+
+const user = new User("Eli", "secret123");
+console.log(user.getName()); // Outputs: Eli
+console.log(user.login("secret123")); // Outputs: Login successful!
+console.log(user._password); // Undefined, private property is not accessible
+```
+
+#### 6.11 Setters and Getters
+
+In JavaScript, getters and setters are special methods that provide controlled access and modification of object properties. Getters allow you to retrieve or access the value of a property, while setters allow you to change or mutate that value. These methods are essential for encapsulating and protecting the internal state of an object, enabling you to enforce specific logic when properties are accessed or modified.
+
+To define a getter or setter in a constructor function, you can use the `Object.defineProperty()` method. This method takes three arguments: the object on which the property is being defined, the name of the property, and an object specifying the `get` and/or `set` methods. By using getters and setters, you can manage the behavior of private properties while still allowing them to be accessed or modified in a controlled way.
+
+```javascript
+function Person(name) {
+    // Private property
+    let _name = name;
+
+    // Getter and Setter for the 'name' property
+    Object.defineProperty(this, 'name', {
+        get: function() {
+            return _name;
+        },
+        set: function(newName) {
+            if (newName.length <= 0)
+                throw new Error("Name cannot be empty.");
+            _name = newName;
+        }
+    });
+}
+
+const person = new Person("Eli");
+console.log(person.name);  // Outputs: Eli
+person.name = "";  // Error: Name cannot be empty.
+```
+
+#### 6.12 Garbage Collector
 
 JavaScript automatically handles memory management through a process called garbage collection. This built-in mechanism identifies variables and constants that are no longer in use by the program and deallocates the memory they occupy. Garbage collection runs in the background, freeing developers from the need to manually manage memory, allowing them to focus on writing code without worrying about potential memory leaks.
 
-#### 6.11 Learning about Built-in Objects
+#### 6.13 Learning about Built-in Objects
 
 For detailed information on methods and properties from built-in functions like `String`, `Math`, `Date`, and many more, the [MDN Web Docs](https://developer.mozilla.org/en-US/) is a valuable resource.
 
-#### 6.12 Template Literals for String Formatting
+#### 6.14 Template Literals for String Formatting
 
 Template literals in JavaScript, denoted by backticks (`` ` ``), offer a powerful way to create and format strings. Unlike traditional string literals, template literals allow for multi-line strings and the inclusion of expressions within the string using placeholders (`${}`), making string formatting more flexible and readable. This feature is especially useful for including dynamic content and maintaining proper formatting in your strings.
 
@@ -627,11 +688,11 @@ In JavaScript, functions can be defined in two primary ways:
    let addNumbers = function(a, b) {
        return a + b;
    };
-   
+   ```
    
    addNumbers(1, 2) // Call must be placed after expression 
-   ```
 
+```
 #### 8.3 Arrow Functions
 
 Arrow functions in JavaScript are a more concise way to write functions, introduced in ES6. Unlike regular functions, arrow functions do not have their own `this` context. Arrow functions can be written in various ways depending on the number of parameters and the complexity of the function body.
@@ -639,22 +700,22 @@ Arrow functions in JavaScript are a more concise way to write functions, introdu
 ```javascript
 // Regular Function
 function add(a, b) {
-    return a + b;
+ return a + b;
 }
 
 // Arrow Function with Multiple Parameters
 const addArrow = (a, b) => {
-    return a + b;
+ return a + b;
 };
 
 // Arrow Function with One Parameter
 const square = x => {
-    return x * x;
+ return x * x;
 };
 
 // Arrow Function with No Parameters
 const greet = () => {
-    return 'Hello World';
+ return 'Hello World';
 };
 
 // Arrow Function with Single Line of Code in Body
@@ -808,4 +869,238 @@ const person = {
 };
 
 person.greet(); // Outputs: Hello, my name is Eli
+```
+
+## 9. Object-Oriented Programming
+
+#### 9.1 Introduction to Object-Oriented Programming
+
+Object-Oriented Programming (OOP) is a programming paradigm that focuses on the use of objects rather than functions to structure software. It is widely supported by many programming languages, including JavaScript, and forms the basis for numerous frameworks. In OOP, related functions and data are combined into units called objects. This approach is organized around four core concepts:
+
+1. **Encapsulation** involves grouping related properties and methods into single units, or objects. This leads to functions with fewer parameters, making them easier to use and maintain.
+
+2. **Abstraction** simplifies the interface of an object by hiding its implementation details. By concealing certain properties and methods that are only relevant internally, abstraction makes the interface simpler and reduces the impact of changes to the object’s internal structure.
+
+3. **Inheritance** allows objects to inherit properties and methods from other objects, preventing the duplication of code.
+
+4. **Polymorphism** enables the same method to behave differently depending on the object it is acting upon. This technique helps eliminate long conditional statements (like if...else or switch...case) and allows for more flexible and dynamic code.
+
+#### 9.2 Prototype
+
+###### 9.2.1 Prototypical Inheritance
+
+Inheritance in JavaScript allows objects to inherit properties and methods from other objects, facilitating code reuse and the sharing of functionality among different types of objects. Unlike classical inheritance in languages with classes, JavaScript uses prototypical inheritance, where objects inherit directly from other objects.
+
+In this model, a derived (or child) object inherits from a base (or parent) object, which serves as its prototype. JavaScript objects can inherit from a single prototype, and by default, every object ultimately inherits from the base or root object, which provides common methods like `toString()` or `__proto__`. Note that the base object in JavaScript is the only object without a prototype, and it serves as the main prototype shared by all other objects in JavaScript. When accessing a property or method, JavaScript first looks for it on the object itself. If it's not found, the search continues up the prototype chain until the base object is reached, a process known as prototypical inheritance. This system ensures that objects can share common behavior while allowing for efficient code reuse.
+
+In JavaScript, objects created by the same constructor function share the same prototype. For example, when you create an array, it inherits from the array prototype, which itself inherits from the object base prototype. This hierarchical structure, where an object inherits properties and methods from multiple levels of prototypes, is known as multilevel inheritance.
+
+###### 9.2.2 Property Descriptors
+
+In JavaScript, properties within constructor functions have descriptors that control their behavior. The key descriptors are:
+
+- `writable`: Determines if a property's value can be changed (true by default).
+- `enumerable`: Controls whether a property will appear during object iteration (true by default).
+- `configurable`: Allows the property to be deleted or modified (true by default).
+
+These descriptors can be modified using the `Object.defineProperty()` method during the constructor declaration. To check the current state of these descriptors, you can use the `Object.getOwnPropertyDescriptor()` method. Modifying these descriptors provides greater control over the properties and their behavior in objects.
+
+###### 9.2.3 Constructor Prototypes
+
+In JavaScript, every function is an object and thus has a prototype. The correct way to retrieve the prototype of an object is by using the `Object.getPrototypeOf()` method. For constructor functions, their prototypes can be accessed directly via the constructor's `prototype` property. This property returns the prototype that is shared by all objects created from that constructor, ensuring that they inherit common properties and methods. This mechanism is fundamental to JavaScript's inheritance model.
+
+```javascript
+function Circle() {
+    // Implementation of constructor members
+}
+
+let myCircle = new Circle();
+console.log(Circle.prototype === Object.getPrototypeOf(myCircle)); // Output: true
+```
+
+###### 9.2.4 Instance and Prototype Members
+
+When a member is shared among many objects created from a single constructor, it can lead to inefficient memory use if each object holds its own copy. To address this, you can move the shared member to the constructor's prototype. This approach ensures that only one reference to the member exists in memory. In JavaScript, this can be achieved by defining the member on the constructor's `prototype`, making it accessible to all instances through prototypical inheritance. This separation between instance members and prototype members not only conserves memory but also allows for modifications and overrides of prototype properties.
+
+```javascript
+function Circle() {
+    // Instance members
+    this.draw = function() {};
+}
+
+// Prototype members
+Circle.prototype.toString = function() {};
+```
+
+While JavaScript allows dynamic modification of constructor prototypes, it is advisable to avoid altering built-in objects. Modifying these prototypes can lead to conflicts with libraries or frameworks that rely on the original behavior of these objects, potentially causing functionality issues or breaking code. As a general best practice, avoid changing objects you do not own to maintain code stability and compatibility.
+
+Defining members on the prototype rather than within the constructor function should be approached as an optimization practice, not a standard method. This approach can expose implementation details that were previously hidden, potentially violating the principle of abstraction. Such exposure may necessitate the creation of setters and getters to manage prototype members, which could compromise encapsulation. Therefore, moving members to the prototype is generally advised only when dealing with a large number of objects sharing the same member, as it can improve memory efficiency. For most cases, maintaining encapsulation by defining members within the constructor is preferred.
+
+###### 9.2.5 Implementing Prototypical Inheritance
+
+In JavaScript, the `Object.create()` method allows you to create a new object with a specified prototype object. By passing a prototype as an argument, `Object.create()` returns an object that inherits properties and methods from that prototype. This technique is particularly useful when implementing prototypical inheritance, enabling one constructor to inherit from another.
+
+For example, consider two constructors, `Shape` and `Circle`. To allow `Circle` objects to inherit from `Shape`, you can set `Circle`'s prototype to an object created by `Object.create()` using `Shape.prototype` as the argument. This effectively sets up an inheritance chain where `Circle` inherits the properties and methods defined in `Shape`.
+
+```javascript
+function Shape() {
+    // Initialize the shape implementation
+}
+
+function Circle() {
+    // Initialize the circle implementation
+}
+
+// Establish prototypical inheritance
+Circle.prototype = Object.create(Shape.prototype);
+```
+
+###### 9.2.6 Resetting the Constructor Property After Prototypical Inheritance
+
+When you change the prototype of a constructor function to enable inheritance, the `constructor` property of that function will also change to the constructor of the inherited object. This can be inconvenient if you need to use the original constructor for creating instances dynamically. As a best practice, after resetting the prototype using `Object.create()`, you should also explicitly reset the `constructor` property of the constructor function. This ensures that instances created from the constructor will correctly reference the original constructor, maintaining consistency and allowing for dynamic object creation.
+
+```javascript
+function Shape() {
+    // Initialize the shape implementation
+}
+
+function Circle() {
+    // Initialize the circle implementation
+}
+
+// Establish prototypical inheritance
+Circle.prototype = Object.create(Shape.prototype);
+
+// Reset the constructor property
+Circle.prototype.constructor = Circle;
+```
+
+###### 9.2.7 Reusable Function
+
+In JavaScript, when implementing prototypical inheritance between multiple parent and child constructors, it’s common practice to use a generic function to handle the inheritance setup. This function ensures that the child constructor properly inherits from the parent constructor, while also resetting the prototype and constructor references correctly. 
+
+```javascript
+function extend(Child, Parent) {
+    Child.prototype = Object.create(Parent.prototype);
+    Child.prototype.constructor = Child;
+}
+```
+
+###### 9.2.8 Initialization of Inherited Prototype Properties
+
+When inheriting from a prototype object, it is sometimes necessary for the child object to pass arguments to the parent prototype to properly initialize its properties. To achieve this, the `call` method is used inside the child object's constructor. The `call` method allows you to invoke the parent constructor with a specific `this` context and pass any required arguments. This ensures that the prototype properties are correctly initialized within the child object, allowing for proper inheritance and functionality.
+
+```javascript
+function Shape(arg1, arg2) {
+    // Initialize the shape with arguments
+    this.arg1 = arg1;
+    this.arg2 = arg2;
+}
+
+function Circle(arg1, arg2, arg3) {
+    // Call the Shape constructor with Circle's context and arguments
+    Shape.call(this, arg1, arg2);
+
+    // Additional initialization for Circle
+    this.arg3 = arg3;
+}
+```
+
+###### 9.2.9 Method Overriding and Polymorphism
+
+Method overriding in JavaScript allows a child constructor to provide a specific implementation of a method that is already defined in its prototype or parent constructor. This technique is essential for implementing polymorphism, a core concept in OOP. Polymorphism enables different objects that inherit from the same prototype to define their own unique implementations of methods, ensuring that each object behaves according to its specific needs.
+
+When overriding a method, it's crucial to ensure that the new implementation in the child constructor is defined after setting up the prototypical inheritance. If the method is defined before inheritance is established, it will be overridden by the parent prototype's implementation, negating the customization.
+
+Polymorphism plays a significant role in simplifying code, particularly by avoiding long conditional statements like `if...else` or `switch...case` that check an object's type. Instead, each object automatically uses its own method implementation, streamlining the code and enhancing maintainability.
+
+```javascript
+function Shape() {
+    // Default implementation
+}
+
+Shape.prototype.draw = function() {
+    console.log("Drawing a shape");
+};
+
+function Circle() {
+    // Circle initialization
+}
+
+// Setting up inheritance
+Circle.prototype = Object.create(Shape.prototype);
+Circle.prototype.constructor = Circle;
+
+// Method overriding
+Circle.prototype.draw = function() {
+    console.log("Drawing a circle");
+};
+
+let shape = new Shape();
+let circle = new Circle();
+
+shape.draw();  // Output: Drawing a shape
+circle.draw(); // Output: Drawing a circle
+```
+
+###### 9.2.10 Mixins
+
+In JavaScript, ES6 introduced the `Object.assign()` method, which facilitates the transfer of properties (or members) from one or more source objects to a target object. This method is particularly useful for implementing composition by allowing different behaviors or functionalities to be mixed into a single object, a pattern known as "Mixins."
+
+To apply `Object.assign()` for creating mixins, you first define a target object—often a constructor's prototype—and then pass one or more source objects as arguments. These source objects contain the methods and properties that should be added to the target object, thereby extending its functionality.
+
+When dealing with multiple source objects, it's common practice to encapsulate this process in a function called `mixin`. The `mixin` function takes the target object as its first parameter, followed by any number of source objects. To accommodate an unknown number of source objects, the rest operator (`...`) is used.
+
+```javascript
+function mixin(target, ...sources) {
+    Object.assign(target, ...sources);
+}
+
+const canEat = {
+    eat: function() {
+        console.log("Eating");
+    }
+};
+
+const canWalk = {
+    walk: function() {
+        console.log("Walking");
+    }
+};
+
+const canSwim = {
+    swim: function() {
+        console.log("Swimming");
+    }
+};
+
+function Person() {}
+
+// Applying mixins to the Person prototype
+mixin(Person.prototype, canEat, canWalk, canSwim);
+
+let person = new Person();
+person.eat();  // Output: Eating
+person.walk(); // Output: Walking
+person.swim(); // Output: Swimming
+```
+
+#### 9.3 Classes
+
+###### 9.3.1 ES6 Classes
+
+In ES6, JavaScript introduced classes as a modern way to create objects and implement inheritance, offering a more streamlined syntax compared to traditional prototype-based methods. Despite their class-like appearance, ES6 classes are essentially syntactic sugar built upon JavaScript's existing prototypical inheritance model. Therefore, a solid understanding of prototypical inheritance is beneficial before diving into ES6 classes.
+
+To define a class in ES6, you use the `class` keyword followed by the class name. Inside the class body, you can specify properties and methods. The `constructor` method is a special method used to initialize the properties of the class when an instance is created. After the `constructor`, additional methods can be defined. Note that methods defined within the class body are automatically added to the prototype of the instances created from the class. If you need methods that are not shared among instances and should be unique to each object, you would need to define them inside the `constructor`.
+
+```javascript
+class Animal {
+    constructor(name) {
+        this.name = name;
+    }
+
+    speak() {
+        console.log(`${this.name} makes a noise.`);
+    }
+}
 ```
