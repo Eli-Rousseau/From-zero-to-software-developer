@@ -493,17 +493,17 @@ To define a getter or setter in a constructor function, you can use the `Object.
 ```javascript
 function Person(name) {
     // Private property
-    let _name = name;
+    let name = name;
 
     // Getter and Setter for the 'name' property
     Object.defineProperty(this, 'name', {
         get: function() {
-            return _name;
+            return name;
         },
         set: function(newName) {
             if (newName.length <= 0)
                 throw new Error("Name cannot be empty.");
-            _name = newName;
+            name = newName;
         }
     });
 }
@@ -688,11 +688,9 @@ In JavaScript, functions can be defined in two primary ways:
    let addNumbers = function(a, b) {
        return a + b;
    };
+   addNumbers(1, 2) // Call must be placed after expression
    ```
-   
-   addNumbers(1, 2) // Call must be placed after expression 
 
-```
 #### 8.3 Arrow Functions
 
 Arrow functions in JavaScript are a more concise way to write functions, introduced in ES6. Unlike regular functions, arrow functions do not have their own `this` context. Arrow functions can be written in various ways depending on the number of parameters and the complexity of the function body.
@@ -891,7 +889,7 @@ Object-Oriented Programming (OOP) is a programming paradigm that focuses on the 
 
 Inheritance in JavaScript allows objects to inherit properties and methods from other objects, facilitating code reuse and the sharing of functionality among different types of objects. Unlike classical inheritance in languages with classes, JavaScript uses prototypical inheritance, where objects inherit directly from other objects.
 
-In this model, a derived (or child) object inherits from a base (or parent) object, which serves as its prototype. JavaScript objects can inherit from a single prototype, and by default, every object ultimately inherits from the base or root object, which provides common methods like `toString()` or `__proto__`. Note that the base object in JavaScript is the only object without a prototype, and it serves as the main prototype shared by all other objects in JavaScript. When accessing a property or method, JavaScript first looks for it on the object itself. If it's not found, the search continues up the prototype chain until the base object is reached, a process known as prototypical inheritance. This system ensures that objects can share common behavior while allowing for efficient code reuse.
+In this model, a derived (or child) object inherits from a base (or parent) object, which serves as its prototype. JavaScript objects can inherit from a single prototype, and by default, every object ultimately inherits from the base or root object, which provides common methods like `toString()`. Note that the base object in JavaScript is the only object without a prototype, and it serves as the main prototype shared by all other objects in JavaScript. When accessing a property or method, JavaScript first looks for it on the object itself. If it's not found, the search continues up the prototype chain until the base object is reached, a process known as prototypical inheritance. This system ensures that objects can share common behavior while allowing for efficient code reuse.
 
 In JavaScript, objects created by the same constructor function share the same prototype. For example, when you create an array, it inherits from the array prototype, which itself inherits from the object base prototype. This hierarchical structure, where an object inherits properties and methods from multiple levels of prototypes, is known as multilevel inheritance.
 
@@ -1104,3 +1102,281 @@ class Animal {
     }
 }
 ```
+
+###### 9.3.2 Instance and Static Methods
+
+In classical OOP, methods are typically categorized into two types: instance methods and static methods. In JavaScript, instance methods are those that can be called on instances of classes, meaning they operate on a specific object created from a class. On the other hand, static methods are associated with the class itself rather than any instance of the class. These methods cannot be called on instances but are accessible directly through the class reference. Static methods usually serve as utility functions that are not tied to any particular instance, making them ideal for use in classes where creating an instance is unnecessary.
+
+```javascript
+class Example {
+  // Instance method
+  instanceMethod() {
+    console.log('This is an instance method.');
+  }
+
+  // Static method
+  static staticMethod() {
+    console.log('This is a static method.');
+  }
+}
+
+// Creating an instance of the class
+const exampleInstance = new Example();
+exampleInstance.instanceMethod(); // Works
+
+// Calling the static method
+Example.staticMethod(); // Works
+exampleInstance.staticMethod(); // Error: staticMethod is not a function
+```
+
+###### 9.3.3  Private Members Using Symbols
+
+In OOP, abstraction is a principle that involves hiding the internal implementation details of an object while exposing only the essential members to the outside world. In JavaScript, this concept can be achieved by making certain properties or methods private within ES6 classes. A practical way to implement this in JavaScript is by using symbols, which were introduced in ES6 as a primitive data type.
+
+Symbols are unique identifiers that can be created using the built-in `Symbol` function. These identifiers can be used as property or method names in an object, ensuring that they are unique and not easily accessible from outside the class. To create private properties or methods, developers typically define symbols as constants or variables (often prefixed with an underscore) outside the class. These symbols are then used in bracket notation within the class to define properties and methods. Since symbols are unique and not directly accessible, they effectively make the associated properties and methods private.
+
+```javascript
+// Define symbols for private properties and methods
+const _privateProperty = Symbol();
+const _privateMethod = Symbol();
+
+class MyClass {
+  constructor(value) {
+    // Using the symbol as a key for a private property
+    this[_privateProperty] = value;
+  }
+
+  // Using the symbol as a key for a private method
+  [_privateMethod]() {
+    console.log('This is a private method');
+  }
+
+  // Public method to interact with private property
+  publicMethod() {
+    console.log(`Private Property Value: ${this[_privateProperty]}`);
+    this[_privateMethod](); // Calling the private method
+  }
+}
+
+const instance = new MyClass('Hello, World!');
+instance.publicMethod(); // Accesses the private property and methodIn this example, `_privateProperty` and `_privateMethod` are symbols that act as unique identifiers for a private property and method within the `MyClass` class. The `publicMethod` allows controlled access to these private members, demonstrating how symbols can be used to achieve abstraction by keeping certain details hidden from the outside world.
+```
+
+###### 9.3.4 Private Members Using WeakMaps
+
+WeakMaps in JavaScript offer a powerful way to implement private members in classes. A WeakMap is a special type of dictionary where keys are objects, and the associated values can be of any type. The key feature of WeakMaps is that the keys are weakly held, meaning if there are no other references to the key object, it can be garbage collected, helping to manage memory efficiently. To use WeakMaps for private members, start by defining a WeakMap outside the class using the `WeakMap()` constructor. It's good practice to create a separate WeakMap for each private member. Inside the class, you can use the `set()` method to associate a value with the current object instance (the key). To access the private member, use the `get()` method, passing the object instance as the key.
+
+```javascript
+// Define WeakMaps for private properties and methods
+const _privateProperty = new WeakMap();
+const _privateMethod = new Weakap();
+
+class MyClass {
+  constructor(value) {
+    // Setting the private property using the WeakMap
+    _privateProperty.set(this, value);
+
+    // Defining a private method using the WeakMap
+    _privateMethod.set(this, () => {
+      console.log('This is a private method');
+    });
+  }
+
+  // Public method to access private members
+  publicMethod() {
+    console.log(`Private Property Value: ${_privateProperty.get(this)}`);
+    _privateMethod.get(this)(); // Invoking the private method
+  }
+}
+
+const instance = new MyClass('Hello, World!');
+instance.publicMethod(); // Accesses the private property and method
+```
+
+###### 9.3.5 Getters and Setters in Classes
+
+In JavaScript, getters and setters are special methods within ES6 classes that provide a controlled way to access and modify object properties. They enable encapsulation by allowing you to control how properties are retrieved or updated, adding an additional layer of validation or logic when needed.
+
+- **Getters**: A getter method is created by prefixing a method with the `get` keyword. It allows you to retrieve the value of an object's property as if you were accessing a regular variable. Getters are useful for returning computed values or encapsulating the retrieval logic.
+
+- **Setters**: A setter method is created by prefixing a method with the `set` keyword. It allows you to change the value of an object's property. Setters are useful for encapsulating validation logic or ensuring that a property is updated in a controlled manner.
+
+Here’s an example of how getters and setters can be implemented in a JavaScript class:
+
+```javascript
+class Person {
+  constructor(name) {
+    this._name = name;
+  }
+
+  // Getter for name
+  get name() {
+    return this._name;
+  }
+
+  // Setter for name
+  set name(newName) {
+    if (typeof newName === 'string' && newName.length > 0) {
+      this._name = newName;
+    } else {
+      console.log('Invalid name');
+    }
+  }
+}
+
+const person = new Person('Eli', 24);
+
+console.log(person.name); // Uses the getter, outputs: Eli
+person.name = 'Mariam'; // Uses the setter
+console.log(person.name); // Outputs: Mariam
+```
+
+###### 9.3.6 Implementing Class Inheritance
+
+In JavaScript, class inheritance allows a class to inherit properties and methods from another class, facilitating code reuse and hierarchical relationships between classes. This is achieved using the `extends` keyword, followed by the name of the parent class.
+
+When a child class inherits from a parent class that has a constructor, it is crucial to call the parent's constructor within the child class's constructor. This is done using the `super` keyword, which invokes the parent class's constructor and ensures that the base object is properly initialized. Arguments can be passed to `super()` to forward them to the parent constructor.
+
+```javascript
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+class Dog extends Animal {
+  constructor(name, breed) {
+    // Call the parent class constructor with the name argument
+    super(name);
+    this.breed = breed;
+  }
+}
+
+const myDog = new Dog('Rex', 'German Shepherd');
+```
+
+This method of inheritance provides a streamlined approach compared to prototypical inheritance, where manually resetting the prototype and constructor properties of object instances is necessary.
+
+###### 9.3.7 Method Overriding
+
+Method overriding occurs when a method in a base class is redefined in a derived class to change its behavior. In JavaScript, this is achieved by implementing the method with the same name in the derived class. This allows the derived class to customize or completely replace the functionality of the inherited method. If needed, the original method from the parent class can still be accessed using the `super` keyword within the overriding method.
+
+```javascript
+class Animal {
+  speak() {
+    console.log('Makes a sound.');
+  }
+}
+
+class Dog extends Animal {
+  speak() {
+    console.log('Barks.');
+  }
+}
+
+const myDog = new Dog();
+myDog.speak(); // Outputs: Barks
+```
+
+#### 9.4 ES6 Tools
+
+###### 9.4.1 Modular JavaScript
+
+When building an application, writing all the code in a single file can make the codebase increasingly difficult to maintain. Instead, developers can divide the code into separate files, known as modules. Modularity improves maintainability, allows for code reusability, and abstracts complexity by exposing only the essential parts of a module while hiding implementation details.
+
+This is particularly important when dealing with private class members using Symbols or WeakMaps. If these members are defined within the same file as the class, they could be unintentionally accessed or manipulated. By organizing the code into modules, you can encapsulate these details in a separate file, protecting the implementation while allowing the class to be imported elsewhere without exposing its internal workings.
+
+JavaScript supports different module formats. **CommonJS** is a module format traditionally used by Node.js, while **ES6 Modules** (introduced in ES6) are now widely supported in browsers.
+
+###### 9.4.2 CommonJS Modules
+
+In CommonJS, a widely used module system in Node.js, code can be moved into separate files with a `.js` extension. By default, everything in a module is private and not accessible from outside the module unless explicitly exported. To export elements in CommonJS, you use the `module.exports` syntax. For example, you can export a class or object by assigning it to `module.exports`. In another module, this exported object can be imported using the `require()` function, which takes the relative path of the module without needing to specify the `.js` extension. The `require()` function returns the object provided by `module.exports`, which can then be used in the importing file.
+
+```javascript
+// File: Animal.js
+class Animal {
+}
+
+// Export the Animal class
+module.exports.Animal = Animal;
+```
+
+```javascript
+// File: main.js
+// Import the Animal class from Animal.js
+const Animal = require('./Animal').Animal;
+
+const myDog = new Animal();
+```
+
+###### 9.4.3 ES6 Modules
+
+ES6 Modules provide a modern way to organize and share code across different files in JavaScript. When using ES6 Modules, you can move code into separate `.js` files to improve modularity. By default, everything within an ES6 module is private and not accessible from outside the module unless explicitly exported. To make a class or object available for use in other files, you can use the `export` keyword before the class or object declaration. To use this exported code in another file, you would use the `import` statement at the top of the module, referencing the relative path of the file where the export resides.
+
+```javascript
+// File: Animal.js
+export class Animal {
+}
+```
+
+```javascript
+// File: main.js
+// Import the Animal class from Animal.js
+import { Animal } from './Animal';
+
+const myDog = new Animal();
+```
+
+###### 9.4.4 Using ES6 Tools for Modern Web Development
+
+When developing web applications with modern JavaScript (ES6), two essential tools are needed to ensure compatibility across all browsers: a **transpiler** and a **bundler**.
+
+1. **Transpiler**: A transpiler converts modern ES6 JavaScript code into a version that all browsers can understand. BABEL is a widely used transpiler that handles this conversion process, allowing developers to write cutting-edge JavaScript without worrying about browser support.
+
+2. **Bundler**: A bundler consolidates all JavaScript files into a single file, known as a bundle. The most popular bundler is **Webpack**, which also minimizes the code by removing unnecessary whitespace, comments, and renaming variables to create a more efficient, lightweight bundle.
+
+To use these tools, you first need to install **Node.js**, which provides access to **npm** (Node Package Manager). npm is used to install third-party libraries and tools, including Webpack and Babel.
+
+Here's a step-by-step guide to setting up Webpack and Babel:
+
+1. **Install Webpack Globally**: Open your terminal in the project directory and run:
+   
+   ```bash
+   npm i -g webpack-cli
+   ```
+   
+   This installs Webpack globally, making it accessible from any project.
+
+2. **Initialize Webpack**: In your project folder, run:
+   
+   ```bash
+   webpack-cli init
+   ```
+   
+   This command creates a Webpack configuration file and sets up the environment.
+
+3. **Set Up npm**: Run the following command to create a `package.json` file:
+   
+   ```bash
+   npm init --yes
+   ```
+   
+   Then, add a build script to the `package.json` file:
+   
+   ```json
+   "scripts": {
+     "build": "webpack -w"
+   }
+   ```
+   
+   This script will automate the bundling process whenever changes are detected.
+
+4. **Adjust Dependencies**: Move all relevant packages to the `devDependencies` section in `package.json` to indicate they are only needed during development.
+
+5. **Build the Project**: Run the following command to bundle your JavaScript files:
+   
+   ```bash
+   npm run build
+   ```
+   
+   Webpack, with the help of Babel, will transpile and bundle the code into a single JavaScript file located in the output directory. This bundled file can then be included in your HTML file via a `<script>` tag.
