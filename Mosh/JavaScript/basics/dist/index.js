@@ -1,11 +1,13 @@
 "use strict";
-function findingNemo(ocean) {
-    for (var i = 0; i < ocean.length; i++) {
-        var fish = ocean[i];
-        if (fish === "Nemo")
-            return `Nemo is at position ${--i}`;
+class Person {
+    constructor(firstName, lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+    get fullName() {
+        return `${this.firstName} ${this.lastName}`;
     }
 }
-var ocean = ["shark", "wale", "octopus", "Nemo", "dolphin"];
-console.log(findingNemo(ocean));
+let person = new Person("Eli", "Rousseau");
+console.log(person.fullName);
 //# sourceMappingURL=index.js.map
