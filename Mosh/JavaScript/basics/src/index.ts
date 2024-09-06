@@ -1,8 +1,15 @@
-class Entity<T> {
+class Food {
+    public price: number;
 
-    public readonly identifier: T;
+    constructor(price: number) {this.price = price}
+}
 
-    constructor(identifier: T) {
-        this.identifier = identifier;
+class Pizza extends Food{
+    public type: string;
+    constructor(price: number, type: string) {
+        super(price);
+        this.type = type;
     }
 }
+
+const food: Pizza = new Pizza(20, 'fresh');

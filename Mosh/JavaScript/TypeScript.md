@@ -62,19 +62,21 @@ To manage how TypeScript compiles your code, you can create a configuration file
 
 2. **Key Configuration Options**:
    
-   | Configuration Option     | Description                                                                                             | Preferred Value |
-   | ------------------------ | ------------------------------------------------------------------------------------------------------- | --------------- |
-   | **target**               | Specifies the JavaScript version to which TypeScript will be compiled.                                  | `es2016`        |
-   | **module**               | Defines the module system for the compiled JavaScript.                                                  | `commonjs`      |
-   | **rootDir**              | Sets the directory for the source TypeScript files.                                                     | `./src`         |
-   | **outDir**               | Specifies the directory where the compiled JavaScript files will be output.                             | `./dist`        |
-   | **removeComments**       | Removes comments from the compiled JavaScript files.                                                    | `true`          |
-   | **noEmitOnError**        | Determines if JavaScript files should be generated when there are TypeScript errors.                    | `true`          |
-   | **noUnusedParameters**   | Compiler will shout when function parameters are unused.                                                | `true`          |
-   | **noImplicitReturns**    | Compiler prevents functions from returning `undefined` by default when no return statement is provided. | `true`          |
-   | **noUnusedLocals**       | Compiler will shout when variables are not read.                                                        | `true`          |
-   | **allowUnreachableCode** | Compiler indicates the codes that is unreachable.                                                       | `false`         |
-   | **noImplicitOverride**   | Compiler ensures that defines the method that have to be overwritten.                                   | `true`          |
+   | Configuration Option       | Description                                                                                             | Preferred Value |
+   | -------------------------- | ------------------------------------------------------------------------------------------------------- | --------------- |
+   | **target**                 | Specifies the JavaScript version to which TypeScript will be compiled.                                  | `es2016`        |
+   | **module**                 | Defines the module system for the compiled JavaScript.                                                  | `commonjs`      |
+   | **rootDir**                | Sets the directory for the source TypeScript files.                                                     | `./src`         |
+   | **outDir**                 | Specifies the directory where the compiled JavaScript files will be output.                             | `./dist`        |
+   | **removeComments**         | Removes comments from the compiled JavaScript files.                                                    | `true`          |
+   | **noEmitOnError**          | Determines if JavaScript files should be generated when there are TypeScript errors.                    | `true`          |
+   | **noUnusedParameters**     | Compiler will shout when function parameters are unused.                                                | `true`          |
+   | **noImplicitReturns**      | Compiler prevents functions from returning `undefined` by default when no return statement is provided. | `true`          |
+   | **noUnusedLocals**         | Compiler will shout when variables are not read.                                                        | `true`          |
+   | **allowUnreachableCode**   | Compiler indicates the codes that is unreachable.                                                       | `false`         |
+   | **noImplicitOverride**     | Compiler ensures that defines the method that have to be overwritten.                                   | `true`          |
+   | **experimentalDecorators** | Enables the creation and usage of decorators.                                                           | `true`          |
+   | **moduleResolution**       | Specify how TypeScript looks up a file from a given module specifier.                                   | `node`          |
 
 #### 1.4 Debugging TypeScript
 
@@ -886,3 +888,353 @@ const user: OptionalUser = {
 ```
 
 Due to the usefulness of these certain mapped types, TypeScript included them as built-in features. You can find a comprehensive overview of these utility types at https://www.typescriptlang.org/docs/handbook/utility-types.html.
+
+## 6. Decorators
+
+#### 6.1 Introduction to Decorators
+
+Decorators in TypeScript provide a way to modify or extend the behavior of classes, methods, or properties by applying special attributes to them. Essentially, decorators are functions that are executed at runtime, receiving the target class or class member they are applied to. This powerful feature allows developers to enhance or alter the functionality of classes without changing their core code, making the code more flexible and reusable.
+
+#### 6.2 Class Decorators in TypeScript
+
+A class decorator is a special type of decorator applied to an entire class, where the JavaScript engine calls the decorator function and passes the class constructor to it. This function can modify the class by adding new properties or methods, or by altering the behavior of existing ones. To create a class decorator, you define a function that accepts the class constructor as a parameter and interacts with the class prototype to extend or modify its functionality. It's important to note that when a class decorator is applied, the function is automatically invoked at runtime, even without instantiating the class, ensuring that the modifications are applied.
+
+```typescript
+// Class decorator function
+function LogClass(constructor: Function) {
+
+    // Add a new method to the class prototype
+    constructor.prototype.logInfo = function() {
+        console.log(`Instance of ${constructor.name} has been created.`);
+    };
+}
+
+// Applying the class decorator
+@LogClass
+class User {
+    constructor(public name: string) {}
+}
+
+// Create an instance of the class
+const user = new User("Eli");
+
+// Call the dynamically added method
+(user as any).logInfo(); // Output: Instance of User has been created.
+```
+
+#### 6.3 Parametrized Decorators
+
+A decorator factory in TypeScript is a special type of decorator that allows you to pass parameters, returning a function that can be applied to classes, methods, or properties. Unlike regular decorators, which are applied directly, a decorator factory enables parameterized decorators, letting you customize their behavior based on the provided parameters. When used with classes, the factory returns a function that modifies the class by accessing its constructor, allowing for dynamic modifications depending on the arguments passed to the decorator.
+
+```typescript
+// Class decorator factory that accepts a parameter
+function Logger(prefix: string) {
+    // The actual decorator function
+    return function(constructor: Function) {
+        console.log(`${prefix} - Class ${constructor.name} is being created.`);
+    };
+}
+
+// Applying the class decorator with a custom prefix
+@Logger("Info")
+class User {
+    constructor(public name: string) {}
+}
+
+const user = new User("Eli"); // Output: Info - Class User is being created.
+```
+
+#### 6.4 Composite Decorators
+
+In TypeScript, you can apply multiple decorators to a class or its members, and the order in which they are applied is important. The decorators are evaluated from top to bottom but applied from bottom to top, meaning the decorator at the bottom wraps around the one above it. This allows for layered customization, where each decorator can build on or modify the effects of the previous one, influencing the overall behavior of the class or its members.
+
+```typescript
+function FirstDecorator(constructor: Function) {
+    console.log('FirstDecorator applied');
+    constructor.prototype.first = true;
+}
+
+function SecondDecorator(constructor: Function) {
+    console.log('SecondDecorator applied');
+    constructor.prototype.second = true;
+}
+
+@FirstDecorator     // Evaluated first, but applied second
+@SecondDecorator    // Evaluated second, but applied first
+class ExampleClass {
+    constructor() {
+        console.log('ExampleClass created');
+    }
+}
+
+const example = new ExampleClass();
+```
+
+#### 6.5 Method Decorators
+
+In TypeScript, method decorators allow you to modify or extend the behavior of methods within a class. Unlike class decorators, method decorators accept three parameters: the target object (of type `any`), the method name (of type `string`), and the method's property descriptor (of type `PropertyDescriptor`). These parameters let you directly interact with and modify the method's functionality. A common use of method decorators is to redefine the method by changing `descriptor.value`, which allows you to add custom logic before or after the method execution. It's important to use function expressions instead of arrow functions when calling the original method, as arrow functions do not have their own `this` context, which is required for proper method binding.
+
+```typescript
+function LogExecution(target: any, methodName: string, descriptor: PropertyDescriptor) {
+    const originalMethod = descriptor.value;
+
+    descriptor.value = function (...args: any[]) {
+        console.log(`Calling ${methodName} with arguments: ${JSON.stringify(args)}`);
+        const result = originalMethod.apply(this, args);  // Call the original method
+        console.log(`Method ${methodName} returned: ${result}`);
+        return result;
+    };
+}
+
+class Calculator {
+    @LogExecution
+    add(a: number, b: number): number {
+        return a + b;
+    }
+}
+
+const calculator = new Calculator();
+calculator.add(2, 3);
+```
+
+#### 6.6 Accessor Decorators
+
+Accessor decorators in TypeScript are used to modify the behavior of getter and setter methods in a class. Like method decorators, they take three parameters: the target object (of type `any`), the accessor method's name (of type `string`), and the property descriptor (of type `PropertyDescriptor`). Accessor decorators allow you to inject custom logic when a property is accessed or modified by interacting with the `descriptor.get` or `descriptor.set` functions. This enables you to control or extend the functionality of getters and setters in a class.
+
+```typescript
+function LogAccessor(target: any, propertyName: string, descriptor: PropertyDescriptor) {
+    const originalGet = descriptor.get;
+
+    descriptor.get = function () {
+        const value = originalGet?.apply(this);
+        console.log(`Getting value of ${propertyName}: ${value}`);
+        return value;
+    };
+}
+
+class Person {
+    private _age: number = 0;
+
+    @LogAccessor
+    get age(): number {
+        return this._age;
+    }
+
+    set age(value: number) {
+        this._age = value;
+    }
+}
+
+const person = new Person();
+person.age = 30;
+console.log(person.age);
+```
+
+#### 6.7 Property Decorators
+
+Property decorators in TypeScript allow you to customize and extend the behavior of class properties. They are applied directly to properties and take two parameters: the target object (of type `any`) and the property name (of type `string`). Inside the decorator, you can define a property descriptor to control how the property is accessed or modified. For instance, you can add custom logic for getting or setting the property value. The updated descriptor is then applied to the property using the `Object.defineProperty()` method, enabling enhanced functionality.
+
+```typescript
+function AddValidAge(target: any, propertyName: string) {
+    let value: number | null = null; // Local variable to store the value
+
+    Object.defineProperty(target, propertyName, {
+        get: (): number | null => value,
+        set: (age: number): void => {
+            value = age > 0 ? age : null; // Apply validation before setting the value
+        },
+        enumerable: true,
+        configurable: true
+    });
+}
+
+class Person {
+    @AddValidAge
+    age: number | null = null; // Remove readonly to allow modification
+}
+
+const person = new Person();
+person.age = 20;  // Valid assignment
+console.log(person.age);  // Output: 20
+
+person.age = -5;  // Invalid assignment, will be set to null
+console.log(person.age);  // Output: null
+```
+
+## 7. Modules
+
+#### 7.1 Importing and Exporting Modules
+
+As projects grow in complexity, it becomes increasingly difficult to manage all the code within a single file. To address this, code is typically organized into separate files known as modules. Each module serves a specific purpose and contains related classes, functions, and other objects. By default, all objects within a module are private and inaccessible from outside the module unless explicitly exported. To make these objects available to other parts of the project, you need to use the `export` keyword before the object declaration.
+
+```typescript
+// user.ts
+export class User {
+    constructor(public name: string) {}
+}
+
+export function createUser(name: string): User {
+    return new User(name);
+}
+```
+
+In another file, you can import these exported objects using the `import` statement, specifying either the absolute or relative path to the module:
+
+```typescript
+// app.ts
+import { User, createUser } from './user';
+
+const newUser = createUser('Eli');
+console.log(newUser.name);  // Output: Eli
+```
+
+This modular approach helps keep the codebase organized and manageable, allowing you to split functionality across different files and only import what you need.
+
+#### 7.2 Modern JavaScript Module Systems
+
+Originally, JavaScript lacked a standardized module system, leading to various techniques and formats for modularizing code. However, since the introduction of ES2015 (ES6), JavaScript has natively supported a standardized module system using `export` and `import` statements. This modern module format is widely adopted and supported by most web browsers and JavaScript runtime environments, making older module formats largely obsolete.
+
+In TypeScript, the default behavior is to convert ES6 modules into the CommonJS module format when transpiling TypeScript code to JavaScript. However, this behavior can be customized by modifying the `module` setting in the `tsconfig.json` file.
+
+#### 7.3 Default Exports
+
+In JavaScript modules, when you want to export a single object from a module while keeping the rest of the module code private, you can use the `export default` statement. This approach simplifies the import process, as it eliminates the need for curly braces around the imported object.
+
+```javascript
+// user.js
+class User {
+    constructor(name) {
+        this.name = name;
+    }
+}
+
+export default User;
+```
+
+When importing this module, you don't need to use curly braces:
+
+```javascript
+// app.js
+import User from './user';
+
+const newUser = new User('Eli');
+console.log(newUser.name);  // Output: Eli
+```
+
+#### 7.3 Wildcard Imports
+
+When dealing with modules that export multiple objects, importing everything individually can become cumbersome. In such cases, you can use wildcard imports to bring all exported members into a single container object. To perform a wildcard import, use the `import * as` syntax followed by a chosen alias. This alias will act as the container object holding all the exported members from the module.
+
+```javascript
+// utils.js
+export function add(a, b) {
+    return a + b;
+}
+
+export function subtract(a, b) {
+    return a - b;
+}
+
+export const PI = 3.14;
+```
+
+You can import all these exports into a single container object:
+
+```javascript
+// app.js
+import * as utils from './utils';
+
+console.log(utils.add(5, 3));       // Output: 8
+console.log(utils.subtract(5, 3));  // Output: 2
+console.log(utils.PI);             // Output: 3.14
+```
+
+#### 7.4 Re-exporting
+
+Re-exporting is a technique used to aggregate multiple modules into a single module, allowing you to combine and export them collectively. This approach is particularly useful for creating a central module that consolidates various functionalities, making it easier for consumers to import from a single source rather than managing multiple import statements. To re-export from a module, you can use the `export` keyword in combination with `import`. 
+
+Suppose you have multiple modules with various exports:
+
+```javascript
+// math.js
+export function add(a, b) {
+    return a + b;
+}
+
+export function subtract(a, b) {
+    return a - b;
+}
+
+// constants.js
+export const PI = 3.14;
+export const E = 2.71;
+```
+
+You can create a central module that re-exports everything from these modules:
+
+```javascript
+// index.js
+export * from './math';
+export * from './constants';
+```
+
+Now, consumers of your module can import everything from a single source:
+
+```javascript
+// app.js
+import { add, subtract, PI, E } from './index';
+
+console.log(add(5, 3));      // Output: 8
+console.log(subtract(5, 3)); // Output: 2
+console.log(PI);            // Output: 3.14
+console.log(E);             // Output: 2.71
+```
+
+## 8. Integration with JavaScript
+
+#### 8.1 Including JavaScript Code in TypeScript Projects
+
+When working on a TypeScript project, you may need to include and use JavaScript code alongside TypeScript files. To enable this, you need to adjust the `tsconfig.json` configuration file. Specifically, set the `"allowJs"` option to `true` to permit JavaScript files to be part of your TypeScript project. Additionally, ensure that the `"module"` setting is configured to use the CommonJS module system, which is typically used for module resolution in Node.js environments. With this configuration, you can import JavaScript modules into TypeScript files.
+
+#### 8.2 Type Checking JavaScript Code
+
+By default, TypeScript does not perform type checking on JavaScript code. To enable type checking for JavaScript files, you need to set the `"checkJs"` option to `true` in the `tsconfig.json` file. This allows TypeScript to apply type checking rules to JavaScript files, providing enhanced error detection and type safety.
+
+If you encounter errors in your JavaScript code that you wish to ignore, you can suppress TypeScript checks by adding a `// @ts-nocheck` comment at the top of the file or above specific lines of code. This instructs the TypeScript compiler to skip type checking for the affected code.
+
+#### 8.3 Defining JavaScript Types
+
+To provide type information for JavaScript objects and functions, you can use JSDoc comments directly in your JavaScript files. JSDoc comments allow you to specify types for variables, parameters, and return values, which helps TypeScript understand and check the code correctly.
+
+```javascript
+/**
+ * Adds two numbers.
+ * @param {number} a - The first number.
+ * @param {number} b - The second number.
+ * @returns {number} - The sum of a and b.
+ */
+function add(a, b) {
+  return a + b;
+}
+```
+
+Alternatively, you can create a type definition file (`.d.ts` file) to provide type information without modifying the original JavaScript code. The type definition file should have the same name as the JavaScript file it describes, with a `.d.ts` extension. This file includes declarations for functions, variables, or methods with their types, but no implementation.
+
+```typescript
+// add.d.ts
+export function add(a: number, b: number): number;
+```
+
+By exporting these declarations, the TypeScript compiler can infer the types and perform accurate type checking when importing the JavaScript module. Ensure that the type definition file describes all the features of the JavaScript module you want to use to ensure proper type checking.
+
+#### 8.4 Integrating Third-Party JavaScript Libraries
+
+When incorporating third-party JavaScript libraries into a TypeScript project, you may face challenges with type checking, as these libraries often lack JSDoc comments or TypeScript declaration files. To address this issue, you can use the DefinitelyTyped repository, which provides TypeScript declaration files for many popular JavaScript libraries. These declaration files define the types for the libraries, allowing TypeScript to perform type checking and provide IntelliSense.
+
+To add type definitions for a specific library, you can install them as a development dependency using npm. For example, to install type definitions for a library named `lodash`, use the following command:
+
+```bash
+npm install --save-dev @types/lodash
+```
+
+This command downloads the declaration files from the DefinitelyTyped repository and saves them in your project's `node_modules` directory. Including these type definitions enables TypeScript to correctly check types and provide autocompletion when using the library. Some libraries may already include their own declaration files, which means you won't need to install them separately.
