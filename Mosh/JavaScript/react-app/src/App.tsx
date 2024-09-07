@@ -1,7 +1,12 @@
-import ListGroup from "./components/ListGroup";
+import Form from './components/Form';
+import './components/index.css'
 
 function App() {
-  return <div><ListGroup></ListGroup></div>
+  return (
+    <div>
+      <Form></Form>
+    </div>
+  );
 }
 
 export default App;
