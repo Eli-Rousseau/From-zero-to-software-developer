@@ -1033,3 +1033,363 @@ function MyForm() {
   );
 }
 ```
+
+## 6. Connecting to the Backend
+
+#### 6.1 Understanding the Effect Hook
+
+React component functions should be pure, meaning they return the same JSX for the same props and avoid changes during rendering. However, some tasks, like accessing local storage, making API calls, or manually modifying DOM elements, are considered side effects since they impact the component beyond rendering. Side effects make a component impure.
+
+To handle side effects in React, the `useEffect` hook is used. It allows you to run specific logic after the component renders. This could include data fetching, DOM manipulation, or updating external resources. To use `useEffect`, import it from React, and place the side-effect logic inside the hook, ensuring it runs after the initial render. Like the state hook, `useEffect` should be called at the top level of the component.
+
+```tsx
+import { useEffect, useState } from 'react';
+
+function MyComponent() {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    // Example of a side effect: fetching data from an API
+    fetch('https://api.example.com/data')
+      .then(response => response.json())
+      .then(result => setData(result))
+      .catch(error => console.error('Error fetching data:', error));
+  }, []); // Empty dependency array ensures this runs only once after the initial render
+
+  return (
+    <div>
+      <h1>Data from API:</h1>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+    </div>
+  );
+}
+```
+
+#### 6.2 Effect Hook Dependencies
+
+By default, the `useEffect` hook runs after every component render, but sometimes you need more control over when it executes. To achieve this, the `useEffect` hook accepts a second optional argument—a dependency array. This array holds variables (such as props or state) that determine when the effect should run. If any of these values change, React re-executes the effect. When the dependency array is empty (`[]`), the effect runs only once after the initial render. If the second argument is omitted, the effect will run after every render, which may cause performance issues or excessive API calls.
+
+```tsx
+import { useEffect, useState } from 'react';
+
+function DataFetcher({ userId }) {
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    // This effect will run only when userId changes
+    fetch(`https://api.example.com/users/${userId}`)
+      .then(response => response.json())
+      .then(data => setUserData(data))
+      .catch(error => console.error('Error fetching user data:', error));
+  }, [userId]); // The effect depends on userId
+
+  return (
+    <div>
+      <h2>User Data:</h2>
+      <pre>{JSON.stringify(userData, null, 2)}</pre>
+    </div>
+  );
+}
+```
+
+#### 6.3 Effect Clean Up
+
+The function passed to the `useEffect` hook can optionally return a cleanup function. This cleanup function is useful for undoing side effects, such as unsubscribing from services, canceling API requests, or disconnecting from WebSockets. The cleanup function is called when the component unmounts or before the effect re-runs due to changes in dependencies, ensuring that no side effects persist.
+
+```tsx
+import { useEffect, useState } from 'react';
+
+function WebSocketComponent() {
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    const socket = new WebSocket('wss://example.com/socket');
+
+    socket.onmessage = (event) => {
+      setMessage(event.data);
+    };
+
+    // Cleanup function: close WebSocket connection
+    return () => {
+      socket.close();
+    };
+  }, []); // Empty array ensures the effect runs only once on mount
+
+  return <div>Latest Message: {message}</div>;
+}
+```
+
+#### 6.4 Fetching Data With HTTP Requests
+
+To send requests to a server, you can use a popular library called Axios. Axios simplifies HTTP requests and supports features like automatic JSON parsing and handling responses. First, install Axios with:
+
+```bash
+npm i axios
+```
+
+In your component, import Axios. To make a server request, such as a `GET` request, place the call inside the `useEffect` hook to ensure it runs after the component renders. Axios’s `get()` method returns a promise, representing the eventual success or failure of the request. You can chain a `.then()` method to handle the response.
+
+```tsx
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+
+interface DataResponse {
+  id: number;
+  title: string;
+}
+
+function DataComponent() {
+  const [data, setData] = useState<DataResponse[]>([]);
+
+  useEffect(() => {
+    axios
+      .get<DataResponse[]>('https://api.example.com/data')
+      .then((response) => {
+        setData(response.data);
+      });
+  }, []); // Empty dependency array to run only once
+
+  return (
+    <ul>
+      {data.map(item => (
+        <li key={item.id}>{item.title}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+The `axios.get()` method sends an HTTP request from the client (browser) to a server, which responds with the requested resources like webpages, images, or videos, using the HTTP protocol for communication.
+
+#### 6.5 Handling Errors in HTTP Requests
+
+When making an HTTP request, various issues can occur, such as losing connection to the server. To handle these potential errors, JavaScript promises offer a `catch` method, which can be chained to the `then()` method. The `catch` method accepts a callback function that executes when an error occurs during data fetching. The error object passed to this function contains a `message` property, which can be used to display meaningful error messages.
+
+```javascript
+axios.get('https://api.example.com/data')
+  .then(response => {
+    // Handle successful response
+    console.log(response.data);
+  })
+  .catch(error => {
+    // Handle any errors that occur during the request
+    console.error('Error fetching data:', error.message);
+  });
+```
+
+#### 6.6 Cancelling HTTP Requests
+
+When fetching data in an `effect` hook, it is a good practice to provide a cleanup function to cancel the request in case the component unmounts. To do this, declare a `controller` constant inside the `effect` hook and assign it a new instance of the built-in `AbortController` class, which allows aborting asynchronous operations. Pass the controller's signal to the `axios.get()` method as an optional argument. Finally, return `controller.abort()` in the effect hook for cleanup. Additionally, in the `axios.catch()` method, check if the error is an instance of `CanceledError` from the axios module to handle the request cancellation properly.
+
+```javascript
+import axios, { CanceledError } from 'axios';
+import { useEffect } from 'react';
+
+useEffect(() => {
+  const controller = new AbortController();
+
+  axios.get('https://api.example.com/data', { signal: controller.signal })
+    .then(response => {
+      // Handle successful response
+      console.log(response.data);
+    })
+    .catch(error => {
+      if (error instanceof CanceledError) return;
+      console.log(error.message);
+    });
+
+  return () => {
+    // Cleanup: cancel the request if the component unmounts
+    controller.abort();
+  };
+}, []);
+```
+
+#### 6.7 Displaying a Loading Indicator
+
+To show a loading indicator while fetching data, you can use a state hook to manage the loading state. Set the loading state to `true` before calling `axios.get()`, and update it to `false` inside the callback functions of both `axios.then()` and `axios.catch()`, ensuring the loading state is updated after the request completes. The loading state can then be used to conditionally display a loader in the component.
+
+```javascript
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+
+const MyComponent = () => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setLoading(true); // Start loading before fetching data
+
+    axios.get('https://api.example.com/data')
+      .then(response => {
+        setData(response.data);
+      })
+      .catch(err => {
+        setError(err.message);
+      })
+      .finally(() => {
+        setLoading(false); // Stop loading after request finishes
+      });
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  return (
+    <div>
+      {data ? (
+        <div>Data: {JSON.stringify(data)}</div>
+      ) : (
+        <div>No data available</div>
+      )}
+    </div>
+  );
+};
+```
+
+#### 6.8 Handling Data Synchronization in React
+
+###### 6.8.1 Synchronization Approaches
+
+When manipulating server-side data (e.g., deleting, creating, or modifying) and synchronizing it with user actions, you can follow two strategies: optimistic or pessimistic.
+
+- **Optimistic Approach**: The user interface is updated immediately, assuming the server operation will succeed. The changes are sent to the server afterward. This approach makes the UI feel faster and more responsive.
+
+- **Pessimistic Approach**: The UI waits for confirmation from the server before updating. This assumes the server call may fail, delaying the UI update until success is confirmed. While more cautious, this can slow down the user experience.
+
+###### 6.8.2 Axios Synchronization Operations
+
+1. **Deleting Data**: Use `axios.delete()` with the endpoint URL to delete data. Handle potential errors with `catch()`.
+   
+   ```javascript
+   axios.delete('https://api.example.com/items/1')
+     .then(() => {
+       // Update UI after delete
+     })
+     .catch(error => {
+       console.error('Error deleting item:', error);
+     });
+   ```
+
+2. **Creating Data**: Use `axios.post()` to create new data. Pass the URL and data object, and handle success or errors with `then()` and `catch()`.
+   
+   ```javascript
+   axios.post('https://api.example.com/items', { name: 'New Item' })
+     .then(response => {
+       // Update UI with new data
+     })
+     .catch(error => {
+       console.error('Error creating item:', error);
+     });
+   ```
+
+3. **Modifying Data**: Use `axios.put()` to replace an object or `axios.patch()` to modify specific properties. Handle errors with `catch()`.
+   
+   ```javascript
+   // Replace entire object
+   axios.put('https://api.example.com/items/1', { name: 'Updated Item' })
+     .then(response => {
+       // Update UI after modification
+     })
+     .catch(error => {
+       console.error('Error updating item:', error);
+     });
+   
+   // Modify specific fields
+   axios.patch('https://api.example.com/items/1', { name: 'Updated Name' })
+     .then(response => {
+       // Update UI after partial modification
+     })
+     .catch(error => {
+       console.error('Error patching item:', error);
+     });
+   ```
+
+#### 6.9 Structuring API Calls in React: Best Practices for Maintainable Code
+
+When integrating a backend with React using HTTP clients, following a few key practices can improve code structure and maintainability.
+
+###### 6.9.1 Extracting Reusable API Clients
+
+Create a dedicated service module to manage HTTP configurations and requests. Typically, a `services` folder is created, where a `api-client.ts` file stores the reusable API client configuration. Using `axios.create()`, you can define a base URL and any necessary headers (such as API keys) that apply to all requests. This API client can be imported into any component that needs to make HTTP requests, allowing for consistency and reusability across the app.
+
+```typescript
+import axios from 'axios';
+
+const apiClient = axios.create({
+  baseURL: 'https://api.example.com',
+  headers: {
+    Authorization: 'Bearer API_KEY'
+  }
+});
+
+export default apiClient;
+```
+
+###### 6.9.2 Separation of Concerns
+
+Keep HTTP request logic separate from the components. Instead of cluttering React components with data-fetching logic, move these operations into dedicated services, which can be reused throughout the app. This promotes better modularity and cleaner code, as components remain focused on rendering.
+
+###### 6.9.3 Creating a Generic HTTP Service
+
+Create a generic class that can handle various HTTP operations (GET, POST, PATCH, DELETE) for any endpoint. This class can be extended for specific resources, making it easy to manage different API entities while reducing redundant code.
+
+```typescript
+import apiClient from './api-client';
+
+interface Entity {
+  id: number;
+}
+
+class HttpService {
+  endpoint: string;
+
+  constructor(endpoint: string) {
+    this.endpoint = endpoint;
+  }
+
+  getAll<T>() {
+    const controller = new AbortController();
+    const request = apiClient.get<T[]>(this.endpoint, { signal: controller.signal });
+    return { request, cancel: () => controller.abort() };
+  }
+
+  delete(id: number) {
+    return apiClient.delete(this.endpoint + '/' + id);
+  }
+
+  create<T>(entity: T) {
+    return apiClient.post(this.endpoint, entity);
+  }
+
+  update<T extends Entity>(entity: T) {
+    return apiClient.patch(this.endpoint + '/' + entity.id, entity);
+  }
+}
+
+const create = (endpoint: string) => new HttpService(endpoint);
+export default create;
+```
+
+###### 6.9.4 Custom Hooks for Reusability
+
+Encapsulate the logic for synchronizing with the server inside custom hooks, which can be reused throughout the app. A custom hook should start with the `use` prefix and can be stored in a `hooks` folder.
+
+```typescript
+import { useEffect, useState } from 'react';
+import create from './services/http-service';
+
+function useData(endpoint: string) {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const { request, cancel } = create(endpoint).getAll();
+    request.then(response => setData(response.data)).finally(() => setLoading(false));
+    return cancel; // cleanup function to abort request
+  }, [endpoint]);
+
+  return { data, loading };
+}
+```
