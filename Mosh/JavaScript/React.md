@@ -1079,7 +1079,7 @@ function MyForm() {
 }
 ```
 
-## 6. Connecting to the Backend
+## 6. Calling Backend Services
 
 #### 6.1 Understanding the Effect Hook
 
@@ -1195,7 +1195,7 @@ const [loading, setLoading] = useState(false);
 
 useEffect(() => {
   const controller = new AbortController();
-  
+
   setLoading(true);
   axios.get<User[]>('http://...', {signal: controller.signal})
     .then((response) => {
@@ -1357,3 +1357,296 @@ function useData(endpoint: string) {
   return { data, loading };
 }
 ```
+
+## 7. React Query
+
+#### 7.1 Starting With React Query
+
+React Query is a powerful library for handling data fetching and caching in React applications, offering a simpler alternative to Redux, which often requires more boilerplate and has a steeper learning curve. Caching in React Query allows faster access to data by storing it for future use.
+
+To install React Query, run the command:
+
+```bash
+npm i @tanstack/react-query
+```
+
+To integrate React Query into your application, start by importing `QueryClient` and `QueryClientProvider` from `@tanstack/react-query` in the projects' `main.tsx` file. The `QueryClient` is used to manage and cache remote data. Create an instance of `QueryClient` and wrap the entire `App` with `QueryClientProvider` to provide the query client to your component tree.
+
+```typescript
+import "bootstrap/dist/css/bootstrap.css";
+import React from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import "./index.css";
+
+const queryClient = new QueryClient();
+
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
+  </React.StrictMode>
+);
+```
+
+#### 7.2 Fetching Data
+
+To fetch data using React Query, you can utilize the `useQuery` hook, imported from `@tanstack/react-query`. This hook is called with an object containing two key properties: `queryKey` and `queryFn`.
+
+- **`queryKey`**: A unique identifier for the query, used for caching and tracking data. It is often an array where the first element is a string describing the type of data, followed by optional parameters to refine the caching behavior. This can be defined in several ways, depending on the structure and specifics of the data returned by the query function.
+- **`queryFn`**: The function that fetches data from the backend, typically returning a promise that either resolves with the fetched data or throws an error. You can use `axios.get()` to make the HTTP request, ensuring the returned type matches the expected data structure by passing a generic parameter.
+
+```typescript
+const fetchData = function() {
+  axios
+    .get<Data[]>('http://...')
+    .then(response => response.data);
+};
+
+const { data } = useQuery({
+  queryKey: ['data'],
+  queryFn: fetchData
+});
+```
+
+React Query offers several advantages, including automatic retries when server requests fail, automatic refetching to keep data fresh, and caching to improve performance by minimizing redundant API calls.
+
+#### 7.3 Handling Errors
+
+The `useQuery` hook not only fetches data but also provides an `error` property to handle any errors that occur during the data-fetching process. When using `useQuery`, you can specify two generic type parameters: the type of data being fetched and the type of error, which is commonly set to `Error`. This enables access to the error's properties, such as `message`, `cause`, `name`, and `stack`, allowing for precise error handling when an Axios request fails.
+
+```typescript
+const fetchData = function() {
+  return axios
+    .get<Data[]>('http://...')
+    .then(response => response.data);
+};
+
+const { data, error } = useQuery<Data, Error>({
+  queryKey: ['data'],
+  queryFn: fetchData
+});
+```
+
+#### 7.4 Displaying a Loading Indicator
+
+React Query's `useQuery` hook includes an `isLoading` property, which returns a Boolean value indicating whether the data-fetching process is still in progress. This property is especially useful for displaying loading indicators in your application, as it allows you to track when the fetch is ongoing or has completed.
+
+```typescript
+const fetchData = function() {
+  return axios
+    .get<Data[]>('http://...')
+    .then(response => response.data);
+}
+
+const { data, isLoading } = useQuery<Data, Error>({
+  queryKey: ['data'],
+  queryFn: fetchData
+});
+```
+
+#### 7.5 React Query DevTools
+
+React Query offers its own DevTools for monitoring and debugging queries. To install, run `npm i @tanstack/react-query-devtools`. In your `main.tsx`, import `ReactQueryDevtools` from `@tanstack/react-query-devtools` and add it to your component tree, typically after the `App` component/
+
+```typescript
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import App from "./App";
+
+const queryClient = new QueryClient();
+
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+  <QueryClientProvider client={queryClient}>
+    <App />
+    <ReactQueryDevtools />
+  </QueryClientProvider>
+);
+```
+
+Once the app is running, you’ll see a DevTools tab on the left side of the screen. Clicking it reveals query details, such as the query key, number of active observers, and last update time. You can refetch, invalidate, reset, or remove queries and inspect the associated data. The tool also provides a Query Explorer, showing properties like the cache duration, which by default is 5 minutes, making it easier to monitor the status and behavior of queries in real time.
+
+#### 7.6 Customizing React Query Defaults
+
+React Query provides default configurations suitable for most cases, but you can easily customize these settings either globally or locally for each query instance.
+
+###### 7.6.1 Global Configuration
+
+To apply global configurations, modify the `QueryClient` instance in your `main.tsx`. You can pass a configuration object to the `defaultOptions` property to override default query settings globally. Here’s an example:
+
+```typescript
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 2,  // Retry failed queries twice
+      cacheTime: 600000,  // Cache inactive queries for 10 minutes
+      staleTime: 10000,   // Data is fresh for 10 seconds
+      refetchOnWindowFocus: false,  // Disable refetch on window focus
+      refetchOnReconnect: true,  // Refetch on network reconnection
+      refetchOnMount: false,  // Disable refetch when component mounts
+    }
+  }
+});
+```
+
+| **Setting**              | **Default Value**      | **Description**                                                                                                   |
+| ------------------------ | ---------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| **retry**                | 3                      | Number of times a failed query is retried.                                                                        |
+| **cacheTime**            | 5 minutes (300,000 ms) | Time a query stays in the cache after it becomes inactive (no observers).                                         |
+| **staleTime**            | 0                      | Time before data is considered stale. Automatically refreshed when the window is refocused or network reconnects. |
+| **refetchOnWindowFocus** | true                   | Refetches the query when the window is refocused.                                                                 |
+| **refetchOnReconnect**   | true                   | Refetches when the network reconnects.                                                                            |
+| **refetchOnMount**       | true                   | Refetches when the component is mounted.                                                                          |
+
+###### 7.6.2 Local Configuration
+
+To configure individual queries, pass the desired options directly to the `useQuery` function inside a React component. This overrides the global settings for that specific query:
+
+```typescript
+const { data, error } = useQuery('myData', fetchData, {
+  staleTime: 30000,  // Data is fresh for 30 seconds
+  retry: 1,  // Retry only once on failure
+  refetchOnWindowFocus: false,  // Disable refetch on window focus for this query
+});
+```
+
+#### 7.7 Parametrizing Fetch Queries
+
+To parameterize fetching queries in React Query, you modify the `queryKey` property passed to the `useQuery` function. The `queryKey` can follow a hierarchical structure that reflects the relationship inside the fetched data, allowing the query to adapt to provided parameters. To pass these parameters to `axios`, you can provide them in the `params` property, passed as the second argument to the `axios.get()` method. If these parameters are tied to a state object, React Query will refetch the data whenever the state changes, creating a dependency on that state.
+
+```typescript
+const { data, error } = useQuery<Post[], Error>({
+  queryKey: ['posts', userId],  // userId parameter in queryKey
+  queryFn: () => 
+    axios.get('https://jsonplaceholder.typicode.com/posts', {
+      params: { userId }  // Pass query parameters
+    }).then(response => response.data)
+});
+```
+
+#### 7.8 Pagination
+
+To implement pagination with React Query, first declare a state variable `page` to track the current page using the `useState` hook, initialized to page 1. Additionally, create a variable `pageSize` to represent the number of objects to display per page. Both variables can be combined into a single query object encapsulating the current page and page size.
+
+You can pass this query object directly into the `queryKey` array of the `useQuery` function to ensure that the pagination is included in the query's unique identifier. To implement pagination logic in the `axios.get()` request, use query parameters like `_start` and `_limit` for determining the starting position and number of items per page. `_start` is calculated as `(query.page - 1) * query.pageSize`, and `_limit` is set to `query.pageSize`.
+
+By default, each time data is retrieved, the page reloads and scrolls back to the top. However, by setting the `keepPreviousData` property in the `useQuery` to `true`, the new data is seamlessly integrated into the page without resetting the scroll position.
+
+This setup can then be used to create pagination buttons, allowing users to navigate through the pages.
+
+```typescript
+const [page, setPage] = useState(1);
+const pageSize = 10;
+
+const query = {
+  page,
+  pageSize,
+};
+
+const { data, error } = useQuery<Post[], Error>({
+  queryKey: ['posts', query],  // Include pagination in the queryKey
+  queryFn: () => 
+    axios.get('https://jsonplaceholder.typicode.com/posts', {
+      params: {
+        _start: (query.page - 1) * query.pageSize,  // Starting position
+        _limit: query.pageSize                      // Number of items per page
+      }
+    }).then(response => response.data),
+  keepPreviousData: true  // Prevents jumping inside the page
+});
+
+// Example pagination buttons
+return (
+  <>
+    {data?.map(post => (
+      <div key={post.id}>{post.title}</div>
+    ))}
+    <button onClick={() => setPage(page - 1)} disabled={page === 1}>
+      Previous
+    </button>
+    <button onClick={() => setPage(page + 1)}>
+      Next
+    </button>
+  </>
+);
+```
+
+#### 7.9 Infinite Queries
+
+To implement infinite scrolling with React Query, start by declaring a `pageSize` variable to define the number of items to display per page. Instead of using `useQuery`, you will use `useInfiniteQuery` from `@tanstack/react-query`.
+
+In the `useInfiniteQuery` function, you need to configure the `getNextPageParam` property. This function takes two arguments: `lastPage` (an array of items in the last page fetched) and `allPages` (a two-dimensional array of all pages fetched so far). The function should return the next page number like this:
+
+```js
+return lastPage.length > 0 ? allPages.length + 1 : undefined;
+```
+
+The query function should accept an argument called `{ pageParam = 1 }`, which will be passed to the `_start` query parameter for pagination:
+
+```js
+_start: (pageParam - 1) * query.pageSize
+```
+
+To ensure that new data loads seamlessly into the page without resetting the scroll position, set the `keepPreviousData` property to `true`.
+
+The `useInfiniteQuery` hook returns an object that includes the `fetchNextPage` method, which can be triggered when the user scrolls or clicks a button to load more data, and the `isFetchingNextPage` property, which indicates whether more pages are being fetched.
+
+Lastly, when rendering the `data`, note that the result is not a flat array but rather a nested array of pages. You need to iterate over the pages and the items within each page:
+
+```js
+const pageSize = 10;
+
+const query = {
+  pageSize,
+};
+
+const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
+  queryKey: ['items', query],
+  queryFn: ({ pageParam = 1 }) =>
+    axios.get(`/api/items`, {
+      params: { _start: (pageParam - 1) * pageSize, _limit: pageSize },
+    }).then(response => response.data),
+  getNextPageParam: (lastPage, allPages) =>
+    lastPage.length > 0 ? allPages.length + 1 : undefined,
+  keepPreviousData: true
+});
+
+return (
+  <div>
+    {data.pages.map((page, index) => (  // Iterates over each page
+      <div key={index}>
+        {page.map(item => (  // Iterates over all items on each page
+          <div key={item.id}>{item.name}</div>
+        ))}
+      </div>
+    ))}
+    <button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+      {isFetchingNextPage ? 'Loading...' : 'Load More'}
+    </button>
+  </div>
+);
+```
+
+This setup will allow for infinite scrolling or pagination with React Query, fetching more items as needed and displaying them seamlessly.
+
+#### 7.1 Caching
+
+#### 7.2 Automatic retry
+
+#### 7.3 Automatic refresh
+
+#### 7.4 Paginated Queries
+
+## 8. Global State Management
+
+#### 8.1 Reducers
+
+#### 8.2 Context
+
+#### 8.3 Providers
+
+#### 8.4 Zustand
+
+## 9. Routing
