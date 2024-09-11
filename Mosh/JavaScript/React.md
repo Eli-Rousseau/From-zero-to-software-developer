@@ -107,7 +107,7 @@ Unlike frameworks such as Angular and Vue, which provide a comprehensive set of 
 
 While React handles UI components, it doesn't include features like routing, HTTP requests, state management, validation, animations, or internationalization. However, React's flexibility is its strength—developers can choose whichever tools or libraries they prefer for these tasks, as React is unopinionated and allows for customized development solutions.
 
-#### 1.6 react Developer Tool
+#### 1.6 React Developer Tool
 
 React Developer Tools is a useful browser extension for inspecting and analyzing React applications. It adds the Component tool to the browser's development interface. The Components tool displays the hierarchy of React components on the webpage, representing the component tree used by React to create the actual DOM. By selecting a component, you can inspect its props, how it was rendered, and view the source file. Additionally, you can inspect both the rendered HTML elements and the React components themselves, making it easier to debug and analyze your app's structure and behavior.
 
@@ -121,6 +121,21 @@ function App() {
     </div>
   );
 }
+```
+
+#### 1.7 Building and Deploying a React App with Vercel
+
+To build a React application locally, use the command `npm run build`, which compiles your project and outputs the result to the `dist` folder. Any compilation errors must be resolved before the build can succeed. For deployment, Vercel provides an easy-to-use service for hosting static sites. First, install the Vercel CLI with `npm i -g vercel`. After setting up, you can deploy your site by running the `vercel` command in your terminal. Once deployed, link your Vercel account to your GitHub repository, allowing Vercel to automatically pull the latest code, build, and deploy updates from your repository.
+
+```bash
+# Build React app locally
+npm run build
+
+# Install Vercel CLI globally
+npm i -g vercel
+
+# Deploy the React app to Vercel
+vercel
 ```
 
 ## 2. Building Components
@@ -811,7 +826,7 @@ function MyForm() {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();  // Prevents page reload
     if (inputRef.current) {  // Check if the input field is noy null
-      console.log('Form submitted with value:', inputRef.current.value);  // Access the input field value
+      console.log('Input field submitted with value:', inputRef.current.value);  // Access the input field value
     }
   };
 
@@ -832,7 +847,7 @@ function MyForm() {
 export default MyForm;
 ```
 
-#### 5.3 Retriveing Input Change Events
+#### 5.3 Retrieving Input Change Events
 
 In React, every input field triggers a change event (`onChange`) each time the user types a keystroke. This event can be used to update state variables, ensuring the UI remains in sync with the user's input. To handle this, the `onChange` attribute of the input element should pass the `event` parameter, allowing access to `event.target.value`. This value can then be used to update the corresponding state. For optimal synchronization between the input field and the component state, it's important to set the input's `value` attribute to the state variable.
 
@@ -865,7 +880,7 @@ Keep in mind that handling frequent `onChange` events with each keystroke might 
 
 #### 5.4 Form Handling with React Hook Form
 
-Managing complex forms with multiple input fields can quickly become tedious in React. React Hook Form simplifies this process by reducing the amount of code needed to handle form inputs. To use this library one need to install it using the following command:
+Managing complex forms with multiple input fields can quickly become tedious in React. React Hook Form simplifies this process by reducing the amount of code needed to handle form inputs. To use this library, you need to install it using the following command:
 
 ```bash
 npm i react-hook-form
@@ -882,20 +897,39 @@ Below is a more detailed look at the two key functions, `register` and `handleSu
    const { register, handleSubmit } = useForm();
    ```
 
-2. **`register` Method**  
+2. **Define a `DataForm` Interface**  
+   To ensure TypeScript understands the structure of your form data, it’s a good practice to define an interface that describes the shape of the form values. This allows React Hook Form to infer the correct types for the form inputs and the data returned by `handleSubmit`.
+   
+   Here's an example of how to define a `DataForm` interface and pass it as a generic type to the `useForm` hook:
+   
+   ```tsx
+   interface DataForm {
+     name: string;
+     email: string;
+     age: number;
+   }
+   
+   const { register, handleSubmit } = useForm<DataForm>();
+   ```
+   
+   By specifying `<DataForm>`, TypeScript will now infer that the form has a `name`, `email`, and `age` field, making the code more type-safe and easier to manage.
+
+3. **`register` Method**  
    The `register` function is used to "register" form inputs with React Hook Form. It attaches important properties such as `onChange` and `value` to the form elements without you having to manually specify them. To apply it to an input field, use the spread operator `{...register('fieldName')}`.
    
    ```tsx
    <input {...register('name')} />
+   <input {...register('email')} />
+   <input type="number" {...register('age')} />
    ```
    
    This automatically binds the input field to the form's state, handling both value and change events under the hood. You don't need to write explicit `onChange` handlers or manage the state manually.
 
-3. **`handleSubmit` Method**  
-   The `handleSubmit` method wraps around your form's submit event, processing the data before it gets passed to the form submission handler. It ensures that the data passed to the submit handler is properly structured.
+4. **`handleSubmit` Method**  
+   The `handleSubmit` method wraps around your form's submit event, processing the data before it gets passed to the form submission handler. It ensures that the data passed to the submit handler is properly structured according to the `DataForm` interface.
    
    ```tsx
-   const onSubmit = (data: FieldValues) => {
+   const onSubmit = (data: DataForm) => {
      console.log(data); // Process form data
    };
    
@@ -904,7 +938,7 @@ Below is a more detailed look at the two key functions, `register` and `handleSu
    </form>
    ```
    
-   The `onSubmit` function receives the form data as its parameter. React Hook Form handles the validation and state management for you, making form submissions simpler and more reliable.
+   The `onSubmit` function now receives `data` of type `DataForm`. React Hook Form handles the validation and state management for you, making form submissions simpler and more reliable.
 
 #### 5.5 Validation with React Hook Form
 
@@ -940,7 +974,7 @@ Below is an example of how data validation would be managed with React Hook Form
 
 In React Hook Form, validation rules can sometimes clutter the JSX code. To organize validation rules more efficiently, you can use schema-based validation, where all rules are defined in a single place, called a schema. This can be achieved using libraries like Zod.
 
-Below is an exmaple on how the validation rules can be organized in a schema using Zod and integrating it with React Hook Form:
+Below is an example on how the validation rules can be organized in a schema using Zod and integrating it with React Hook Form:
 
 1. **Install Zod**  
    Start by installing Zod with the following command:
@@ -971,7 +1005,7 @@ Below is an exmaple on how the validation rules can be organized in a schema usi
 4. **Integrate with React Hook Form**  
    Import the `zodResolver` and pass the schema to the `useForm` hook through the `resolver` property.
    
-   ```tsx
+   ```jsx
    import { useForm } from 'react-hook-form';
    import { zodResolver } from '@hookform/resolvers/zod';
    
@@ -980,7 +1014,18 @@ Below is an exmaple on how the validation rules can be organized in a schema usi
    });
    ```
 
-5. **Handling Errors**  
+5. **Infer the DataForm structure**  
+   Use Zod's `infer` utility to automatically derive the type for your form data. This enables React Hook Form to accurately infer the types for the form fields and the data returned by `handleSubmit`.
+   
+   ```tsx
+   type FormData = z.infer<typeof schema>;
+   
+   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+     resolver: zodResolver(schema)
+   });
+   ```
+
+6. **Handling Errors**  
    Zod automatically generates error messages, but you can customize them through the schema. Access the error messages from `formState.errors`.
    
    ```tsx
@@ -995,7 +1040,7 @@ Below is an exmaple on how the validation rules can be organized in a schema usi
    </form>
    ```
 
-6. **Custom Error Messages**  
+7. **Custom Error Messages**  
    You can customize messages for specific validation failures, or even provide an error message for invalid types:
    
    ```tsx
@@ -1043,26 +1088,12 @@ React component functions should be pure, meaning they return the same JSX for t
 To handle side effects in React, the `useEffect` hook is used. It allows you to run specific logic after the component renders. This could include data fetching, DOM manipulation, or updating external resources. To use `useEffect`, import it from React, and place the side-effect logic inside the hook, ensuring it runs after the initial render. Like the state hook, `useEffect` should be called at the top level of the component.
 
 ```tsx
-import { useEffect, useState } from 'react';
-
-function MyComponent() {
-  const [data, setData] = useState(null);
-
-  useEffect(() => {
-    // Example of a side effect: fetching data from an API
-    fetch('https://api.example.com/data')
-      .then(response => response.json())
-      .then(result => setData(result))
-      .catch(error => console.error('Error fetching data:', error));
-  }, []); // Empty dependency array ensures this runs only once after the initial render
-
-  return (
-    <div>
-      <h1>Data from API:</h1>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
-    </div>
-  );
-}
+useEffect(() => {
+  fetch('https://api.example.com/data')
+    .then(res => res.json())
+    .then(setData)
+    .catch(console.error);
+});
 ```
 
 #### 6.2 Effect Hook Dependencies
@@ -1070,54 +1101,17 @@ function MyComponent() {
 By default, the `useEffect` hook runs after every component render, but sometimes you need more control over when it executes. To achieve this, the `useEffect` hook accepts a second optional argument—a dependency array. This array holds variables (such as props or state) that determine when the effect should run. If any of these values change, React re-executes the effect. When the dependency array is empty (`[]`), the effect runs only once after the initial render. If the second argument is omitted, the effect will run after every render, which may cause performance issues or excessive API calls.
 
 ```tsx
-import { useEffect, useState } from 'react';
-
-function DataFetcher({ userId }) {
-  const [userData, setUserData] = useState(null);
-
-  useEffect(() => {
-    // This effect will run only when userId changes
-    fetch(`https://api.example.com/users/${userId}`)
-      .then(response => response.json())
-      .then(data => setUserData(data))
-      .catch(error => console.error('Error fetching user data:', error));
-  }, [userId]); // The effect depends on userId
-
-  return (
-    <div>
-      <h2>User Data:</h2>
-      <pre>{JSON.stringify(userData, null, 2)}</pre>
-    </div>
-  );
-}
+useEffect(() => {
+  fetch('https://api.example.com/data')
+    .then(res => res.json())
+    .then(setData)
+    .catch(console.error);
+}, []);
 ```
 
 #### 6.3 Effect Clean Up
 
-The function passed to the `useEffect` hook can optionally return a cleanup function. This cleanup function is useful for undoing side effects, such as unsubscribing from services, canceling API requests, or disconnecting from WebSockets. The cleanup function is called when the component unmounts or before the effect re-runs due to changes in dependencies, ensuring that no side effects persist.
-
-```tsx
-import { useEffect, useState } from 'react';
-
-function WebSocketComponent() {
-  const [message, setMessage] = useState('');
-
-  useEffect(() => {
-    const socket = new WebSocket('wss://example.com/socket');
-
-    socket.onmessage = (event) => {
-      setMessage(event.data);
-    };
-
-    // Cleanup function: close WebSocket connection
-    return () => {
-      socket.close();
-    };
-  }, []); // Empty array ensures the effect runs only once on mount
-
-  return <div>Latest Message: {message}</div>;
-}
-```
+The function passed to the `useEffect` hook can optionally return a cleanup function. This cleanup function is useful for undoing side effects, such as unsubscribing from services, canceling API requests, or disconnecting from WebSockets. The cleanup function is called when the component unmounts or before the effect re-runs due to changes in dependencies, ensuring that no side effects persist. See an example of a clean up function in `6.6 Cancelling HTTP Requests.`
 
 #### 6.4 Fetching Data With HTTP Requests
 
@@ -1130,127 +1124,97 @@ npm i axios
 In your component, import Axios. To make a server request, such as a `GET` request, place the call inside the `useEffect` hook to ensure it runs after the component renders. Axios’s `get()` method returns a promise, representing the eventual success or failure of the request. You can chain a `.then()` method to handle the response.
 
 ```tsx
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+const [users, setUsers] = useState<User[]>([]);
 
-interface DataResponse {
-  id: number;
-  title: string;
-}
-
-function DataComponent() {
-  const [data, setData] = useState<DataResponse[]>([]);
-
-  useEffect(() => {
-    axios
-      .get<DataResponse[]>('https://api.example.com/data')
-      .then((response) => {
-        setData(response.data);
-      });
-  }, []); // Empty dependency array to run only once
-
-  return (
-    <ul>
-      {data.map(item => (
-        <li key={item.id}>{item.title}</li>
-      ))}
-    </ul>
-  );
-}
+useEffect(() => {
+  axios.get<User[]>('http://...')
+    .then((response) => setUsers(response.data));
+  }, []);
 ```
 
 The `axios.get()` method sends an HTTP request from the client (browser) to a server, which responds with the requested resources like webpages, images, or videos, using the HTTP protocol for communication.
 
-#### 6.5 Handling Errors in HTTP Requests
+#### 6.5 Dynamic Request Configuration
+
+When using Axios as your API client, you can pass an `AxiosRequestConfig` object as an optional parameter to dynamically configure API requests. This object, which is of type `AxiosRequestConfig`, allows you to specify configurations such as query parameters (`params`), headers (`headers`), or any other request settings based on the API provider's requirements. This approach avoids hardcoding these settings in the function itself, enabling more flexible API interactions.
+
+The `requestConfig` object should be of type `AxiosRequestConfig`, allowing dynamic customization of the request.
+
+```typescript
+import { AxiosRequestConfig } from 'axios';
+
+// Example API call using AxiosRequestConfig
+apiClient.get<GetResponse<T>>(endpoint, { 
+  signal: controller.signal, 
+  ...requestConfig // Type: AxiosRequestConfig
+});
+```
+
+This flexibility helps in fetching specific data or applying custom request settings like filtering or authentication headers.
+
+#### 6.6 Handling Errors in HTTP Requests
 
 When making an HTTP request, various issues can occur, such as losing connection to the server. To handle these potential errors, JavaScript promises offer a `catch` method, which can be chained to the `then()` method. The `catch` method accepts a callback function that executes when an error occurs during data fetching. The error object passed to this function contains a `message` property, which can be used to display meaningful error messages.
 
 ```javascript
-axios.get('https://api.example.com/data')
-  .then(response => {
-    // Handle successful response
-    console.log(response.data);
-  })
-  .catch(error => {
-    // Handle any errors that occur during the request
-    console.error('Error fetching data:', error.message);
-  });
+const [users, setUsers] = useState<User[]>([]);
+const [error, setError] = useState('');
+
+useEffect(() => {
+  axios.get<User[]>('http://...')
+    .then((response) => setUsers(response.data))
+    .catch((error) => setError(error.message));
+  }, []);
 ```
 
-#### 6.6 Cancelling HTTP Requests
+#### 6.7 Cancelling HTTP Requests
 
 When fetching data in an `effect` hook, it is a good practice to provide a cleanup function to cancel the request in case the component unmounts. To do this, declare a `controller` constant inside the `effect` hook and assign it a new instance of the built-in `AbortController` class, which allows aborting asynchronous operations. Pass the controller's signal to the `axios.get()` method as an optional argument. Finally, return `controller.abort()` in the effect hook for cleanup. Additionally, in the `axios.catch()` method, check if the error is an instance of `CanceledError` from the axios module to handle the request cancellation properly.
 
 ```javascript
-import axios, { CanceledError } from 'axios';
-import { useEffect } from 'react';
-
 useEffect(() => {
   const controller = new AbortController();
 
-  axios.get('https://api.example.com/data', { signal: controller.signal })
-    .then(response => {
-      // Handle successful response
-      console.log(response.data);
-    })
-    .catch(error => {
+  axios.get<User[]>('http://...', {signal: controller.signal})
+    .then((response) => setUsers(response.data))
+    .catch((error) => {
       if (error instanceof CanceledError) return;
-      console.log(error.message);
+      setError(error.message);
     });
 
-  return () => {
-    // Cleanup: cancel the request if the component unmounts
-    controller.abort();
-  };
-}, []);
+    return () => controller.abort();
+  }, []);
 ```
 
-#### 6.7 Displaying a Loading Indicator
+#### 6.8 Displaying a Loading Indicator
 
 To show a loading indicator while fetching data, you can use a state hook to manage the loading state. Set the loading state to `true` before calling `axios.get()`, and update it to `false` inside the callback functions of both `axios.then()` and `axios.catch()`, ensuring the loading state is updated after the request completes. The loading state can then be used to conditionally display a loader in the component.
 
 ```javascript
-import axios from 'axios';
-import { useState, useEffect } from 'react';
+const [loading, setLoading] = useState(false);
 
-const MyComponent = () => {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+useEffect(() => {
+  const controller = new AbortController();
+  
+  setLoading(true);
+  axios.get<User[]>('http://...', {signal: controller.signal})
+    .then((response) => {
+      setUsers(response.data);
+      setLoading(false);
+    })
+    .catch((error) => {
+      if (error instanceof CanceledError) return;
+      setError(error.message);
+      setLoading(false);
+    });
 
-  useEffect(() => {
-    setLoading(true); // Start loading before fetching data
-
-    axios.get('https://api.example.com/data')
-      .then(response => {
-        setData(response.data);
-      })
-      .catch(err => {
-        setError(err.message);
-      })
-      .finally(() => {
-        setLoading(false); // Stop loading after request finishes
-      });
+    return () => controller.abort();
   }, []);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-
-  return (
-    <div>
-      {data ? (
-        <div>Data: {JSON.stringify(data)}</div>
-      ) : (
-        <div>No data available</div>
-      )}
-    </div>
-  );
-};
 ```
 
-#### 6.8 Handling Data Synchronization in React
+#### 6.9 Handling Data Synchronization in React
 
-###### 6.8.1 Synchronization Approaches
+###### 6.9.1 Synchronization Approaches
 
 When manipulating server-side data (e.g., deleting, creating, or modifying) and synchronizing it with user actions, you can follow two strategies: optimistic or pessimistic.
 
@@ -1258,7 +1222,7 @@ When manipulating server-side data (e.g., deleting, creating, or modifying) and 
 
 - **Pessimistic Approach**: The UI waits for confirmation from the server before updating. This assumes the server call may fail, delaying the UI update until success is confirmed. While more cautious, this can slow down the user experience.
 
-###### 6.8.2 Axios Synchronization Operations
+###### 6.9.2 Axios Synchronization Operations
 
 1. **Deleting Data**: Use `axios.delete()` with the endpoint URL to delete data. Handle potential errors with `catch()`.
    
@@ -1306,11 +1270,11 @@ When manipulating server-side data (e.g., deleting, creating, or modifying) and 
      });
    ```
 
-#### 6.9 Structuring API Calls in React: Best Practices for Maintainable Code
+#### 6.10 Structuring API Calls in React: Best Practices for Maintainable Code
 
 When integrating a backend with React using HTTP clients, following a few key practices can improve code structure and maintainability.
 
-###### 6.9.1 Extracting Reusable API Clients
+###### 6.10.1 Extracting Reusable API Clients
 
 Create a dedicated service module to manage HTTP configurations and requests. Typically, a `services` folder is created, where a `api-client.ts` file stores the reusable API client configuration. Using `axios.create()`, you can define a base URL and any necessary headers (such as API keys) that apply to all requests. This API client can be imported into any component that needs to make HTTP requests, allowing for consistency and reusability across the app.
 
@@ -1327,11 +1291,11 @@ const apiClient = axios.create({
 export default apiClient;
 ```
 
-###### 6.9.2 Separation of Concerns
+###### 6.10.2 Separation of Concerns
 
 Keep HTTP request logic separate from the components. Instead of cluttering React components with data-fetching logic, move these operations into dedicated services, which can be reused throughout the app. This promotes better modularity and cleaner code, as components remain focused on rendering.
 
-###### 6.9.3 Creating a Generic HTTP Service
+###### 6.10.3 Creating a Generic HTTP Service
 
 Create a generic class that can handle various HTTP operations (GET, POST, PATCH, DELETE) for any endpoint. This class can be extended for specific resources, making it easy to manage different API entities while reducing redundant code.
 
@@ -1372,7 +1336,7 @@ const create = (endpoint: string) => new HttpService(endpoint);
 export default create;
 ```
 
-###### 6.9.4 Custom Hooks for Reusability
+###### 6.10.4 Custom Hooks for Reusability
 
 Encapsulate the logic for synchronizing with the server inside custom hooks, which can be reused throughout the app. A custom hook should start with the `use` prefix and can be stored in a `hooks` folder.
 
