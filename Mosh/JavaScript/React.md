@@ -1081,114 +1081,193 @@ function MyForm() {
 
 ## 6. Calling Backend Services
 
-#### 6.1 Understanding the Effect Hook
+#### 6.1 Effect Hook
 
-React component functions should be pure, meaning they return the same JSX for the same props and avoid changes during rendering. However, some tasks, like accessing local storage, making API calls, or manually modifying DOM elements, are considered side effects since they impact the component beyond rendering. Side effects make a component impure.
+1. **Basic Purpose of `useEffect`**  
+   The `useEffect` hook is used to perform side effects after a React component renders. React components are pure, meaning they should only focus on rendering UI, while side effects involve tasks like updating the DOM or fetching data. In this example, the hook updates the document title after each render:
+   
+   ```tsx
+   useEffect(() => {
+     document.title = "Page Loaded";
+   });
+   ```
 
-To handle side effects in React, the `useEffect` hook is used. It allows you to run specific logic after the component renders. This could include data fetching, DOM manipulation, or updating external resources. To use `useEffect`, import it from React, and place the side-effect logic inside the hook, ensuring it runs after the initial render. Like the state hook, `useEffect` should be called at the top level of the component.
+2. **Running `useEffect` on Every Render**  
+   By default, `useEffect` runs after every component render. This behavior is useful when you want the side effect to occur on each render, regardless of changes in any variables. In the following example, the hook logs a message after each render:
+   
+   ```tsx
+   useEffect(() => {
+     console.log("Component rendered");
+   });
+   ```
 
-```tsx
-useEffect(() => {
-  fetch('https://api.example.com/data')
-    .then(res => res.json())
-    .then(setData)
-    .catch(console.error);
-});
-```
+3. **Controlling Execution with the Dependency Array**  
+   You can control when `useEffect` runs by passing a dependency array as the second argument. This array contains variables that the hook monitors, ensuring that the effect only runs when those values change. If the array is empty, the effect will run only once after the initial render, as seen in this example:
+   
+   ```tsx
+   useEffect(() => {
+     console.log("Component mounted");
+   }, []);
+   ```
 
-#### 6.2 Effect Hook Dependencies
+4. **Dependency-Based Re-Runs**  
+   The `useEffect` hook will re-run only when values in the dependency array change. This allows you to control when an effect is triggered, ensuring it only executes when necessary. In the example below, the effect logs a message only when the `count` state changes:
+   
+   ```tsx
+   useEffect(() => {
+     console.log(`Count updated: ${count}`);
+   }, [count]);
+   ```
 
-By default, the `useEffect` hook runs after every component render, but sometimes you need more control over when it executes. To achieve this, the `useEffect` hook accepts a second optional argument—a dependency array. This array holds variables (such as props or state) that determine when the effect should run. If any of these values change, React re-executes the effect. When the dependency array is empty (`[]`), the effect runs only once after the initial render. If the second argument is omitted, the effect will run after every render, which may cause performance issues or excessive API calls.
+5. **Cleanup Function**  
+   The function passed to `useEffect` can return a cleanup function to undo or cancel the side effect when the component unmounts or when dependencies change. Cleanup functions help prevent memory leaks and ensure that the side effects do not persist unnecessarily. In this example, an interval is cleared when the component unmounts:
+   
+   ```tsx
+   useEffect(() => {
+     const timer = setInterval(() => {
+       console.log("Interval running");
+     }, 1000);
+   
+     return () => clearInterval(timer);
+   }, []);
+   ```
 
-```tsx
-useEffect(() => {
-  fetch('https://api.example.com/data')
-    .then(res => res.json())
-    .then(setData)
-    .catch(console.error);
-}, []);
-```
+#### 6.2 Fetch and Mutate Data in a Backend Service With Axios
 
-#### 6.3 Effect Clean Up
-
-The function passed to the `useEffect` hook can optionally return a cleanup function. This cleanup function is useful for undoing side effects, such as unsubscribing from services, canceling API requests, or disconnecting from WebSockets. The cleanup function is called when the component unmounts or before the effect re-runs due to changes in dependencies, ensuring that no side effects persist. See an example of a clean up function in `6.6 Cancelling HTTP Requests.`
-
-#### 6.4 Fetching Data With HTTP Requests
-
-To send requests to a server, you can use a popular library called Axios. Axios simplifies HTTP requests and supports features like automatic JSON parsing and handling responses. First, install Axios with:
+To send requests to a back end service, you can use a popular library called Axios. Start installing Axios with the command:
 
 ```bash
 npm i axios
 ```
 
-In your component, import Axios. To make a server request, such as a `GET` request, place the call inside the `useEffect` hook to ensure it runs after the component renders. Axios’s `get()` method returns a promise, representing the eventual success or failure of the request. You can chain a `.then()` method to handle the response.
+###### 6.2.1 Fetching Data with Axios
+
+To fetch data from a backend service, the `axios.get()` method is used to send `GET` requests. The query method in axios return a promise, allowing you to chain `.then()` for successful responses and `.catch()` for error handling.
 
 ```tsx
-const [users, setUsers] = useState<User[]>([]);
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 
-useEffect(() => {
-  axios.get<User[]>('http://...')
-    .then((response) => setUsers(response.data));
-  }, []);
-```
-
-The `axios.get()` method sends an HTTP request from the client (browser) to a server, which responds with the requested resources like webpages, images, or videos, using the HTTP protocol for communication.
-
-#### 6.5 Dynamic Request Configuration
-
-When using Axios as your API client, you can pass an `AxiosRequestConfig` object as an optional parameter to dynamically configure API requests. This object, which is of type `AxiosRequestConfig`, allows you to specify configurations such as query parameters (`params`), headers (`headers`), or any other request settings based on the API provider's requirements. This approach avoids hardcoding these settings in the function itself, enabling more flexible API interactions.
-
-The `requestConfig` object should be of type `AxiosRequestConfig`, allowing dynamic customization of the request.
-
-```typescript
-import { AxiosRequestConfig } from 'axios';
-
-// Example API call using AxiosRequestConfig
-apiClient.get<GetResponse<T>>(endpoint, { 
-  signal: controller.signal, 
-  ...requestConfig // Type: AxiosRequestConfig
-});
-```
-
-This flexibility helps in fetching specific data or applying custom request settings like filtering or authentication headers.
-
-#### 6.6 Handling Errors in HTTP Requests
-
-When making an HTTP request, various issues can occur, such as losing connection to the server. To handle these potential errors, JavaScript promises offer a `catch` method, which can be chained to the `then()` method. The `catch` method accepts a callback function that executes when an error occurs during data fetching. The error object passed to this function contains a `message` property, which can be used to display meaningful error messages.
-
-```javascript
-const [users, setUsers] = useState<User[]>([]);
+const [data, setData] = useState([]);
 const [error, setError] = useState('');
 
 useEffect(() => {
-  axios.get<User[]>('http://...')
-    .then((response) => setUsers(response.data))
-    .catch((error) => setError(error.message));
-  }, []);
+  axios.get('https://api.example.com/items')
+    .then((response) => {
+      setData(response.data);
+    })
+    .catch((error) => {
+      setError(error.message);
+    });
+}, []);
 ```
 
-#### 6.7 Cancelling HTTP Requests
+###### 6.2.2 Dynamic Request Configuration
 
-When fetching data in an `effect` hook, it is a good practice to provide a cleanup function to cancel the request in case the component unmounts. To do this, declare a `controller` constant inside the `effect` hook and assign it a new instance of the built-in `AbortController` class, which allows aborting asynchronous operations. Pass the controller's signal to the `axios.get()` method as an optional argument. Finally, return `controller.abort()` in the effect hook for cleanup. Additionally, in the `axios.catch()` method, check if the error is an instance of `CanceledError` from the axios module to handle the request cancellation properly.
+Axios allows for dynamic configuration of requests by passing an `AxiosRequestConfig` object. This helps set custom headers, query parameters, or other settings without hardcoding them into the request.
+
+```typescript
+import axios, { AxiosRequestConfig } from 'axios';
+
+const config: AxiosRequestConfig = {
+  headers: {
+    'Authorization': 'Bearer token',
+  },
+  params: {
+    userId: 123,
+  },
+};
+
+axios.get('https://api.example.com/items', config)
+  .then(response => {
+    console.log(response.data);
+  })
+  .catch(error => {
+    console.error(error.message);
+  });
+```
+
+###### 6.2.3 Cleaning Up Requests with AbortController
+
+When making requests within React components, it’s important to clean up requests if the component unmounts before the request completes. This can be done using `AbortController` and passing its signal to Axios.
 
 ```javascript
 useEffect(() => {
   const controller = new AbortController();
 
-  axios.get<User[]>('http://...', {signal: controller.signal})
-    .then((response) => setUsers(response.data))
-    .catch((error) => {
-      if (error instanceof CanceledError) return;
-      setError(error.message);
+  axios.get('https://api.example.com/items', { signal: controller.signal })
+    .then(response => {
+      setData(response.data);
+    })
+    .catch(error => {
+      if (axios.isCancel(error)) {
+        console.log('Request canceled');
+      } else {
+        setError(error.message);
+      }
     });
 
-    return () => controller.abort();
-  }, []);
+  return () => controller.abort(); // Clean up by aborting the request
+}, []);
 ```
 
-#### 6.8 Displaying a Loading Indicator
+###### 6.2.4 Mutating Data: Create, Update, and Delete
 
-To show a loading indicator while fetching data, you can use a state hook to manage the loading state. Set the loading state to `true` before calling `axios.get()`, and update it to `false` inside the callback functions of both `axios.then()` and `axios.catch()`, ensuring the loading state is updated after the request completes. The loading state can then be used to conditionally display a loader in the component.
+**Creating Data with `POST`**
+
+To create new data on the server, use `axios.post()` with the URL and the data object.
+
+```javascript
+axios.post('https://api.example.com/items', { name: 'New Item' })
+  .then(response => {
+    console.log('Item created:', response.data);
+  })
+  .catch(error => {
+    console.error('Error creating item:', error.message);
+  });
+```
+
+**Updating Data with `PUT` or `PATCH`**
+
+To replace an entire object, use `PUT`. To update specific fields, use `PATCH`.
+
+```javascript
+// Replace entire object
+axios.put('https://api.example.com/items/1', { name: 'Updated Item' })
+  .then(response => {
+    console.log('Item updated:', response.data);
+  })
+  .catch(error => {
+    console.error('Error updating item:', error.message);
+  });
+
+// Modify specific fields
+axios.patch('https://api.example.com/items/1', { name: 'Updated Name' })
+  .then(response => {
+    console.log('Item patched:', response.data);
+  })
+  .catch(error => {
+    console.error('Error patching item:', error.message);
+  });
+```
+
+**Deleting Data with `DELETE`**
+
+To delete data from the server, use `axios.delete()`.
+
+```javascript
+axios.delete('https://api.example.com/items/1')
+  .then(() => {
+    console.log('Item deleted');
+  })
+  .catch(error => {
+    console.error('Error deleting item:', error.message);
+  });
+```
+
+###### 6.2.5 Displaying Loading Indicators
+
+While waiting for data to load, it’s common to show a loading indicator. This can be achieved by maintaining a loading state, which toggles when the request starts and ends.
 
 ```javascript
 const [loading, setLoading] = useState(false);
@@ -1197,78 +1276,305 @@ useEffect(() => {
   const controller = new AbortController();
 
   setLoading(true);
-  axios.get<User[]>('http://...', {signal: controller.signal})
-    .then((response) => {
-      setUsers(response.data);
+  axios.get('https://api.example.com/items', { signal: controller.signal })
+    .then(response => {
+      setData(response.data);
       setLoading(false);
     })
-    .catch((error) => {
-      if (error instanceof CanceledError) return;
-      setError(error.message);
+    .catch(error => {
+      if (!axios.isCancel(error)) {
+        setError(error.message);
+      }
       setLoading(false);
     });
 
-    return () => controller.abort();
-  }, []);
+  return () => controller.abort();
+}, []);
 ```
 
-#### 6.9 Handling Data Synchronization in React
+#### 6.3 React Query
 
-###### 6.9.1 Synchronization Approaches
+###### 6.3.1 Introduction to React Query
 
-When manipulating server-side data (e.g., deleting, creating, or modifying) and synchronizing it with user actions, you can follow two strategies: optimistic or pessimistic.
+React Query is a library for fetching, caching, and synchronizing data in React applications. It abstracts away the complexities of managing server state and provides a simpler, more efficient way to handle data-fetching and state management compared to traditional methods like Redux. With built-in features such as caching, automatic refetching, and optimistic updates, React Query can significantly enhance the performance and responsiveness of your application.
 
-- **Optimistic Approach**: The user interface is updated immediately, assuming the server operation will succeed. The changes are sent to the server afterward. This approach makes the UI feel faster and more responsive.
+###### 6.3.2 Installing and Setting Up React Query
 
-- **Pessimistic Approach**: The UI waits for confirmation from the server before updating. This assumes the server call may fail, delaying the UI update until success is confirmed. While more cautious, this can slow down the user experience.
+To get started with React Query, you first need to install it:
 
-###### 6.9.2 Axios Synchronization Operations
+```bash
+npm i @tanstack/react-query
+```
 
-1. **Deleting Data**: Use `axios.delete()` with the endpoint URL to delete data. Handle potential errors with `catch()`.
+Once installed, you need to set up a `QueryClient` and a `QueryClientProvider` to provide React Query's functionality to your entire application. Here’s how you can integrate it into your app:
+
+1. **Create a Query Client**: This client is responsible for managing and caching your queries.
+2. **Wrap Your Application**: Use `QueryClientProvider` to make the client available to all components.
+
+Here’s an example of how you set it up:
+
+```tsx
+// file: main.tsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import App from './App';
+
+const queryClient = new QueryClient();
+
+ReactDOM.render(
+  <QueryClientProvider client={queryClient}>
+    <App />
+  </QueryClientProvider>,
+  document.getElementById('root')
+);
+```
+
+###### 6.3.3 Fetching Data with React Query and Axios
+
+React Query’s `useQuery` hook is used to fetch data from an API. The hook takes two primary arguments: `queryKey` and `queryFn`.
+
+- **`queryKey`**: A unique identifier for the query that React Query uses to cache and manage the data.
+- **`queryFn`**: A function that performs the actual data fetching, typically using Axios.
+
+```tsx
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+
+const fetchData = () => {
+  return axios.get('https://api.example.com/data').then(response => response.data);
+};
+
+const MyComponent = () => {
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['data'],
+    queryFn: fetchData,
+  });
+};
+```
+
+###### 6.3.4 Handling Errors and Loading States
+
+React Query provides mechanisms to handle errors and loading states effectively.
+
+- **Error Handling**: If the `queryFn` fails, `useQuery` will populate the `error` object. You can use this to display an error message to the user.
+
+- **Loading Indicator**: Use the `isLoading` property to show a loading spinner or message while the data is being fetched.
+
+```tsx
+const { data, error, isLoading } = useQuery({
+  queryKey: ['data'],
+  queryFn: fetchData,
+});
+
+if (isLoading) return <div>Loading...</div>;
+if (error) return <div>Error: {error.message}</div>;
+```
+
+###### 6.3.5 Mutating Data (Create, Update, Delete) with React Query
+
+When managing server-side data (e.g., creating, deleting, or modifying) and synchronizing it with the UI, you can choose between two approaches:
+
+- **Optimistic Approach**: Updates the UI immediately, assuming the server request will succeed. This makes the UI feel faster and more responsive, with server changes processed in the background.
+
+- **Pessimistic Approach**: Waits for server confirmation before updating the UI, which can be slower but ensures data integrity by reflecting only confirmed changes.
+
+Using the optimistic approach with Axios and React Query's `useMutation` hook allows for a more responsive user experience by instantly reflecting changes in the UI while managing server-side updates in the background.
+
+1. **Set Up the Mutation Function**:
+   Define the mutation function using Axios for making server requests. This function is passed to `useMutation` to handle data operations.
    
-   ```javascript
-   axios.delete('https://api.example.com/items/1')
-     .then(() => {
-       // Update UI after delete
-     })
-     .catch(error => {
-       console.error('Error deleting item:', error);
-     });
+   ```js
+   const createData = (newData) => {
+     return axios.post('https://api.example.com/data', newData);
+   };
    ```
 
-2. **Creating Data**: Use `axios.post()` to create new data. Pass the URL and data object, and handle success or errors with `then()` and `catch()`.
+2. **Configure the Mutation Hook**:
+   Use `useMutation` to manage your data operations. Define `onMutate`, `onError`, and `onSuccess` callbacks to handle optimistic updates, errors, and success respectively.
    
-   ```javascript
-   axios.post('https://api.example.com/items', { name: 'New Item' })
-     .then(response => {
-       // Update UI with new data
-     })
-     .catch(error => {
-       console.error('Error creating item:', error);
-     });
+   ```tsx
+   const queryClient = useQueryClient();
+   
+   const { mutate, isError, isLoading } = useMutation({
+     mutationFn: createData,
+   
+     // Optimistic update
+     onMutate: (newData) => {
+       // Store the current data
+       const previousData = queryClient.getQueryData(['data']);
+   
+       // Optimistically update the cache
+       queryClient.setQueryData(['data'], (oldData) => [...oldData, newData]);
+   
+       // Return context to rollback if needed
+       return { previousData };
+     },
+   
+     // Rollback on error
+     onError: (error, newData, context) => {
+       queryClient.setQueryData(['data'], context.previousData);
+     },
+   
+     // Update cache on success
+     onSuccess: (response) => {
+       queryClient.setQueryData(['data'], (oldData) => [...oldData, response.data]);
+     }
+   });
    ```
 
-3. **Modifying Data**: Use `axios.put()` to replace an object or `axios.patch()` to modify specific properties. Handle errors with `catch()`.
+3. **Handle the Mutation in Your UI**:
+   Trigger the mutation through user actions, like form submissions. The mutation’s `mutate` method is used to initiate the request.
    
-   ```javascript
-   // Replace entire object
-   axios.put('https://api.example.com/items/1', { name: 'Updated Item' })
-     .then(response => {
-       // Update UI after modification
-     })
-     .catch(error => {
-       console.error('Error updating item:', error);
-     });
+   ```jsx
+   const handleSubmit = (data) => {
+     mutate(data);
+   };
    
-   // Modify specific fields
-   axios.patch('https://api.example.com/items/1', { name: 'Updated Name' })
-     .then(response => {
-       // Update UI after partial modification
-     })
-     .catch(error => {
-       console.error('Error patching item:', error);
-     });
+   return (
+     <button onClick={() => handleSubmit({ name: 'New Item' })}>
+       Add Item
+     </button>
+   );
    ```
+
+4. **Error and Loading States**:
+   React Query provides `isLoading` and `isError` states to manage the UI during loading and error scenarios.
+   
+   ```jsx
+   if (isLoading) return <p>Loading...</p>;
+   if (isError) return <p>An error occurred: {mutation.error.message}</p>;
+   ```
+
+This structure ensures that your UI reflects changes immediately with optimistic updates, while still handling potential errors gracefully and keeping the data synchronized with the server.
+
+###### 6.3.6 Customizing React Query Default Configurations
+
+React Query allows you to customize the default settings for queries globally or locally with the following configurations.
+
+| **Setting**              | **Default Value**      | **Description**                                                                                                   |
+| ------------------------ | ---------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| **retry**                | 3                      | Number of times a failed query is retried.                                                                        |
+| **cacheTime**            | 5 minutes (300,000 ms) | Time a query stays in the cache after it becomes inactive (no observers).                                         |
+| **staleTime**            | 0                      | Time before data is considered stale. Automatically refreshed when the window is refocused or network reconnects. |
+| **refetchOnWindowFocus** | true                   | Refetches the query when the window is refocused.                                                                 |
+| **refetchOnReconnect**   | true                   | Refetches when the network reconnects.                                                                            |
+| **refetchOnMount**       | true                   | Refetches when the component is mounted.                                                                          |
+
+**Global Configuration**:
+
+Set global defaults by configuring the `QueryClient`:
+
+```tsx
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 10000,  // Time before data is considered stale
+      cacheTime: 600000, // Duration for caching inactive queries
+      refetchOnWindowFocus: false, // Prevent refetching on window focus
+    },
+  },
+});
+```
+
+**Local Configuration**:
+
+You can override these defaults for specific queries by passing configuration options directly to `useQuery`:
+
+```tsx
+const { data } = useQuery({
+  queryKey: ['data'],
+  queryFn: fetchData,
+  staleTime: 30000,  // Data is fresh for 30 seconds
+  retry: 1,  // Retry once if the query fails
+});
+```
+
+###### 6.3.7 Pagination with React Query
+
+Pagination allows you to display data in chunks, enhancing performance and user experience. With React Query's `useQuery`, you can handle pagination by tracking the current page and fetching data accordingly. The `queryFn` function retrieves data based on the current page and page size, adjusting the request parameters to fetch the appropriate slice of data. The `keepPreviousData` option ensures a smooth user experience by retaining the previous page’s data while loading new data. Pagination buttons allow users to navigate through pages by updating the `page` state, which triggers data fetching for the new page.
+
+```tsx
+const [page, setPage] = useState(1);
+const pageSize = 10;
+
+const query = {
+  page,
+  pageSize,
+};
+
+const { data, error } = useQuery<Post[], Error>({
+  queryKey: ['posts', query],  // Include pagination in the queryKey
+  queryFn: () => 
+    axios.get('https://api.example.com/data', {
+      params: {
+        _start: (query.page - 1) * query.pageSize,  // Starting position
+        _limit: query.pageSize                      // Number of items per page
+      }
+    }).then(response => response.data),
+  keepPreviousData: true  // Prevents jumping inside the page
+});
+
+// Example pagination buttons
+return (
+  <>
+    {data?.map(post => (
+      <div key={post.id}>{post.title}</div>
+    ))}
+    <button onClick={() => setPage(page - 1)} disabled={page === 1}>
+      Previous
+    </button>
+    <button onClick={() => setPage(page + 1)}>
+      Next
+    </button>
+  </>
+);
+```
+
+###### 6.3.8 Infinite Scrolling with React Query
+
+Infinite scrolling dynamically loads more data as the user scrolls or interacts with the page, providing a seamless experience for browsing large datasets. Using React Query’s `useInfiniteQuery`, you can manage this by fetching data in pages and determining when to load additional pages. The `queryFn` function retrieves data with pagination parameters, while `getNextPageParam` calculates the next page to fetch based on the current data. The `fetchNextPage` function triggers the loading of more data, and `isFetchingNextPage` helps to manage loading states. This setup ensures continuous and efficient data loading, enhancing user interaction without manual page navigation.
+
+```tsx
+const pageSize = 10;
+
+const query = {
+  pageSize,
+};
+
+const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
+  queryKey: ['items', query],
+  queryFn: ({ pageParam = 1 }) =>
+    axios.get(`/api/items`, {
+      params: { _start: (pageParam - 1) * pageSize, _limit: pageSize },
+    }).then(response => response.data),
+  getNextPageParam: (lastPage, allPages) =>
+    lastPage.length > 0 ? allPages.length + 1 : undefined,
+  keepPreviousData: true
+});
+
+// Example pagination buttons
+return (
+  <div>
+    {data.pages.map((page, index) => (  // Iterates over each page
+      <div key={index}>
+        {page.map(item => (  // Iterates over all items on each page
+          <div key={item.id}>{item.name}</div>
+        ))}
+      </div>
+    ))}
+    <button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+      {isFetchingNextPage ? 'Loading...' : 'Load More'}
+    </button>
+  </div>
+);
+```
+
+One should encapsulate everything that is UI related in a separate hook module starting with the use prefix. One should also find a way to separate the querying object from the hook. As the same object can be used for fetching, but also mutating the data.
+
+
+
+
 
 #### 6.10 Structuring API Calls in React: Best Practices for Maintainable Code
 
@@ -1358,286 +1664,7 @@ function useData(endpoint: string) {
 }
 ```
 
-## 7. React Query
 
-#### 7.1 Starting With React Query
-
-React Query is a powerful library for handling data fetching and caching in React applications, offering a simpler alternative to Redux, which often requires more boilerplate and has a steeper learning curve. Caching in React Query allows faster access to data by storing it for future use.
-
-To install React Query, run the command:
-
-```bash
-npm i @tanstack/react-query
-```
-
-To integrate React Query into your application, start by importing `QueryClient` and `QueryClientProvider` from `@tanstack/react-query` in the projects' `main.tsx` file. The `QueryClient` is used to manage and cache remote data. Create an instance of `QueryClient` and wrap the entire `App` with `QueryClientProvider` to provide the query client to your component tree.
-
-```typescript
-import "bootstrap/dist/css/bootstrap.css";
-import React from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import ReactDOM from "react-dom/client";
-import App from "./App";
-import "./index.css";
-
-const queryClient = new QueryClient();
-
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
-  </React.StrictMode>
-);
-```
-
-#### 7.2 Fetching Data
-
-To fetch data using React Query, you can utilize the `useQuery` hook, imported from `@tanstack/react-query`. This hook is called with an object containing two key properties: `queryKey` and `queryFn`.
-
-- **`queryKey`**: A unique identifier for the query, used for caching and tracking data. It is often an array where the first element is a string describing the type of data, followed by optional parameters to refine the caching behavior. This can be defined in several ways, depending on the structure and specifics of the data returned by the query function.
-- **`queryFn`**: The function that fetches data from the backend, typically returning a promise that either resolves with the fetched data or throws an error. You can use `axios.get()` to make the HTTP request, ensuring the returned type matches the expected data structure by passing a generic parameter.
-
-```typescript
-const fetchData = function() {
-  axios
-    .get<Data[]>('http://...')
-    .then(response => response.data);
-};
-
-const { data } = useQuery({
-  queryKey: ['data'],
-  queryFn: fetchData
-});
-```
-
-React Query offers several advantages, including automatic retries when server requests fail, automatic refetching to keep data fresh, and caching to improve performance by minimizing redundant API calls.
-
-#### 7.3 Handling Errors
-
-The `useQuery` hook not only fetches data but also provides an `error` property to handle any errors that occur during the data-fetching process. When using `useQuery`, you can specify two generic type parameters: the type of data being fetched and the type of error, which is commonly set to `Error`. This enables access to the error's properties, such as `message`, `cause`, `name`, and `stack`, allowing for precise error handling when an Axios request fails.
-
-```typescript
-const fetchData = function() {
-  return axios
-    .get<Data[]>('http://...')
-    .then(response => response.data);
-};
-
-const { data, error } = useQuery<Data, Error>({
-  queryKey: ['data'],
-  queryFn: fetchData
-});
-```
-
-#### 7.4 Displaying a Loading Indicator
-
-React Query's `useQuery` hook includes an `isLoading` property, which returns a Boolean value indicating whether the data-fetching process is still in progress. This property is especially useful for displaying loading indicators in your application, as it allows you to track when the fetch is ongoing or has completed.
-
-```typescript
-const fetchData = function() {
-  return axios
-    .get<Data[]>('http://...')
-    .then(response => response.data);
-}
-
-const { data, isLoading } = useQuery<Data, Error>({
-  queryKey: ['data'],
-  queryFn: fetchData
-});
-```
-
-#### 7.5 React Query DevTools
-
-React Query offers its own DevTools for monitoring and debugging queries. To install, run `npm i @tanstack/react-query-devtools`. In your `main.tsx`, import `ReactQueryDevtools` from `@tanstack/react-query-devtools` and add it to your component tree, typically after the `App` component/
-
-```typescript
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import App from "./App";
-
-const queryClient = new QueryClient();
-
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <QueryClientProvider client={queryClient}>
-    <App />
-    <ReactQueryDevtools />
-  </QueryClientProvider>
-);
-```
-
-Once the app is running, you’ll see a DevTools tab on the left side of the screen. Clicking it reveals query details, such as the query key, number of active observers, and last update time. You can refetch, invalidate, reset, or remove queries and inspect the associated data. The tool also provides a Query Explorer, showing properties like the cache duration, which by default is 5 minutes, making it easier to monitor the status and behavior of queries in real time.
-
-#### 7.6 Customizing React Query Defaults
-
-React Query provides default configurations suitable for most cases, but you can easily customize these settings either globally or locally for each query instance.
-
-###### 7.6.1 Global Configuration
-
-To apply global configurations, modify the `QueryClient` instance in your `main.tsx`. You can pass a configuration object to the `defaultOptions` property to override default query settings globally. Here’s an example:
-
-```typescript
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 2,  // Retry failed queries twice
-      cacheTime: 600000,  // Cache inactive queries for 10 minutes
-      staleTime: 10000,   // Data is fresh for 10 seconds
-      refetchOnWindowFocus: false,  // Disable refetch on window focus
-      refetchOnReconnect: true,  // Refetch on network reconnection
-      refetchOnMount: false,  // Disable refetch when component mounts
-    }
-  }
-});
-```
-
-| **Setting**              | **Default Value**      | **Description**                                                                                                   |
-| ------------------------ | ---------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| **retry**                | 3                      | Number of times a failed query is retried.                                                                        |
-| **cacheTime**            | 5 minutes (300,000 ms) | Time a query stays in the cache after it becomes inactive (no observers).                                         |
-| **staleTime**            | 0                      | Time before data is considered stale. Automatically refreshed when the window is refocused or network reconnects. |
-| **refetchOnWindowFocus** | true                   | Refetches the query when the window is refocused.                                                                 |
-| **refetchOnReconnect**   | true                   | Refetches when the network reconnects.                                                                            |
-| **refetchOnMount**       | true                   | Refetches when the component is mounted.                                                                          |
-
-###### 7.6.2 Local Configuration
-
-To configure individual queries, pass the desired options directly to the `useQuery` function inside a React component. This overrides the global settings for that specific query:
-
-```typescript
-const { data, error } = useQuery('myData', fetchData, {
-  staleTime: 30000,  // Data is fresh for 30 seconds
-  retry: 1,  // Retry only once on failure
-  refetchOnWindowFocus: false,  // Disable refetch on window focus for this query
-});
-```
-
-#### 7.7 Parametrizing Fetch Queries
-
-To parameterize fetching queries in React Query, you modify the `queryKey` property passed to the `useQuery` function. The `queryKey` can follow a hierarchical structure that reflects the relationship inside the fetched data, allowing the query to adapt to provided parameters. To pass these parameters to `axios`, you can provide them in the `params` property, passed as the second argument to the `axios.get()` method. If these parameters are tied to a state object, React Query will refetch the data whenever the state changes, creating a dependency on that state.
-
-```typescript
-const { data, error } = useQuery<Post[], Error>({
-  queryKey: ['posts', userId],  // userId parameter in queryKey
-  queryFn: () => 
-    axios.get('https://jsonplaceholder.typicode.com/posts', {
-      params: { userId }  // Pass query parameters
-    }).then(response => response.data)
-});
-```
-
-#### 7.8 Pagination
-
-To implement pagination with React Query, first declare a state variable `page` to track the current page using the `useState` hook, initialized to page 1. Additionally, create a variable `pageSize` to represent the number of objects to display per page. Both variables can be combined into a single query object encapsulating the current page and page size.
-
-You can pass this query object directly into the `queryKey` array of the `useQuery` function to ensure that the pagination is included in the query's unique identifier. To implement pagination logic in the `axios.get()` request, use query parameters like `_start` and `_limit` for determining the starting position and number of items per page. `_start` is calculated as `(query.page - 1) * query.pageSize`, and `_limit` is set to `query.pageSize`.
-
-By default, each time data is retrieved, the page reloads and scrolls back to the top. However, by setting the `keepPreviousData` property in the `useQuery` to `true`, the new data is seamlessly integrated into the page without resetting the scroll position.
-
-This setup can then be used to create pagination buttons, allowing users to navigate through the pages.
-
-```typescript
-const [page, setPage] = useState(1);
-const pageSize = 10;
-
-const query = {
-  page,
-  pageSize,
-};
-
-const { data, error } = useQuery<Post[], Error>({
-  queryKey: ['posts', query],  // Include pagination in the queryKey
-  queryFn: () => 
-    axios.get('https://jsonplaceholder.typicode.com/posts', {
-      params: {
-        _start: (query.page - 1) * query.pageSize,  // Starting position
-        _limit: query.pageSize                      // Number of items per page
-      }
-    }).then(response => response.data),
-  keepPreviousData: true  // Prevents jumping inside the page
-});
-
-// Example pagination buttons
-return (
-  <>
-    {data?.map(post => (
-      <div key={post.id}>{post.title}</div>
-    ))}
-    <button onClick={() => setPage(page - 1)} disabled={page === 1}>
-      Previous
-    </button>
-    <button onClick={() => setPage(page + 1)}>
-      Next
-    </button>
-  </>
-);
-```
-
-#### 7.9 Infinite Queries
-
-To implement infinite scrolling with React Query, start by declaring a `pageSize` variable to define the number of items to display per page. Instead of using `useQuery`, you will use `useInfiniteQuery` from `@tanstack/react-query`.
-
-In the `useInfiniteQuery` function, you need to configure the `getNextPageParam` property. This function takes two arguments: `lastPage` (an array of items in the last page fetched) and `allPages` (a two-dimensional array of all pages fetched so far). The function should return the next page number like this:
-
-```js
-return lastPage.length > 0 ? allPages.length + 1 : undefined;
-```
-
-The query function should accept an argument called `{ pageParam = 1 }`, which will be passed to the `_start` query parameter for pagination:
-
-```js
-_start: (pageParam - 1) * query.pageSize
-```
-
-To ensure that new data loads seamlessly into the page without resetting the scroll position, set the `keepPreviousData` property to `true`.
-
-The `useInfiniteQuery` hook returns an object that includes the `fetchNextPage` method, which can be triggered when the user scrolls or clicks a button to load more data, and the `isFetchingNextPage` property, which indicates whether more pages are being fetched.
-
-Lastly, when rendering the `data`, note that the result is not a flat array but rather a nested array of pages. You need to iterate over the pages and the items within each page:
-
-```js
-const pageSize = 10;
-
-const query = {
-  pageSize,
-};
-
-const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
-  queryKey: ['items', query],
-  queryFn: ({ pageParam = 1 }) =>
-    axios.get(`/api/items`, {
-      params: { _start: (pageParam - 1) * pageSize, _limit: pageSize },
-    }).then(response => response.data),
-  getNextPageParam: (lastPage, allPages) =>
-    lastPage.length > 0 ? allPages.length + 1 : undefined,
-  keepPreviousData: true
-});
-
-return (
-  <div>
-    {data.pages.map((page, index) => (  // Iterates over each page
-      <div key={index}>
-        {page.map(item => (  // Iterates over all items on each page
-          <div key={item.id}>{item.name}</div>
-        ))}
-      </div>
-    ))}
-    <button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
-      {isFetchingNextPage ? 'Loading...' : 'Load More'}
-    </button>
-  </div>
-);
-```
-
-This setup will allow for infinite scrolling or pagination with React Query, fetching more items as needed and displaying them seamlessly.
-
-#### 7.1 Caching
-
-#### 7.2 Automatic retry
-
-#### 7.3 Automatic refresh
-
-#### 7.4 Paginated Queries
 
 ## 8. Global State Management
 
