@@ -1849,14 +1849,414 @@ const MyComponent = () => {
 export default MyComponent;
 ```
 
-## 8. Global State Management
+## 7. Global State Management
 
-#### 8.1 Reducers
+#### 7.1 Reducers
 
-#### 8.2 Context
+Reducers in React centralize state updates by moving state management into a single function, simplifying complex components. Typically defined in a separate TypeScript file (e.g., `Reducer.ts`), a reducer takes the current state and an action object, which represents user intent, often defined as a union of valid actions. The `useReducer` hook replaces `useState`, taking the reducer function and initial state, and returns the current state along with a `dispatch` function to trigger updates, handling different action types while preventing errors from invalid actions.
 
-#### 8.3 Providers
+```tsx
+// counterReducer.ts
+interface Action {
+    type: 'INCREMENT' | 'DECREMENT' | 'RESET';
+}
 
-#### 8.4 Zustand
+export const counterReducer = (state: number, action: Action): number => {
+  switch (action.type) {
+    case 'INCREMENT':
+      return state + 1;
+    case 'DECREMENT':
+      return state - 1;
+    case 'RESET':
+      return 0;
+  return state;
+  }
+};
 
-## 9. Routing
+// CounterComponent.tsx
+import { useReducer } from 'react';
+import { counterReducer } from './counterReducer';
+
+const CounterComponent = () => {
+  const [count, dispatch] = useReducer(counterReducer, 0);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => dispatch({ type: 'INCREMENT' })}>Increment</button>
+      <button onClick={() => dispatch({ type: 'DECREMENT' })}>Decrement</button>
+      <button onClick={() => dispatch({ type: 'RESET' })}>Reset</button>
+    </div>
+  );
+};
+```
+
+#### 7.2 React Context
+
+In React, sharing state between components is often achieved by "lifting the state up" to a parent component and passing it down as props. However, this can lead to prop drilling, where intermediate components are forced to pass props they don't directly use. React Context offers an efficient solution by allowing state sharing without passing props through multiple components.
+
+To use React Context, you first lift the state to the closest common parent and then use context to distribute the state. Context is typically stored in a separate folder, with files named using a `Context` suffix. In this file, start by defining an interface to shape the context type. For example, if using a reducer, the interface would include properties like `value` and `dispatch`. The `dispatch` function should be typed as `React.Dispatch`, which takes a generic parameter for the `Action` type used in the reducer.
+
+Next, create the context using `createContext()`, passing the interface as the generic type and an initial default value (usually an empty object). Here's an example of how the context might look:
+
+```ts
+interface AppStateContextType {
+  value: number;
+  dispatch: React.Dispatch<ActionType>;
+}
+
+const AppStateContext = React.createContext<AppStateContextType>({} as AppStateContextType);
+
+export default AppStateContext;
+```
+
+Once the context is created, wrap the app's component tree in the `Context.Provider` component, providing the `value` and `dispatch` as the context value. This enables child components to access the context without needing to pass it through intermediate components. The context can then be accessed anywhere in the tree using the `useContext` hook:
+
+```tsx
+import AppStateContext from './contexts/AppStateContext';
+import { useReducer } from 'react';
+import reducer, { initialState } from './reducers/appReducer';
+
+const App = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <AppStateContext.Provider value={{ value: state.value, dispatch }}>
+      <ChildComponent />
+    </AppStateContext.Provider>
+  );
+};
+
+const ChildComponent = () => {
+  const { value, dispatch } = useContext(AppStateContext);
+
+  return <div>{value}</div>;
+};
+```
+
+This structure allows state to be shared efficiently across components without prop drilling, while maintaining a clean and modular architecture.
+
+#### 7.3 Providers
+
+A common approach to managing global state with React Context is to move the context provider logic out of the main parent component into a dedicated Provider component. This component is typically placed in a `provider` folder and named with a `Provider` suffix. The Provider component encapsulates the context setup and exposes the `Context.Provider` component, allowing easier reuse and cleaner code in the parent component.
+
+In this setup, the reducer hook is placed inside the Provider component, and the `Context.Provider` component is used to pass down the state and dispatch function. The children of this Provider component are rendered using the `children` prop, enabling child components to access the context without prop drilling. Here's an example implementation:
+
+```tsx
+// AppStateProvider.tsx
+import { createContext, useReducer, ReactNode } from 'react';
+import reducer, { initialState } from '../reducers/appReducer';
+import AppStateContext from '../context/AppStateContext'
+
+interface Props {
+  children: ReactNode;
+}
+
+const AppStateProvider = ({ children }: Props) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <AppStateContext.Provider value={{ value: state.value, dispatch }}>
+      {children}
+    </AppStateContext.Provider>
+  );
+};
+
+export default AppStateProvider;
+```
+
+Now, instead of defining the context provider in the `App` component, you can import and wrap your component tree with the `AppStateProvider`:
+
+```tsx
+// App.tsx
+import AppStateProvider from './providers/AppStateProvider';
+import ChildComponent from './components/ChildComponent';
+
+const App = () => {
+  return (
+    <AppStateProvider>
+      <ChildComponent />
+    </AppStateProvider>
+  );
+};
+```
+
+To access the context in any child component, use the `useContext` hook:
+
+```tsx
+// ChildComponent.tsx
+import { useContext } from 'react';
+import AppStateContext from '../context/AppStateContext';
+
+const ChildComponent = () => {
+  const { value, dispatch } = useContext(AppStateContext);
+
+  return <div>{value}</div>;
+};
+```
+
+This pattern makes the code more modular and reusable, keeping the state management logic separated from the main application structure. It simplifies maintaining the context provider logic and ensures that any child component can easily access the global state.
+
+#### 7.4 Zustand
+
+A key advantage of using a state management tool like **Zustand** is the ability to define and manage state, along with its possible actions, in a single location, eliminating the need for multiple contexts and providers. Zustand offers better control over state, reducing unnecessary re-renders by only updating components that rely on specific pieces of state.
+
+To get started with Zustand, install the library:
+
+```bash
+npm install zustand
+```
+
+Next, define an interface for the state and use Zustand’s `create()` function to initialize the state and define update actions. The `set` function allows you to update the state, and this logic is encapsulated in one place.
+
+```typescript
+import create from 'zustand';
+
+// Define the type for the state
+interface AppState {
+  count: number;
+  increment: () => void;
+}
+
+// Create the store with state and update logic
+const useStore = create<AppState>((set) => ({
+  count: 0,
+  increment: () => set((state) => ({ count: state.count + 1 })),
+}));
+
+export default useStore;
+```
+
+In your components, you can easily access and update the state without needing additional context or reducer logic:
+
+```typescript
+const Counter = () => {
+  const { count, increment } = useStore();
+
+  return (
+    <div>
+      <p>{count}</p>
+      <button onClick={increment}>Increment</button>
+    </div>
+  );
+};
+```
+
+Zustand also allows you to define multiple pieces of state and selectors to minimize re-renders. By selecting only the necessary parts of the state for each component, you can ensure that only components dependent on changed data will re-render.
+
+```typescript
+const count = useStore((state) => state.count);
+const increment = useStore((state) => state.increment);
+```
+
+This setup optimizes performance and simplifies state management, providing a more flexible and efficient alternative to React Context and reducers.
+
+#### 7.5 Best Practices for Managing State
+
+When a value in a React Context changes, all components using that context will re-render. To optimize performance, React Context should only manage values that are closely related and tend to change together, adhering to the **single responsibility principle**. To reduce unnecessary re-renders, it's advisable to split contexts into smaller, focused contexts, rather than bundling unrelated states into a single object. For example, combining a value and the `dispatch` function from a reducer in one context makes sense, as they are often used together.
+
+React applications typically deal with both **server-side state** (data fetched from a backend) and **client-side state** (UI state). It's not recommended to use React Context for server-side state management, as this can lead to excessive context proliferation and a complex component tree. Instead, tools like **React Query** are more suitable for fetching, mutating, and managing server state. For **client-side state**, React Context works well when paired with `useState` for simple cases or `useReducer` for more complex scenarios.
+
+As a best practice, ensure each context has a single responsibility. However, in cases where splitting contexts doesn't make sense, consider using a state management tool like **Zustand**, which can track specific pieces of state and trigger re-renders only when necessary, offering more fine-grained control over component updates.
+
+## 8. Routing
+
+#### 8.1 Setting Up React Router
+
+To set up React Router in your project, start by installing it via the following command:
+
+```bash
+npm install react-router-dom
+```
+
+Once installed, create a new file called `routes.tsx` in your project folder. In this file, you can use the `createBrowserRouter` function from the React Router library to define your app's routes. This function accepts an array of route objects, each with two properties: `path` (the URL path) and `element` (the React component to render when that path is accessed).
+
+```typescript
+import { createBrowserRouter } from 'react-router-dom';
+import Home from './components/Home';
+import About from './components/About';
+
+// Define your routes
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Home />,
+  },
+  {
+    path: '/about',
+    element: <About />,
+  },
+]);
+
+export default router;
+```
+
+After defining the routes, you can export the router and use it in your main application file (`main.tsx`). Here, replace the `App` component with the `RouterProvider` component from React Router, which will provide routing context to your application. Pass the created router as a prop to `RouterProvider` to ensure the correct components render based on the user's location.
+
+```typescript
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { RouterProvider } from 'react-router-dom';
+import router from './routes';
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <RouterProvider router={router} />
+  </StrictMode>
+);
+```
+
+This setup ensures that React Router dynamically renders the appropriate components based on the current URL, providing seamless navigation in your application.
+
+#### 8.2 Navigating Between Pages with React Router
+
+In traditional web navigation, clicking an anchor tag (`<a>`) reloads the entire page, which can be inefficient. React Router solves this issue by allowing navigation without full-page reloads, enabling smoother transitions between components. The `Link` component from React Router is a replacement for the anchor element and allows users to navigate between routes without reloading the entire page. The `Link` component uses the `to` prop to specify the target route.
+
+```tsx
+import { Link } from 'react-router-dom';
+
+const Navbar = () => (
+  <nav>
+    <Link to="/">Home</Link>
+    <Link to="/about">About</Link>
+  </nav>
+);
+```
+
+For programmatic navigation, such as redirecting users after an action like form submission or button click, React Router provides the `useNavigate` hook. This hook returns a `navigate` function, which can be used inside event handlers (e.g., `onClick` or `onSubmit`) to direct users to a specific route.
+
+```tsx
+import { useNavigate } from 'react-router-dom';
+
+const MyButton = () => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    // Navigate to a different route on button click
+    navigate('/about');
+  };
+
+  return <button onClick={handleClick}>Go to About</button>;
+};
+```
+
+By using `Link` for anchor tags and `useNavigate` for programmatic navigation, React Router allows dynamic navigation between pages without reloading the entire page, ensuring a smooth user experience.
+
+#### 8.3 Working with Route Parameters and URL in React Router
+
+In React Router, routes can be parameterized to allow dynamic values in the URL. By adding a colon (`:`) before a path segment, you can define a route parameter. This allows components to receive dynamic values through the URL. For example, a path like `"/user/:id"` will treat `:id` as a parameter.
+
+```tsx
+import { Link } from 'react-router-dom';
+
+const UsersList = () => (
+  <div>
+    <Link to="/user/1">User 1</Link>
+    <Link to="/user/2">User 2</Link>
+  </div>
+);
+```
+
+To access the parameters passed in the URL, use the `useParams` hook, which returns an object containing the route parameters.
+
+```tsx
+import { useParams } from 'react-router-dom';
+
+const UserProfile = () => {
+  const { id } = useParams(); // 'id' corresponds to :id in the route
+
+  return <div>User ID: {id}</div>;
+};
+```
+
+The `useSearchParams` hook in React Router allows you to read and update query string parameters in the URL. To avoid unintended side effects like re-renders or updates happening outside the component lifecycle, it's recommended to handle updates to search parameters within a `useEffect` hook.
+
+```tsx
+import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+
+const SearchPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get('q'); // Get the query parameter
+
+  const searchQuery = 'newSearch'; // Example state or value
+
+  useEffect(() => {
+    // Safely update URL search params when 'searchQuery' changes
+    if (searchQuery) {
+      setSearchParams({ q: searchQuery });
+    }
+  }, [searchQuery, setSearchParams]); // Runs only when 'searchQuery' changes
+
+  return (
+    <div>
+      <p>Search Query: {query}</p>
+    </div>
+  );
+};
+```
+
+Additionally, the `useLocation` hook can be used to access the current location's details, including the `pathname` and `search` properties.
+
+```tsx
+import { useLocation } from 'react-router-dom';
+
+const CurrentPage = () => {
+  const location = useLocation();
+
+  return (
+    <div>
+      <p>Current Path: {location.pathname}</p>
+      <p>Current Query: {location.search}</p>
+    </div>
+  );
+};
+```
+
+These hooks—`useParams`, `useSearchParams`, and `useLocation`—are useful for accessing and manipulating URL parameters and the current route in a React application.
+
+#### 8.4 Creating Nested Routes with React Router
+
+In React Router, you can create nested routes by using the `Outlet` component, which acts as a placeholder for rendering child components based on the current route. Nested routing allows you to organize related routes under a parent route, creating a hierarchical structure. The `Outlet` component is crucial for nested routing. It acts as a placeholder where the child routes will be rendered dynamically based on the user’s location.
+
+```tsx
+const Dashboard = () => (
+  <div>
+    <h1>Dashboard</h1>
+    <Outlet /> {/* Placeholder for rendering child routes */}
+  </div>
+);
+```
+
+Next, we define the child components that will be rendered inside the `Outlet`. These are typically smaller parts of the overall view.
+
+```tsx
+const Overview = () => <h2>Overview Section</h2>;
+const Settings = () => <h2>Settings Section</h2>;
+```
+
+The routes are defined using the `createBrowserRouter` function, with the parent route and its nested child routes (indicated as relative paths to the parent path).
+
+```tsx
+const router = createBrowserRouter([
+  {
+    path: '/dashboard',
+    element: <Dashboard />, // Parent component
+    children: [
+      { path: 'overview', element: <Overview /> }, // Child route
+      { path: 'settings', element: <Settings /> }, // Another child route
+      { index: true, element: <Overview /> } // Default child route for '/dashboard'
+    ]
+  }
+]);
+```
+
+Finally, the `RouterProvider` component is used to apply the router configuration to your application.
+
+```tsx
+const App = () => (
+  <RouterProvider router={router} />
+);
+
+export default App;
+```
