@@ -2217,7 +2217,7 @@ These hooks—`useParams`, `useSearchParams`, and `useLocation`—are useful for
 
 #### 8.4 Creating Nested Routes with React Router
 
-In React Router, you can create nested routes by using the `Outlet` component, which acts as a placeholder for rendering child components based on the current route. Nested routing allows you to organize related routes under a parent route, creating a hierarchical structure. The `Outlet` component is crucial for nested routing. It acts as a placeholder where the child routes will be rendered dynamically based on the user’s location.
+In web applications, some components, like a navigation bar, need to persist across different pages while other components dynamically change based on the route. React Router’s nested routes are an ideal solution for such cases. In React Router, you can create this structure by using the `Outlet` component, which acts as a placeholder for rendering child components based on the current route. Nested routing allows you to organize related routes under a parent route, creating a hierarchical structure. The `Outlet` component is crucial for nested routing. It acts as a placeholder where the child routes will be rendered dynamically based on the user’s location.
 
 ```tsx
 const Dashboard = () => (
@@ -2251,12 +2251,103 @@ const router = createBrowserRouter([
 ]);
 ```
 
-Finally, the `RouterProvider` component is used to apply the router configuration to your application.
+This structure enables seamless navigation where shared components, such as headers or footers, remain visible across different pages, and only specific content changes within the `Outlet`.
+
+#### 8.5 Handling Invalid Routes and Errors in React Router
+
+To handle invalid routes or errors in a React application, React Router provides an elegant way to display custom error pages. You can create an `ErrorPage` component and link it to the route configuration using the `errorElement` property. This ensures that whenever a user accesses an invalid route or when a JavaScript runtime error occurs, the `ErrorPage` is displayed.
 
 ```tsx
-const App = () => (
-  <RouterProvider router={router} />
-);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,  // Parent layout
+    errorElement: <ErrorPage />,  // Display this on any error
+    children: [
+      { path: "home", element: <Home /> },
+      { path: "about", element: <About /> },
+    ],
+  },
+]);
+```
+
+In the `ErrorPage` component, you can use the `useRouteError` hook to catch and handle the error. This error can be passed to logging services for monitoring. Additionally, by using the `isRouteErrorResponse()` function, you can differentiate between user navigation errors (like an invalid route) and other types of errors, allowing you to display more specific error messages.
+
+```tsx
+import { useRouteError, isRouteErrorResponse } from "react-router-dom";
+
+// ErrorPage component
+const ErrorPage = () => {
+  const error = useRouteError();  // Catch the error
+
+  return (
+    <div>
+      <h1>Error</h1>
+      <p>
+        {isRouteErrorResponse(error) 
+          ? 'Invalid page'    // Error due to invalid route
+          : 'Unexpected error occurred'}  // General error
+      </p>
+    </div>
+  );
+};
+
+export default ErrorPage;
+```
+
+#### 8.6 Private Routes in React Router
+
+In many applications, certain routes need to be restricted to authenticated or logged-in users—these are known as private routes. Typically, this requires checking whether the user is authenticated before allowing access to specific pages. If not, they should be redirected. Using React Router, the `Navigate` component can be used for this purpose.
+
+Instead of using the `useNavigate` function (which causes side effects like modifying the URL after rendering), we utilize the `Navigate` component directly within the JSX to handle redirection before rendering occurs. This avoids rendering a restricted page and then redirecting the user afterward.
+
+To avoid duplicating this logic across multiple routes, one can create a reusable `PrivateRoute` component that encapsulates the authentication check. When the user is authenticated, the `Outlet` component is returned, which acts as a placeholder for the child routes. If the user is not authenticated, the `Navigate` component is used to redirect them to a login page.
+
+```tsx
+import { Navigate, Outlet } from "react-router-dom";
+
+const PrivateRoute = () => {
+  const isAuthenticated = false; // Replace with actual authentication logic
+
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+};
+
+export default PrivateRoute;
+```
+
+Use the `PrivateRoute` component in the route definition to protect multiple routes without repeating authentication logic.
+
+```tsx
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Layout from "./Layout";
+import Home from "./Home";
+import Dashboard from "./Dashboard"; // Protected route
+import Settings from "./Settings"; // Protected route
+import Login from "./Login";
+import PrivateRoute from "./PrivateRoute"; // Import the private route component
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      { path: "home", element: <Home /> },
+      { path: "login", element: <Login /> },
+    ],
+  },
+  // Group protected routes under the PrivateRoute
+  {
+    element: <PrivateRoute />,  // Private route wrapper
+    children: [
+      { path: "dashboard", element: <Dashboard /> },
+      { path: "settings", element: <Settings /> },
+    ],
+  }
+]);
+
+const App = () => {
+  return <RouterProvider router={router} />;
+};
 
 export default App;
 ```
