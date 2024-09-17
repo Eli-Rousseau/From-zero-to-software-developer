@@ -40,7 +40,7 @@ cd your-project-name
 npm run dev
 ```
 
-#### 1.3 Key Project Structure in Next.js
+#### 1.3 Project Structure in Next.js
 
 After creating the project, several key files and folders are generated:
 
@@ -203,6 +203,519 @@ Next.js supports **static rendering**, where components or pages with static dat
 
 In contrast, **dynamic rendering** happens at request time, ensuring that components are rendered with up-to-date data. This distinction is crucial when fetching data from a backend. If caching is enabled during static rendering, the data fetched at build time will be treated as static, meaning it won't change until the next build, which is ideal for content that doesn't need frequent updates. When deciding between static and dynamic rendering in Next.js, it's essential to consider your use case. If you prefer to dynamically render fetched data, you must disable caching to ensure fresh data is retrieved on each request (see above)
 
-```tsx
+## 2. Styling
 
+#### 2.1 Global Styles
+
+In the `app` folder of a Next.js project, the `global.css` file contains styles that apply globally across the entire application. At the top of this file, you'll find three directives importing base styles from **Tailwind CSS**. The global stylesheet typically includes:
+
+1. A `:root` selector, where custom CSS properties (variables) are defined.
+2. A media query for dark mode, which adjusts the custom properties in the `:root` for dark theme settings.
+3. A `body` selector for applying global styles to the application.
+
+The `global.css` should only be used for truly global styles to prevent the file from becoming bloated and hard to maintain. Avoid styling individual classes directly here; instead, use component-level styles for that purpose. By keeping `global.css` focused on universal styles, you can maintain a clean, scalable stylesheet without overwhelming the project with unnecessary complexity.
+
+#### 2.2 CSS Modules
+
+CSS Modules in Next.js provide a way to scope CSS styles to specific components or pages, helping to prevent style clashes across the application. To create a CSS module, name the file after the component it styles and add the `.module.css` suffix. Within this module, define the classes specific to the component.
+
+In the component file, import the CSS module as `styles`, and apply the styles by setting the `className` of JSX elements to the corresponding class names from the module. 
+
+**Note:** CSS class names traditionally use hyphens (e.g., `my-class`), but in JavaScript, hyphenated names aren't valid property names. To maintain this convention, use bracket notation (`styles['my-class']`). Alternatively, switch to PascalCase class names, allowing you to use dot notation (`styles.MyClass`).
+
+```css
+/* Example: Button.module.css */
+.button {
+  background-color: #3490dc;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+```
+
+```jsx
+// Example: Button.tsx
+import styles from './Button.module.css';
+
+const Button = () => {
+  return <button className={styles.button}>Click me</button>;
+};
+
+export default Button;
+```
+
+By using CSS Modules, styles remain scoped to individual components, making your styles more maintainable and preventing unintended style conflicts.
+
+#### 2.3 Tailwind CSS
+
+Tailwind CSS is a popular utility-first CSS framework that allows developers to style applications using pre-defined utility classes. In a Next.js project, Tailwind can be easily integrated during the initial configuration. Once set up, Tailwind classes are available for use by applying them to the `className` attribute of JSX elements.
+
+One of the key benefits of Tailwind is that during the build process, it automatically removes any unused styles, ensuring the final CSS bundle only contains the utility classes actually used in the markup. This results in optimized and lightweight CSS files.
+
+```tsx
+// Example: Button component with Tailwind
+const Button = () => {
+  return (
+    <button className="bg-blue-500 text-white py-2 px-4 rounded">
+      Click me
+    </button>
+  );
+};
+
+export default Button;
+```
+
+This approach provides a highly efficient and maintainable way to style applications, as Tailwind handles both utility-based styling and the removal of unused CSS.
+
+#### 2.4 Daisy UI
+
+**daisyUI** is a popular component library built on top of Tailwind CSS that provides pre-styled, ready-to-use components. To integrate daisyUI into your Next.js project, start by installing the package using the command:
+
+```bash
+npm install -D daisyui@latest
+```
+
+Next, add daisyUI to your `tailwind.config.js` file to enable its components:
+
+```js
+// tailwind.config.js
+module.exports = {
+  //...
+  plugins: [require('daisyui')],
+};
+```
+
+Once installed, you can refer to the [daisyUI documentation](https://daisyui.com/) to discover the available utility classes and components for styling your elements.
+
+daisyUI also supports **themes** for easy color customization. To use a theme, configure it in your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  //...
+  daisyui: {
+    themes: ['light', 'dark', 'cupcake'], // Add theme names here
+  },
+};
+```
+
+In your root `layout.tsx` file, activate a theme by setting the `data-theme` attribute on the `<html>` tag:
+
+```tsx
+// layout.tsx
+export default function RootLayout({ children }) {
+  return (
+    <html data-theme="cupcake">
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+By integrating daisyUI, you can quickly style your application using its pre-built components, and easily switch between different themes for color customization.
+
+## 3. Routing and Navigation
+
+#### 3.1 File-System Based Routing
+
+Next.js uses a built-in routing system that is based on the file system. In the `app` folder, you create folders that represent segments of the application. To make a route publicly accessible, each segment folder must contain a `page.tsx` file, which serves as the entry point for that route. This `page.tsx` file must export a React component, which will be rendered when a user visits the route location. Other files in the folder will not be directly accessible. This approach to routing keeps components and related files organized by co-locating them within the same folder rather than scattering them in a global `components` directory.
+
+#### 3.2 Creating Dynamic Routes
+
+In Next.js, dynamic routes allow you to create routes with parameters. To set up a dynamic route, create a folder with a name inside square brackets, representing the route parameter (e.g., `[id]`). Inside this folder, create the `page.tsx` file.
+
+To access the route parameter, define a `Props` interface that includes a `params` property, which holds an object containing the route parameters. The component can then use these `params` to render dynamic content based on the route.
+
+```tsx
+// Example: /app/[id]/page.tsx
+interface Props {
+  params: {
+    id: string;
+  };
+}
+
+const DynamicPage = ({ params }: Props) => {
+  return <div>Dynamic Route ID: {params.id}</div>;
+};
+
+export default DynamicPage;
+```
+
+In this example, visiting `/app/123` would display "Dynamic Route ID: 123". This approach allows you to easily create routes with dynamic segments in Next.js.
+
+#### 3.3 Multiple Route Parameters
+
+In Next.js, you can handle routes with a varying number of parameters using a catch-all route. To do this, create a folder with a name inside square brackets, prefixed by three dots (e.g., `[...id]`). This allows for multiple parameters within a single route. If the parameters should be optional, wrap the name in double square brackets (e.g., `[[...id]]`).
+
+To access these parameters, define a `Props` interface that includes a `params` property, which is now an array of strings. The component can then use this array to handle dynamic content based on the number of route segments.
+
+```tsx
+// Example: /app/[...id]/page.tsx
+interface Props {
+  params: {
+    id: string[];
+  };
+}
+
+const CatchAllRoute = ({ params }: Props) => {
+  return <div>Route Parameters: {params.id.join(', ')}</div>;
+};
+
+export default CatchAllRoute;
+```
+
+In this example, visiting `/app/123/456` would display "Route Parameters: 123, 456". By using this approach, you can handle dynamic routes with multiple or optional parameters in a flexible way.
+
+#### 3.4 Accessing Query String Parameters in Next.js
+
+In Next.js, you can access query string parameters by defining a `Props` interface that includes a `searchParams` property, which stores an object containing the query parameters. These parameters can then be used to render dynamic content based on the query values.
+
+To navigate to a route with query parameters, use the `Link` component, setting the `href` to a URL with query strings (e.g., `/list?query=value`). Unlike standard React applications that use client-side state, this approach leverages server-side handling of query parameters, allowing state to be passed and managed on the server.
+
+```tsx
+// Example: /app/list/page.tsx
+interface Props {
+  searchParams: {
+    query?: string;
+  };
+}
+
+const ListPage = ({ searchParams }: Props) => {
+  return <div>Search Query: {searchParams.query}</div>;
+};
+
+export default ListPage;
+```
+
+```tsx
+// Example of linking to the route with query params
+import Link from 'next/link';
+
+const HomePage = () => {
+  return <Link href="/app/list?query=example">Go to List with Query</Link>;
+};
+
+export default HomePage;
+```
+
+This approach allows for handling query string parameters on the server, offering more flexibility compared to client-side state management.
+
+#### 3.5 Layouts
+
+In Next.js, `layout.tsx` files are special files recognized by the router system to define shared UI elements across multiple pages. The root `layout.tsx` file provides a common layout for the entire application. However, to create a custom layout for a specific route, you can add a `layout.tsx` file inside the corresponding route folder. 
+
+Each `layout.tsx` file should export a React component that includes `children` of type `ReactNode`, allowing you to define shared UI elements for all pages within that route.
+
+```tsx
+// Example: /app/dashboard/layout.tsx
+import { ReactNode } from 'react';
+
+interface LayoutProps {
+  children: ReactNode;
+}
+
+const DashboardLayout = ({ children }: LayoutProps) => {
+  return (
+    <div>
+      <nav>Dashboard Navigation</nav>
+      <main>{children}</main>
+    </div>
+  );
+};
+
+export default DashboardLayout;
+```
+
+In this example, the `DashboardLayout` component provides a custom layout with navigation that will be applied to all pages within the `/dashboard` route. By utilizing custom layouts, you can create consistent UI structures across different sections of your Next.js app.
+
+#### 3.6 Page Navigation
+
+Next.js enhances navigation performance using the `Link` component, which prevents full page reloads during navigation. Instead of reloading all resources, `Link` only fetches the content of the target page. It also pre-fetches links visible in the viewport to improve performance and caches pages on the client. This means that if a page is visited multiple times, it is retrieved from the client cache rather than making repeated requests to the backend.
+
+```tsx
+// Example: Using the Link component for navigation
+import Link from 'next/link';
+
+const Navigation = () => {
+  return (
+    <nav>
+      <Link href="/about">About</Link>
+      <Link href="/contact">Contact</Link>
+    </nav>
+  );
+};
+
+export default Navigation;
+```
+
+By leveraging the `Link` component, Next.js ensures smoother and faster page transitions, enhancing the overall user experience.
+
+#### 3.7 Programmatic Navigation
+
+In Next.js, programmatic navigation allows you to redirect users to a new page in response to actions like clicking a button or submitting a form. To achieve this, convert the component into a client component by including event handlers like `onClick` or `onSubmit`. Use the `useRouter` hook from `next/navigation` inside the event handler to perform the navigation. The hook returns a `router` object, and you can use the `push()` method to navigate to the target page.
+
+```tsx
+"use client"; // Convert to a client component
+
+import { useRouter } from 'next/navigation';
+
+const NavigateButton = () => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push('/target-page'); // Navigate to target page
+  };
+
+  return <button onClick={handleClick}>Go to Target Page</button>;
+};
+
+export default NavigateButton;
+```
+
+#### 3.8 Showing Loading States
+
+React 18 introduces the `Suspense` feature, which allows you to display a fallback UI while a component is being rendered. You can wrap a component inside a `Suspense` component and specify a `fallback` prop that determines what to display during the loading phase. This approach supports streaming, where the initial UI is shown to the client while waiting for additional data without terminating the request-response lifecycle.
+
+```tsx
+// Using Suspense in React 18
+import React, { Suspense } from 'react';
+
+const LazyComponent = React.lazy(() => import('./LazyComponent'));
+
+const MyComponent = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <LazyComponent />
+  </Suspense>
+);
+
+export default MyComponent;
+```
+
+In Next.js, you can also achieve a similar behavior by including a `loading.tsx` file inside a route folder. This file is recognized by Next.js and automatically displays the loading component when a page is being rendered.
+
+```tsx
+// Example of loading.tsx in Next.js
+const Loading = () => <div>Loading page...</div>;
+
+export default Loading;
+```
+
+#### 3.9 Error and Not-Found Pages
+
+Next.js provides default error pages, but you can customize them to improve the user experience. To handle missing pages, create a `not-found.tsx` file in the `app` folder. This file is recognized by Next.js and will display a custom "not found" page when a user navigates to a non-existent route. You can also create a separate `not-found.tsx` file inside specific route folders to tailor the error page for particular routes. Additionally, you can programmatically trigger the `notFound()` function to display this page when a condition is not met in your code.
+
+```tsx
+// Example: Custom Not Found Page (not-found.tsx)
+const NotFound = () => (
+  <div>
+    <h1>404 - Page Not Found</h1>
+    <p>Sorry, the page you are looking for does not exist.</p>
+  </div>
+);
+
+export default NotFound;
+```
+
+For runtime errors that occur during rendering, Next.js shows a default error page in production mode. You can override this behavior by creating an `error.tsx` file in the `app` folder. This component handles runtime errors, and you can log errors using services like Sentry or provide users with a "Retry" option using the `reset` function. Each route can also have its own `error.tsx` for more granular control.
+
+```tsx
+// Example: Custom Error Page (error.tsx)
+"use client"; // Ensure this runs on the client side
+
+interface ErrorPageProps {
+  error: Error;
+  reset: () => void;
+}
+
+const ErrorPage = ({ error, reset }: ErrorPageProps) => (
+  <div>
+    <h1>Application Error</h1>
+    <p>{error.message}</p>
+    <button onClick={reset}>Retry</button>
+  </div>
+);
+
+export default ErrorPage;
+```
+
+## 4. Building APIs
+
+#### 4.1 Creating API Routes
+
+###### 4.1.1 API Routes for Multiple Objects
+
+In Next.js, you can create API routes within the `app` folder by adding an `api` directory. Inside this directory, create a `route.tsx` file, which is recognized by the Next.js routing system for handling HTTP requests. Note that when you define a `route.tsx` file, you cannot have a `page.tsx` file in the same folder.
+
+To create an API route that handles `GET` requests and returns a collection of objects, export a `GET` function from `route.tsx`. This function takes a `NextRequest` object as input and responds with `NextResponse.json()`, where you can return an array of objects in JSON format. This approach allows you to set up API endpoints that can be used to fetch data, such as a list of objects.
+
+```tsx
+// Example: api/route.tsx
+import { NextResponse } from "next/server";
+
+export async function GET(request: Request) {
+  const data = [
+    { id: 1, name: "Object 1" },
+    { id: 2, name: "Object 2" },
+    { id: 3, name: "Object 3" },
+  ];
+
+  return NextResponse.json(data);
+}
+```
+
+###### 4.1.2 API Routes for Single Objects
+
+To create an API endpoint for fetching a single object by its `id`, you need to set up a dynamic route. Inside the `api` folder, create a subfolder named `[id]` to represent the dynamic part of the route. Inside this folder, create a `route.tsx` file, which will handle the request for fetching a specific object.
+
+In the `route.tsx` file, export a `GET` function that accepts two parameters: the `request` (of type `NextRequest`) and `params` (from the route, holding the `id`). The `GET` function should return a single object using `NextResponse.json()`.
+
+```tsx
+// api/[id]/route.tsx
+import { NextResponse } from "next/server";
+
+interface Props {
+  params: { id: string };
+}
+
+export async function GET(request: Request, { params }: Props) {
+  const { id } = params;
+
+  // Example data fetching
+  const data = { id, name: `Object ${id}` };
+
+  return NextResponse.json(data);
+}
+```
+
+#### 4.2 Create an Object
+
+To handle POST requests and create an object in Next.js, you need to define a `POST` function in the `route.tsx` file. This function is asynchronous and accepts a `request` parameter of type `NextRequest`. 
+
+First, read the body of the request using `request.json()`, which returns a promise, so you need to `await` the response. Once the data is received, you can validate the object. If the data is valid, return it using `NextResponse.json()`. If the validation fails, return an appropriate error response.
+
+```tsx
+// api/route.tsx
+import { NextResponse } from 'next/server';
+
+export async function POST(request: Request) {
+  const data = await request.json();
+
+  // Example validation (ensure 'name' property exists)
+  if (!data.name) {
+    return NextResponse.json(
+      { error: 'Invalid data: Name is required' },
+      { status: 400 }
+    );
+  }
+
+  // Return the created object as a response
+  return NextResponse.json({ message: 'Object created', data });
+}
+```
+
+#### 4.3 Updating an Object
+
+To update an object, you can either use the `PUT` or `PATCH` HTTP methods. In the `route.tsx` file at a dynamic route location (e.g., `/api/[id]`), export a function named `PUT` or `PATCH`, depending on whether you want to fully replace the object (`PUT`) or partially update some of its properties (`PATCH`).
+
+The function will receive the request (`NextRequest`) and the route parameters (e.g., `id`). First, validate the request body, returning a 400 error if invalid. Then, fetch the object (e.g., a user) by its ID. If the object doesn’t exist, return a 404 error. Otherwise, update the object and return the updated data.
+
+```tsx
+// api/[id]/route.tsx
+import { NextResponse } from 'next/server';
+
+export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+  const data = await request.json();
+
+  // Example validation (ensure 'name' is provided)
+  if (!data.name) {
+    return NextResponse.json(
+      { error: 'Invalid data: Name is required' },
+      { status: 400 }
+    );
+  }
+
+    // Fetch and update user logic here (e.g., check if user exists)
+    const user = await findUserById(params.id); // Fetch user logic
+    if (!user) {
+      return NextResponse.json(
+        { error: 'User not found' },
+        { status: 404 }
+      );
+    }
+
+    // Update user logic (e.g., update properties)
+    const updatedUser = { ...user, ...data }; // Simulate update
+
+    return NextResponse.json({ message: 'User updated', updatedUser });
+}
+```
+
+#### 4.4 Deleting an Object
+
+To delete an object, such as a user, create and export a `DELETE` request in the `route.tsx` file located at a dynamic route (e.g., `/api/[id]`). The `DELETE` function receives a `NextRequest` and route parameters, like `id`. First, fetch the object from the backend. If it doesn't exist, return a 404 error. If found, delete the object and return a 200 success response indicating the deletion was successful.
+
+```tsx
+// api/[id]/route.tsx
+import { NextResponse } from 'next/server';
+
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+  // Fetch the user by ID
+  const user = await findUserById(params.id); // Replace with actual fetch logic
+
+  // If the user doesn't exist, return 404
+  if (!user) {
+    return NextResponse.json(
+      { error: 'User not found' },
+      { status: 404 }
+    );
+  }
+
+  // Delete the user
+  await deleteUser(params.id); // Replace with actual deletion logic
+
+  return NextResponse.json({ message: 'User deleted successfully' }, { status: 200 });
+}
+```
+
+#### 4.5 Validating API Requests with Zod
+
+When validating API request bodies, using a library like Zod can simplify the process. To get started, install Zod with `npm i zod`. In your `api` folder, create a `schema.ts` file where you can define and export the validation schema.
+
+Import Zod using `import { z } from 'zod'`. Define the schema by calling `z.object()` and passing in the expected structure of the request object. You can chain validation methods like `min()` or `max()` to enforce rules. Export the schema from the module.
+
+```ts
+// schema.ts
+import { z } from 'zod';
+
+const userSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Invalid email address"),
+  age: z.number().min(18, "Must be at least 18 years old")
+});
+
+export default userSchema;
+```
+
+In the `route.tsx` file, import the schema and validate the incoming request data by calling `safeParse()`. This method returns a result that indicates success or failure. If the validation fails, use `result.error.errors` to access detailed error messages.
+
+```ts
+// api/route.tsx
+import { NextResponse } from 'next/server';
+import userSchema from './schema';
+
+export async function POST(request: Request) {
+  const body = await request.json();
+
+  const result = userSchema.safeParse(body);
+
+  if (!result.success) {
+    return NextResponse.json(
+      ,
+      { status: 400 }
+    );
+  }
+
+  // Proceed with creating the user if validation is successful
+  return NextResponse.json({ message: "User created successfully" });
+}
 ```
