@@ -719,3 +719,302 @@ export async function POST(request: Request) {
   return NextResponse.json({ message: "User created successfully" });
 }
 ```
+
+## 5. Database Integration With Prisma
+
+#### 5.1 Setting Up MySQL With Prisma in a Next.js Project
+
+To begin working with MySQL in a Next.js project, start by installing MySQL Community Server and setting it up using the installation wizard. Additionally, you can install MySQL Workbench, a graphical tool for managing MySQL databases.
+
+For database interactions, Prisma is a popular Object-Relational Mapper (ORM) that simplifies database operations like querying, creating, updating, or deleting data. To integrate Prisma, install its extension in Visual Studio Code and then install Prisma in your project using:
+
+```bash
+npm i prisma
+```
+
+Prisma's command-line interface (CLI) can be accessed via `npx`. Initialize Prisma with:
+
+```bash
+npx prisma init
+```
+
+This will create a `prisma` folder with a `schema.prisma` file and an `.env` file for environment variables, including your MySQL connection details. To set up Prisma for MySQL, configure the `schema.prisma` as follows:
+
+```prisma
+// schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+```
+
+In the `.env` file, add your MySQL connection string:
+
+```env
+// .env
+DATABASE_URL="mysql://user:password@localhost:3306/databasename"
+```
+
+Ensure that sensitive files like `.env` are not committed to version control by including them in `.gitignore`.
+
+```bash
+# .gitignore
+.env
+```
+
+With this setup, you're ready to work with MySQL using Prisma in your Node.js project.
+
+#### 5.2 Defining Application Models
+
+In Prisma, models represent the entities of your application's domain. To define a model, add it to the `schema.prisma` file using the `model` keyword followed by the entity name in PascalCase (each word capitalized). 
+
+A model consists of fields that represent the properties of the entity. Each field has a name, a data type (e.g., `Int`, `BigInt`, `String`, `Boolean`), and may include attributes like `@id` (for unique identifiers), `@default(value)` (for setting default values), `@default(autoincrement())` (for auto-incrementing values), and `@unique` (for ensuring field uniqueness).
+
+Here’s an example of how to define a model:
+
+```prisma
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+```
+
+To ensure your code is properly formatted, run:
+
+```bash
+npx prisma format
+```
+
+For more details about Prisma models and handling relationships in relational databases, refer to the official [Prisma documentation](https://www.prisma.io/docs/orm/prisma-schema/data-model/models).
+
+#### 5.3 Creating Migrations
+
+After defining or modifying Prisma models, you need to create migrations to keep the database schema in sync with these models. To do this, run the following command in the terminal:
+
+```bash
+npx prisma migrate dev
+```
+
+This will prompt you to name the migration, creating a folder inside the `prisma/migrations` directory with a descriptive SQL file. This file contains the SQL commands required to update the database according to your Prisma models. It's important to provide clear, descriptive names for each migration to document the applied changes.
+
+This migration process ensures that the database schema remains in sync with your Prisma models. You can connect to your database using MySQL Workbench via the connection URL (e.g., `databasename@localhost`) to view the schema. You'll notice a `_prisma_migrations` table, which Prisma uses to track the applied migrations, along with other tables representing your models.
+
+```sql
+-- Example SQL instructions found in migration file
+CREATE TABLE User (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255),
+  email VARCHAR(255) UNIQUE
+);
+```
+
+#### 5.4 Creating and Managing a Prisma Client
+
+To work with a database using Prisma, you need to create a Prisma client. Start by creating a `client.ts` file inside the `prisma` folder. Inside this file, import `PrismaClient` from `@prisma/client` and instantiate it. This instance allows access to the models defined in your Prisma schema, and you can use it to perform operations like retrieving, creating, updating, or deleting records.
+
+To ensure that the Prisma client is used consistently throughout your Next.js application, export this instance from the `client.ts` file. In development mode, however, Next.js's Fast Refresh can lead to multiple instances of the Prisma client being created, resulting in an error due to exceeding the client limit. To prevent this, use a global namespace to store a single instance of the Prisma client, which avoids re-creating it after every refresh.
+
+```typescript
+// prisma/client.ts
+import { PrismaClient } from '@prisma/client';
+
+// Function to create a new PrismaClient instance
+const prismaClientSingleton = () => {
+  return new PrismaClient();
+};
+
+// Declare global scope to store the singleton instance
+declare const globalThis: {
+  prismaGlobal: ReturnType<typeof prismaClientSingleton>;
+} & typeof global;
+
+// Use existing instance if available, otherwise create a new one
+const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
+
+// Export the Prisma client for use throughout the application
+export default prisma;
+
+// In development, store the instance globally to avoid re-creating it
+if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobal = prisma;
+```
+
+This setup ensures that Prisma operates efficiently by preventing multiple client instances during development while maintaining a single, reusable client across the application.
+
+#### 5.5 Fetching Data from the Database
+
+To retrieve data from a database using Prisma, first import the Prisma client from the `prisma` folder. To get multiple records from a table, you can call the `findMany()` method on the model, optionally passing an object to filter the results. This method returns a promise that you can `await`. If you need to retrieve a single, unique record, use the `findUnique()` method, providing a `where` condition to specify the criteria for fetching the record.
+
+Example:
+
+```typescript
+import prisma from '../prisma/client';
+
+// Fetch multiple records with optional filtering
+const users = await prisma.user.findMany({
+  where: { active: true },
+});
+
+// Fetch a unique record by its identifier
+const user = await prisma.user.findUnique({
+  where: { id: 1 },
+});
+```
+
+#### 5.6 Creating Data in a Database
+
+To insert data into a database using Prisma, first import the Prisma client from the `prisma` folder. Use the `create()` method on the model to create a new record. Pass an object containing the `data` property, where you manually specify the attributes for the new instance. This ensures that only authorized attributes are included, preventing users from submitting unauthorized fields. The `create()` method returns the newly created record.
+
+```typescript
+import prisma from '../prisma/client';
+
+// Create a new record
+const newUser = await prisma.user.create({
+  data: {
+    name: 'John Doe',
+    email: 'john@example.com',
+    active: true,
+  },
+});
+
+// newUser now contains the newly created user instance
+```
+
+#### 5.7 Updating Data in a Database
+
+To update a record in a database using Prisma, first import the Prisma client from the `prisma` folder. Use the `update()` method on the model, passing an object with two properties: `where`, which specifies the record to update (e.g., using a unique identifier), and `data`, which contains the fields to be updated. This approach ensures that only authorized fields are modified, preventing users from changing unauthorized attributes. The `update()` method returns the updated record.
+
+```typescript
+import prisma from '../prisma/client';
+
+// Update a record
+const updatedUser = await prisma.user.update({
+  where: { id: 1 },  // Identify the record to update
+  data: {
+    name: 'Eli',  // Fields to update
+    active: false,
+  },
+});
+
+// updatedUser now contains the updated user instance
+```
+
+#### 5.8 Deleting Data in a Database
+
+To delete a record from a database using Prisma, start by importing the Prisma client from the `prisma` folder. Then, use the `delete()` method on the model, passing an object with the `where` property to specify the record to be deleted, such as by its unique identifier. This will remove the specified record from the table.
+
+```typescript
+import prisma from '../prisma/client';
+
+// Delete a record
+const deletedUser = await prisma.user.delete({
+  where: { id: 1 },  // Identify the record to delete
+});
+
+// deletedUser contains the details of the removed record
+```
+
+## 6. Uploading Files
+
+#### 6.1 Uploading Files to Cloudinary
+
+To handle file uploads in a Next.js application, a cloud platform like Cloudinary is an ideal solution due to its seamless integration. Cloudinary allows easy file storage and retrieval, making it simple to work with in a Next.js project.
+
+Steps for Setup:
+
+1. **Sign Up for Cloudinary:** 
+   First, register on [Cloudinary's platform](https://cloudinary.com/), which provides a free tier with limited resources. Set up separate environments for development and production if needed.
+
+2. **Install Cloudinary:**
+   In your Next.js project, install the Cloudinary package using:
+   
+   ```bash
+   npm i cloudinary
+   ```
+
+3. **Configure Environment Variables:**
+   Add your Cloudinary cloud name to your environment variables in `.env.local` or `.env`:
+   
+   ```env
+   NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="<Your Cloud Environment Name>"
+   ```
+
+4. **Using the Cloudinary Upload Widget:**
+   Import `CldUploadWidget` from `next-cloudinary` into your React component. This component can be used to trigger the Cloudinary upload widget.
+   
+   ```tsx
+   "use client";
+   import { CldUploadWidget } from 'next-cloudinary';
+   
+   const MyUploadComponent = () => {
+     const handleUpload = (widget) => {
+       widget.open(); // Opens the Cloudinary widget
+     };
+   
+     return (
+       <CldUploadWidget uploadPreset="<Your Upload Preset>">
+         {({ open }) => (
+           <button onClick={open}>Upload Files</button> // Trigger upload on button click
+         )}
+       </CldUploadWidget>
+     );
+   };
+   
+   export default MyUploadComponent;
+   ```
+   
+   In addition to CldUploadWidget, [Next Cloudinary](https://next-cloudinary.dev/installation) offers other components for uploading files to Cloudinary in a Next.js application.
+
+5. **Configuring Upload Preset:**
+   
+   - Go to the Cloudinary management console.
+   - Navigate to "Settings" > "Upload" > "Upload Presets."
+   - Create a new upload preset with an unsigned signing mode and optionally, specify a folder for uploads.
+
+6. **File Management:**
+   After upload, the files can be viewed in the Cloudinary Media Library under the specified preset or folder.
+
+With these steps, Cloudinary provides a straightforward method for handling user file uploads in a Next.js app.
+
+#### 6.2 Handling File Upload Events
+
+The `CldUploadWidget` component from next-cloudinary provides an `onUpload` prop, which triggers each time a file is uploaded. You can pass a handler function to this prop, with parameters like `result` and `widget`. The `result` object contains metadata about the uploaded file, such as its unique identifier (`public_id`) and URL (`secure_url`). Using this metadata, you can display the uploaded file in your app.
+
+For instance, to show an uploaded image, import the `CldImage` component from `next-cloudinary` and provide the `public_id` as the `src` prop, allowing you to render images stored in Cloudinary.
+
+```tsx
+import { CldUploadWidget, CldImage } from 'next-cloudinary';
+import { useState } from 'react';
+
+const UploadComponent = () => {
+  const [imageId, setImageId] = useState(null);
+
+  return (
+    <>
+      <CldUploadWidget
+        uploadPreset="your-upload-preset"
+        onUpload={(result, widget) => {
+          setImageId(result.info.public_id);  // Capture the uploaded image's ID
+        }}
+      >
+        {({ open }) => <button onClick={open}>Upload Image</button>}
+      </CldUploadWidget>
+
+      {imageId && (
+        <CldImage src={imageId} alt="Uploaded image" width="300" height="300" />
+      )}
+    </>
+  );
+};
+
+export default UploadComponent;
+```
+
+#### 6.3 Customizing Cloudinary Upload Widgets via GUI
+
+Cloudinary offers a visual interface at [Cloudinary Docs](https://demo.cloudinary.com/uw/#/) that allows you to fully customize upload widgets through a user-friendly GUI. You can tailor various aspects such as upload sources, theme settings, fonts, and enable features like cropping or uploading multiple files. The page provides code snippets that reflect your customizations, making it easy to integrate personalized widgets into your Next.js project or other applications.
