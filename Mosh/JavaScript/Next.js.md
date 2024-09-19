@@ -1018,3 +1018,455 @@ export default UploadComponent;
 #### 6.3 Customizing Cloudinary Upload Widgets via GUI
 
 Cloudinary offers a visual interface at [Cloudinary Docs](https://demo.cloudinary.com/uw/#/) that allows you to fully customize upload widgets through a user-friendly GUI. You can tailor various aspects such as upload sources, theme settings, fonts, and enable features like cropping or uploading multiple files. The page provides code snippets that reflect your customizations, making it easy to integrate personalized widgets into your Next.js project or other applications.
+
+## 7. Authentification With NextAuth.js
+
+#### 7.1 Setting Up NextAuth.js for Authentication
+
+NextAuth.js is a popular authentication library for Next.js applications. To get started, first install the library using:
+
+```bash
+npm i next-auth
+```
+
+Next, set up an API route handler by creating a `route.ts` file inside a "catch-all" folder structure at `/app/api/auth/[...nextauth]/route.ts`. In this file, import `NextAuth` from `next-auth` and create a handler function that configures authentication options.
+
+```typescript
+import NextAuth from "next-auth";
+
+const handler = NextAuth({
+  // Add your authentication options here
+});
+
+export { handler as GET, handler as POST };
+```
+
+This setup automatically handles both GET and POST requests for `/auth` routes, enabling authentication flow in your application.
+
+In your `.env` file, include necessary environment variables such as:
+
+```bash
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-random-secret
+```
+
+You can generate a secure secret using `openssl rand -base64 32` for encryption and signing purposes.
+
+#### 7.2 Configuring Google OAuth with NextAuth.js
+
+NextAuth.js supports various authentication providers like Google, GitHub, Facebook, and more, allowing users to sign in using external services. For example, to integrate Google OAuth, first, go to the [Google Cloud Platform](https://console.developers.google.com/apis/credentials) and create a project. After configuring the project:
+
+1. **Set up the OAuth consent screen**: Define whether the users are internal or external. Fill in details such as the app name, support email, privacy policy URL, and more.
+2. **Configure OAuth credentials**: Go to the Credentials tab, create OAuth 2.0 credentials, and select the application type as "Web Application." Specify the Authorized JavaScript origins (e.g., `http://localhost:3000`) and Redirect URI (e.g., `http://localhost:3000/api/auth/callback/google`).
+3. After creating the credentials, you will receive a Client ID and Client Secret.
+
+Add the following values to your `.env` file:
+
+```bash
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+```
+
+Now, set up Google as a provider in your `NextAuth` configuration:
+
+```typescript
+// /app/api/auth/[...nextauth]/route.ts
+import NextAuth from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+
+const handler = NextAuth({
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+  ],
+});
+
+export { handler as GET, handler as POST };
+```
+
+This setup enables users to sign in via Google, redirecting them to Google for authentication and back to your app. You can trigger this with a link to `/api/auth/signin`.
+
+#### 7.3 Understanding Authentification Sessions
+
+When a user logs into your application using NextAuth.js, it creates an authentication session that is typically represented by a JSON Web Token (JWT). This token is used to maintain the user's session across requests. You can view these tokens in the browser’s DevTools by navigating to the Application panel and checking under the Cookies section. The session token is stored as a long string, which is actually an encoded JSON object using the base64 algorithm.
+
+This JWT contains key user data, such as the user's name, email, profile picture, and metadata like the issued at (`iat`) and expiration time (`exp`). Each time the client makes a request, this token is sent to the server for user identification.
+
+The server decodes the JWT to retrieve and verify this information, enabling secure and stateless communication between the client and the server.
+
+```typescript
+// Example structure of decoded JWT:
+{
+  name: "John Doe",
+  email: "john.doe@example.com",
+  picture: "https://example.com/avatar.jpg",
+  sub: "user_id",
+  iat: 1675815469,  // issued at
+  exp: 1675819069   // expiration time
+}
+```
+
+NextAuth.js takes care of encoding, decoding, and managing the JWT to ensure that user sessions are handled securely across requests.
+
+#### 7.4 Accessing Authentication Session
+
+###### 7.4.1 Client-Side
+
+To manage authentication sessions on the client side with NextAuth.js, create an `AuthProvider` component. First, inside the `app` folder, add a new `auth` directory and create a `Provider.tsx` file. Define the `AuthProvider` component to wrap around the app's child components, using the `SessionProvider` from `next-auth/react`. This ensures session data is available throughout the app. Don’t forget to mark the component as a client-side component using `"use client"` at the top of the file.
+
+```typescript
+// AuthProvider.tsx
+"use client";
+
+import { SessionProvider } from "next-auth/react";
+
+export default function AuthProvider({ children }) {
+  return <SessionProvider>{children}</SessionProvider>;
+}
+```
+
+Next, update your root `layout.tsx` file to wrap the entire app in the `AuthProvider`. This will allow session data to flow through the React context to all child components. You can now access session data anywhere in the app.
+
+```typescript
+// Usage in layout.tsx
+import AuthProvider from "./auth/Provider";
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+To use session data, the `useSession` hook from `next-auth/react` can be leveraged. It returns the session status (`authenticated`, `loading`, or `unauthenticated`) and session data (such as user details). This can help conditionally render components based on the user’s authentication state.
+
+```typescript
+"use client";
+
+import { useSession } from "next-auth/react";
+
+export default function UserProfile() {
+  // Destructure the status and session from the useSession hook
+  const { data: session, status } = useSession();
+
+  // Handle the loading state
+  if (status === "loading") {
+    return <p>Loading...</p>;
+  }
+
+  // Handle the unauthenticated state
+  if (status === "unauthenticated") {
+    return <p>You are not logged in. Please sign in to view your profile.</p>;
+  }
+
+  // Handle the authenticated state
+  return (
+    <div>
+      <h1>Welcome, {session?.user?.name}!</h1>
+      <p>Email: {session?.user?.email}</p>
+      <img src={session?.user?.image ?? "/default-avatar.png"} alt="User Avatar" />
+    </div>
+  );
+}
+```
+
+###### 7.4.2 Server-Side
+
+To access authentication sessions on the server side in a Next.js app, you can use the `getServerSession()` function from NextAuth.js. Ensure that the configuration object used to initialize NextAuth is exported from your route handler file (`app/api/auth/[...nextauth]/route.ts`). This will allow the same configuration to be used in other parts of your app.
+
+```typescript
+import NextAuth from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+
+export const authOptions = {
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+  ],
+};
+
+const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST };
+```
+
+In any server-side component (e.g., `app/page.tsx`), you can retrieve the current session by calling `getServerSession()` and passing the `authOptions` from your route handler.
+
+```typescript
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+
+export default async function HomePage() {
+  // Fetch the session
+  const session = await getServerSession(authOptions);
+
+  return (
+    <div>
+      {session ? (
+        <p>Welcome, {session.user?.name}</p>
+      ) : (
+        <p>Please sign in to access this page.</p>
+      )}
+    </div>
+  );
+}
+```
+
+This setup ensures that server-side components and API routes can both access the current session. The `getServerSession()` function returns a promise that resolves with the session data, allowing you to easily determine if a user is authenticated and access user information on the server.
+
+#### 7.5 Signing Out with NextAuth.js
+
+In a Next.js application using NextAuth.js, you can allow users to sign out by using the NextAuth-provided sign-out page. To implement this, simply add a `Link` component that directs users to `/api/auth/signout`. This route will trigger NextAuth’s built-in sign-out process, ensuring that the user’s session is properly terminated.
+
+```tsx
+import Link from 'next/link';
+
+export default function SignOutLink() {
+  return (
+    <div>
+      <Link href="/api/auth/signout">
+        <button>Sign Out</button>
+      </Link>
+    </div>
+  );
+}
+```
+
+By clicking the "Sign Out" button, the user will be navigated to the sign-out page, which finalizes the sign-out process and ends the authentication session.
+
+#### 7.6 Protect Routes
+
+In Next.js, a middleware function can be used to run code before a request is completed. In a project using NextAuth.js, middleware can check whether a user has a session before accessing protected routes. To set this up, create a `middleware.ts` file in the root of the project, and import the middleware function from `next-auth/middleware`. This middleware will run on every request by default, but you can restrict it to specific routes using a matcher.
+
+The matcher allows you to specify which paths the middleware should apply to, protecting sensitive routes. Dynamic placeholders like `*`, `+`, or `?` can be used for flexible path matching. If a user tries to access a protected route without an active session, NextAuth will automatically redirect them to the sign-in page.
+
+```typescript
+// middleware.ts
+import { withAuth } from 'next-auth/middleware';
+
+export default withAuth({
+  pages: {
+    signIn: '/auth/signin', // Redirects to the sign-in page if the user is not authenticated
+  },
+});
+
+export const config = {
+  matcher: ['/dashboard*', '/profile*'], // Apply middleware only on these paths
+};
+```
+
+#### 7.7 Database Adapters
+
+To store users and their associated data in a database when using NextAuth.js, you can leverage adapters like the Prisma Adapter, which handles persisting session, account, and user data. First, install the required dependencies in your project:
+
+```bash
+npm i @next-auth/prisma-adapter
+npm i prisma
+```
+
+Then, initialize the Prisma adapter in your authentication configuration file located at `/app/api/auth/[...nextauth]/route.ts`:
+
+```typescript
+import NextAuth from "next-auth";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { prisma } from "@/prisma/client";
+
+export const authOptions = NextAuth({
+  adapter: PrismaAdapter(prisma), // Integrates Prisma with NextAuth
+  providers: [], // Add providers here (e.g., Google, GitHub)
+});
+```
+
+You'll also need to add models to the Prisma schema to store user accounts, sessions, and verification tokens. Example schema:
+
+```prisma
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String  @map("user_id")
+  provider           String
+  providerAccountId  String  @map("provider_account_id")
+  refresh_token      String? @db.Text
+  access_token       String? @db.Text
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@map("sessions")
+}
+
+model User {
+  id                String    @id @default(cuid())
+  email             String?   @unique
+  hashedPassword     String?
+  name              String?
+  accounts          Account[]
+  sessions          Session[]
+  @@map("users")
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+  @@unique([identifier, token])
+  @@map("verificationtokens")
+}
+```
+
+After defining the models, run a Prisma migration to create the necessary tables:
+
+```bash
+npx prisma migrate dev
+```
+
+This will create the tables Account, Session, User, and VerificationToken. If you're using OAuth providers (e.g., Google), the session strategy will default to JWT. To change this behavior and make it compatible with OAuth, you need to configure your `authOptions` like this:
+
+```typescript
+export const authOptions: NextAuthOptions = {
+  session: {
+    strategy: 'jwt', // Use JSON Web Tokens
+  },
+  // Add Prisma adapter and providers here
+};
+```
+
+Now, users and their data will be stored in your database, and sessions will be managed efficiently using Prisma.
+
+#### 7.8 Custom Authentication
+
+###### 7.8.1 Configuring Credential Provider
+
+In addition to OAuth providers, NextAuth.js offers a Credential Provider, which allows manual handling of user authentication based on custom logic. To integrate it, start by importing the `CredentialsProvider` from `next-auth/providers/credentials` and add it to the array of providers during the NextAuth initialization.
+
+A typical `CredentialsProvider` setup includes defining fields such as `email` and `password` inside the `credentials` property. The `authorize` method, an asynchronous function, validates the credentials by checking if both fields are provided and then compares the provided password with the stored hashed password (e.g., using bcrypt).
+
+Here's an example setup:
+
+```typescript
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { prisma } from "@/prisma/client";
+import bcrypt from "bcrypt";
+
+export const authOptions = NextAuth({
+  providers: [
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "email", placeholder: "you@example.com" },
+        password: { label: "Password", type: "password", placeholder: "Password" }
+      },
+      async authorize(credentials, req) {
+        // Check if both email and password are provided
+        if (!credentials?.email || !credentials?.password) return null;
+
+        // Retrieve user from the database
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email },
+        });
+
+        // Return null if user is not found
+        if (!user) return null;
+
+        // Compare provided password with hashed password in database
+        const isValidPassword = await bcrypt.compare(credentials.password, user.hashedPassword);
+
+        // Return user object if valid, otherwise return null
+        return (isValidPassword) ? user : null;
+      }
+    })
+  ],
+});
+```
+
+To install bcrypt for password hashing and comparison, run the following commands:
+
+```bash
+npm i bcrypt
+npm i -D @types/bcrypt
+```
+
+This setup allows manual user validation, offering flexibility when integrating custom databases or authentication methods. The `authorize` method ensures that only valid users are authenticated by comparing the provided password with the hashed password stored in the database.
+
+###### 7.8.2 User Registration
+
+To enable user registration when using the Credential Provider in NextAuth.js, you can create an API endpoint that will handle user account creation. This endpoint can be accessed by a client-side form component.
+
+Start by creating a register folder inside the `/app/api` directory, and add a `route.ts` file. In this file, define a `POST` function to handle the registration process. This function should:
+
+1. **Parse and validate the request body**: Use `request.json()` to parse the incoming data and validate it using the Zod library. Zod's `z.object()` allows you to define schema validation rules for fields like email and password. Then, use `schema.safeParse()` to check if the request meets the validation criteria.
+
+2. **Check if the user already exists**: Utilize Prisma's `findUnique()` method to check if a user with the same email is already present in the database. If the user exists, return an error response.
+
+3. **Hash the password**: If the user doesn't exist, hash the password using bcrypt's `hash()` method to securely store it in the database.
+
+4. **Create the new user**: Call Prisma's `create()` method to insert the new user with the hashed password into the database.
+
+5. **Return a response**: Return a JSON response with the newly created user's details or an error message if the operation fails.
+
+Here’s an example code structure for the registration API:
+
+```typescript
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/prisma/client';
+import bcrypt from 'bcrypt';
+import { z } from 'zod';
+
+// Define schema validation
+const userSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+});
+
+export async function POST(request: NextRequest) {
+  const body = await request.json();
+
+  // Validate request body using Zod
+  const validation = userSchema.safeParse(body);
+  if (!validation.success) {
+    return NextResponse.json({ error: validation.error }, { status: 400 });
+  }
+
+  const { email, password } = body;
+
+  // Check if user already exists
+  const existingUser = await prisma.user.findUnique({
+    where: { email },
+  });
+
+  if (existingUser) {
+    return NextResponse.json({ error: 'User already exists' }, { status: 400 });
+  }
+
+  // Hash password
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  // Create new user
+  const newUser = await prisma.user.create({
+    data: {
+      email,
+      password: hashedPassword,
+    },
+  });
+
+  return NextResponse.json(newUser);
+}
+```
+
+With this setup, you can securely register new users in your Next.js application by processing form submissions and saving user details to your database.
