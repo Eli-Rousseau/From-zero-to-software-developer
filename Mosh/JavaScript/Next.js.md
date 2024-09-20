@@ -1470,3 +1470,346 @@ export async function POST(request: NextRequest) {
 ```
 
 With this setup, you can securely register new users in your Next.js application by processing form submissions and saving user details to your database.
+
+## 8. Sending Emails
+
+#### 8.1 Setting Up React Email
+
+React Email is a widely-used library for creating responsive email templates in Next.js applications. To integrate it, begin by installing the required packages with the following command:
+
+```bash
+npm install react-email @react-email/components
+```
+
+Next, add a script to your `package.json` for previewing email templates. This command launches a local server where you can preview the emails you build:
+
+```json
+"scripts": {
+  "preview-email": "email dev -p 3030"
+}
+```
+
+#### 8.2 Creating Email Templates
+
+Now, create an `emails` folder at the root of your project to store the React components that will represent your email templates. Inside this folder, you can design your email templates using components provided by the React Email library such as `Html`, `Body`, `Container`, `Text`, `Link`, and `Preview`. These components help structure your email in a way that ensures proper rendering across different email clients.
+
+Here’s an example of a basic email template using these components:
+
+```typescript
+import { Html, Body, Container, Text, Link, Preview } from "@react-email/components";
+
+export default function WelcomeEmail() {
+  return (
+    <Html>
+      <Preview>Welcome to Our Platform</Preview>
+      <Body>
+        <Container>
+          <Text>Hello,</Text>
+          <Text>Welcome to our platform! We're excited to have you.</Text>
+          <Link href="https://yourwebsite.com">Click here to get started!</Link>
+        </Container>
+      </Body>
+    </Html>
+  );
+}
+```
+
+#### 8.3 Previewing Email Templates
+
+The React Email library includes a built-in tool to preview email templates during development. To launch this environment, run the following command:
+
+```bash
+npm run preview-email
+```
+
+This command will start a local server on `http://localhost:3030`, where you can preview and interact with all the templates stored in your `emails` folder. You can also send test emails directly to a recipient through this interface.
+
+However, running the preview tool generates thousands of temporary files within the `.react-email/` folder in your Next.js project, which are solely for development purposes and should not be tracked by version control. To avoid this, add the following entry to your `.gitignore` file:
+
+```
+.react-email/
+```
+
+This ensures that your repository remains clean, and only relevant project files are tracked.
+
+#### 8.4 Styling Email Components
+
+In React Email, there are two main strategies for styling components within email templates:
+
+1. **Inline CSS Styling:**
+   One approach is to write CSS directly within the `EmailTemplate.tsx` file. You can declare a variable for styles using the `CSSProperties` type imported from React. These styles are then applied to elements through the `style` prop.
+   
+   ```tsx
+   import React, { CSSProperties } from 'react';
+   
+   const textStyle: CSSProperties = {
+     color: 'blue',
+     fontSize: '16px',
+   };
+   
+   const EmailTemplate = () => (
+     <Container>
+       <Text style={textStyle}>Hello, this is a styled text!</Text>
+     </div>
+   );
+   ```
+
+2. **Tailwind CSS Styling:**
+   Another option is to use Tailwind CSS for styling. Start by importing the `Tailwind` component from `@react-email/components`. You can then wrap your elements with the `Tailwind` component and apply Tailwind classes via the `className` property.
+   
+   ```tsx
+   import { Tailwind } from '@react-email/components';
+   
+   const EmailTemplate = () => (
+     <Tailwind>
+       <Container className="bg-blue-500 text-white p-4">
+         <Text className="text-lg">Hello, this is a Tailwind styled text!</Text>
+       </Container>
+     </Tailwind>
+   );
+   ```
+
+#### 8.4 Sending Emails
+
+To send emails using React Email, you'll need to integrate it with an email sending service such as Resend. Resend offers various pricing plans, including a free plan that allows sending up to 3,000 emails per month. First, sign up for Resend and obtain your unique API key. 
+
+In your Next.js project, store the API key in the `.env` file as follows:
+
+```env
+RESEND_API_KEY=your_resend_api_key
+```
+
+Next, install the Resend package:
+
+```bash
+npm i resend
+```
+
+In your business logic (e.g., when submitting a form), import Resend, create an instance using the `RESEND_API_KEY`, and call the `emails.send()` method. This method requires a payload object that includes the sender’s email, recipient email, subject, and the React email template.
+
+```typescript
+import Resend from 'resend';
+import { EmailTemplate } from '@/emails/EmailTemplate';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+async function sendEmail() {
+  await resend.emails.send({
+    from: 'sender@example.com',
+    to: 'recipient@example.com',
+    subject: 'Welcome to Our Service',
+    react: <EmailTemplate />,
+  });
+}
+```
+
+Ensure the sender’s email is verified in the Domains section of your Resend account for successful delivery. This setup allows you to send dynamic emails from your Next.js application.
+
+## 9. Optimizations in Next.js
+
+#### 9.1 Optimizing Images
+
+The `Image` component in Next.js (imported from `next/image`) offers significant performance improvements over the standard HTML image element by automatically compressing and resizing images based on the user's viewport. It should be preferred for handling images, especially since it reduces load times and bandwidth usage.
+
+The component accepts several props, such as:
+
+- **`src`**: This can be a statically imported image or a URL for remote images.
+- **`alt`**: Provides a description for the image.
+
+For remote images (like those stored on cloud services), it's crucial to define valid domains in the `next.config.js` file. This ensures that only trusted sources are allowed to serve images, enhancing security.
+
+```javascript
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'example.com',
+        pathname: '/account123/**',
+      },
+    ],
+  },
+};
+```
+
+When using the `Image` component on remote images, always specify image dimensions using the `width` and `height` props for fixed-sized images. For responsive images, the `fill` prop is recommended. To maintain aspect ratios, use `object-cover` or `object-contain` from Tailwind CSS, applied via the `className` prop. You can also manage image responsiveness by using the `sizes` prop, which accepts relative units and media queries.
+
+Other key features include:
+
+- **`quality`**: Controls the image quality (default is 75).
+- **`priority`**: For images above the fold, set this to prioritize their loading, as the component uses lazy loading by default.
+
+When using `fill`, ensure that the parent container has a non-static position (e.g., `relative`, `absolute`, or `fixed`) and proper sizing.
+
+Example usage:
+
+```tsx
+import Image from 'next/image';
+import exampleImage from '@/public/example.jpg';
+
+export default function MyComponent() {
+  return (
+    <div className="relative w-full h-64">
+      <Image
+        src={exampleImage}
+        alt="An example image"
+        fill
+        className="object-cover"
+        priority
+      />
+    </div>
+  );
+}
+```
+
+#### 9.2 Adding Third-Party Scripts
+
+Incorporating third-party services often requires adding external scripts to your pages. In Next.js, rather than directly using HTML's `<script>` tag, it is better to use the **`Script`** component from `next/script`, which offers better control and optimization for loading these scripts.
+
+To include a script on specific pages, you can add the `Script` component within individual pages or layouts. For example, to load the script across all pages, you should include it in the `root layout.tsx` file. For inline scripts, you can avoid errors by enclosing long scripts in braces and backticks, which allows the `Script` component to parse them correctly.
+
+The `Script` component offers various loading strategies for more efficient rendering:
+
+- **`beforeInteractive`**: Loads the script before any client-side code is executed, useful for critical scripts.
+- **`afterInteractive`** (default): Loads the script once the page becomes interactive.
+- **`lazyOnLoad`**: Delays the script until after all other resources are fetched, perfect for low-priority or background scripts.
+
+When dealing with multiple third-party scripts, it may be preferable to store them in a separate component for cleaner code management.
+
+Example usage:
+
+```tsx
+import Script from 'next/script';
+
+export default function MyPage() {
+  return (
+    <>
+      <h1>My Page</h1>
+      <Script 
+        id="third-party-script" 
+        strategy="lazyOnLoad"
+      >
+        {`console.log('Third-party script loaded');`}
+      </Script>
+    </>
+  );
+}
+```
+
+#### 9.3 Using Custom Fonts
+
+To use Google Fonts in a Next.js application, you can easily import them using the `next/font/google` library. For example, importing the Roboto font can be done by calling the font function and passing an options object that specifies font properties such as `subsets` and `weight`. The returned font object can then be applied to elements by setting the `className` attribute to `roboto.className`.
+
+```tsx
+import { Roboto } from 'next/font/google';
+
+const roboto = Roboto({
+  subsets: ['latin'],
+  weight: '400',
+});
+
+export default function MyComponent() {
+  return <div className={roboto.className}>Hello World!</div>;
+}
+```
+
+For non-Google custom fonts, use the `localFont` function imported from `next/font/local` . This function allows you to load fonts from local files by passing an options object, including the `src` property for the font file location and a `variable` for naming the font (e.g., `--font-poppins`). To use the font in Tailwind CSS, you can extend the `fontFamily` in the `tailwind.config.ts` file. Reference the font using `var(--font-poppins)` in your CSS, and apply it to elements with the `className` attribute like `font-poppins`.
+
+```tsx
+import localFont from 'next/font/local';
+
+const poppins = localFont({
+  src: './fonts/Poppins-Regular.ttf',
+  variable: '--font-poppins',
+});
+
+export default function MyComponent() {
+  return <div className="font-poppins">Hello World!</div>;
+}
+
+// tailwind.config.ts
+module.exports = {
+  theme: {
+    extend: {
+      fontFamily: {
+        poppins: ['var(--font-poppins)'],
+      },
+    },
+  },
+};
+```
+
+#### 9.4 Search Engine Optimization
+
+In Next.js, improving Search Engine Opitimization (SEO) is straightforward using the `metadata` object. In the root `layout.tsx` file, you can export this object with properties like `title` and `description`. Next.js will automatically insert these into the HTML head, allowing search engines to index the content effectively. These meta tags help define each page’s purpose, making them more search engine-friendly. Additionally, `metadata` can include other properties like `openGraph` to optimize for social sharing. When adding metadata in `layout.tsx`, it applies globally across all pages, but it can be overridden by more specific `metadata` settings in individual `page.tsx` or layout files.
+
+```tsx
+export const metadata = {
+  title: 'My Website',
+  description: 'This is a great website.',
+  openGraph: {
+    title: 'My Website',
+    description: 'Check out this awesome site!',
+    url: 'https://mywebsite.com',
+    type: 'website',
+  },
+};
+```
+
+For dynamic pages (like those with route parameters or query strings), metadata can be generated dynamically by exporting an `async generateMetadata` function, allowing you to fetch data from an API and return a metadata object based on the content.
+
+```tsx
+export async function generateMetadata() {
+  const data = await fetchDataFromAPI();
+  return {
+    title: data.pageTitle,
+    description: data.pageDescription,
+  };
+}
+```
+
+#### 9.5 Lazy Loading
+
+Lazy loading is a performance optimization strategy where components or third-party libraries are loaded only when needed, rather than upfront during page load. In Next.js, all statically imported components are loaded with the initial page load by default. To enable lazy loading, the `dynamic` function from `next/dynamic` is used. 
+
+To lazily load a component, use the `dynamic` function, passing it an import statement for the component. You can also include an optional second argument, an object with properties like `loading`, which displays a loader during the component load, and `ssr: false` to disable server-side rendering for that component.
+
+```tsx
+import dynamic from 'next/dynamic';
+
+const LazyComponent = dynamic(() => import('./HeavyComponent'), {
+  loading: () => <p>Loading...</p>,
+  ssr: false, // Disables server-side rendering for this component
+});
+
+export default function Page() {
+  return <LazyComponent />;
+}
+```
+
+Lazy loading is ideal for large, resource-heavy components that may slow down the initial load. However, for smaller components, lazy loading may slightly increase the component size and degrade performance.
+
+You can also lazily load third-party libraries by dynamically importing them using `import()`. This technique ensures the library is loaded only when it is needed, not during the initial page load:
+
+```tsx
+export default function Page() {
+  async function loadLibrary() {
+    const { someLibraryFunction } = await import('some-library');
+    someLibraryFunction();
+  }
+
+  return <button onClick={loadLibrary}>Load Library</button>;
+}
+```
+
+This technique ensures efficient resource usage and can significantly improve load times by reducing the amount of initial JavaScript loaded.
+
+## 10. Building and Deploying a Next.js Application
+
+To locally build a Next.js application, run the command `npm run build`, which compiles the project and outputs the production-ready files to the `dist` folder. Any build errors must be fixed for the process to succeed.
+
+For deployment, Vercel is a popular platform for hosting Next.js applications. It integrates easily with GitHub repositories, enabling automated deployments when code is pushed to GitHub. To deploy, you will synchronize your repository with Vercel and configure settings such as the project name, framework (Next.js), build command, and output directory.
+
+Additionally, you must set up environment variables for production, like database URLs or cloud service credentials. These production values should be distinct from development values to enhance security, ensuring your production environment is protected even if the development environment is compromised.
+
+Once set up, Vercel automates the process: it pulls the latest code from your GitHub repository, builds the application, and deploys it whenever updates are pushed.
