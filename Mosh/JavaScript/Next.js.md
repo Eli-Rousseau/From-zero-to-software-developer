@@ -167,35 +167,31 @@ export default async function ServerDataComponent() {
 
 #### 1.7 Caching
 
-Server-side data fetching in Next.js offers an additional advantage: built-in caching. Data can be retrieved from three sources—memory, the file system, and the network—listed in decreasing order of speed. Next.js uses a file-system-based cache to store fetched data automatically, optimizing performance. 
+Server-side data fetching in Next.js offers an additional advantage: built-in caching. Data can be retrieved from three sources—memory, the file system, and the network—listed in decreasing order of speed. Next.js uses a file-system-based cache to store fetched data automatically, optimizing performance. Next.js supports three main types of caching:
 
-To configure caching behavior, you can pass a second parameter to the `fetch` function. The `cache` property can be set to `'no-store'` to disable caching, while the `next` property with a `revalidate` option allows the data to be re-fetched at specified intervals. Note that Next.js caching is only available when using the `fetch` method, and doesn't apply to third-party libraries like Axios.
+1. **Data Cache**: This is used when fetching data using the `fetch()` function. By default, fetched data is cached on the file system and persists until the application is redeployed. To control caching behavior, you can pass an optional configuration object. For instance, you can disable caching by setting `{ cache: "no-store" }` or enable time-based revalidation with `{ next: { revalidate: 3600 } }`, where `3600` seconds is the revalidation time.
 
-```tsx
-// Example: Fetching with cache configuration
-export default async function ServerComponent() {
-  const response = await fetch('https://api.example.com/data', {
-    cache: 'no-store', // Disable caching
-  });
-  const data = await response.json();
-
-  return <div>Data: {data}</div>;
-}
+```javascript
+fetch('https://api.example.com/data', { cache: "no-store" })
+fetch('https://api.example.com/data', { next: { revalidate: 3600 } })
 ```
 
-```tsx
-// Example: Fetching with revalidation
-export default async function ServerComponent() {
-  const response = await fetch('https://api.example.com/data', {
-    next: { revalidate: 60 }, // Revalidate data every 60 seconds
-  });
-  const data = await response.json();
+2. **Full Route Cache**: This stores the output of statically rendered routes, which are rendered at build time. These cached routes remain in place until the application is rebuilt and redeployed. Dynamic routes, however, are rendered upon request. You can force dynamic rendering by exporting constants such as `dynamic = "force-dynamic"` or set time-based revalidation using `revalidate = 3600`.
 
-  return <div>Data: {data}</div>;
-}
+```javascript
+export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 ```
 
-By leveraging Next.js's built-in caching, you can optimize data fetching performance while maintaining control over how often the data is refreshed.
+3. **Router Cache**: This client-side cache stores page payloads in the browser and lasts for the duration of a session. Pages are automatically invalidated after a specific time—5 minutes for static routes or 30 seconds for dynamic routes. You can also manually force a page refresh using `router.refresh()` to invalidate the cache.
+
+```javascript
+import { useRouter } from 'next/router';
+const router = useRouter();
+router.refresh();
+```
+
+These caching strategies ensure efficient data fetching and page rendering while allowing for flexible control over how content is delivered.
 
 #### 1.8 Static and Dynamic Rendering
 

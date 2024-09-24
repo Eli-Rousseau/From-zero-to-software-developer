@@ -1,5 +1,3 @@
-function LoadingNewIssuePage() {
-  return <div>Loading...</div>;
-}
+import IssueFormSkeleton from "../_components/IssueFormSkeleton";
 
-export default LoadingNewIssuePage;
+export default IssueFormSkeleton;
