@@ -167,31 +167,36 @@ export default async function ServerDataComponent() {
 
 #### 1.7 Caching
 
-Server-side data fetching in Next.js offers an additional advantage: built-in caching. Data can be retrieved from three sources—memory, the file system, and the network—listed in decreasing order of speed. Next.js uses a file-system-based cache to store fetched data automatically, optimizing performance. Next.js supports three main types of caching:
+# 
 
-1. **Data Cache**: This is used when fetching data using the `fetch()` function. By default, fetched data is cached on the file system and persists until the application is redeployed. To control caching behavior, you can pass an optional configuration object. For instance, you can disable caching by setting `{ cache: "no-store" }` or enable time-based revalidation with `{ next: { revalidate: 3600 } }`, where `3600` seconds is the revalidation time.
+Next.js uses three primary caching strategies to optimize performance: **data cache**, **full route cache**, and **router cache**. These caching mechanisms are essential for improving both static and dynamic content delivery across server-side rendering (SSR), client-side rendering (CSR), and static site generation (SSG).
 
-```javascript
-fetch('https://api.example.com/data', { cache: "no-store" })
-fetch('https://api.example.com/data', { next: { revalidate: 3600 } })
-```
+1. **Data Cache**: 
+   The data cache stores results from `fetch()` calls or API requests. By default, this data is cached until the application is redeployed. Developers can disable caching by passing `{ cache: "no-store" }` as an option or use time-based revalidation with `{ next: { revalidate: 3600 } }`. This is particularly useful when using **Incremental Static Regeneration (ISR)**, where static pages can be updated after build time.
+   
+   ```javascript
+   fetch('https://api.example.com/data', { cache: "no-store" });
+   fetch('https://api.example.com/data', { next: { revalidate: 3600 } });
+   ```
 
-2. **Full Route Cache**: This stores the output of statically rendered routes, which are rendered at build time. These cached routes remain in place until the application is rebuilt and redeployed. Dynamic routes, however, are rendered upon request. You can force dynamic rendering by exporting constants such as `dynamic = "force-dynamic"` or set time-based revalidation using `revalidate = 3600`.
+2. **Full Route Cache**: 
+   This stores the entire HTML and JSON output of static routes generated at build time using **SSG**. Full route caching allows for fast delivery of pre-rendered pages. The cache is updated either through revalidation settings or when the application is redeployed. To force dynamic rendering, you can export options like `dynamic = "force-dynamic"` or `revalidate = 3600` to set cache timing for dynamic routes.
+   
+   ```javascript
+   export const dynamic = "force-dynamic";
+   export const revalidate = 3600;
+   ```
 
-```javascript
-export const dynamic = "force-dynamic";
-export const revalidate = 3600;
-```
+3. **Router Cache**: 
+   This cache improves client-side navigation by storing the payload of previously visited pages in the browser. Prefetching of pages happens automatically when the user hovers over links. Cached content is refreshed based on whether the route is static (cached for 5 minutes) or dynamic (cached for 30 seconds). Developers can force the Next.js router to refresh a page by calling `router.refresh()`.
+   
+   ```javascript
+   import { useRouter } from 'next/router';
+   const router = useRouter();
+   router.refresh();
+   ```
 
-3. **Router Cache**: This client-side cache stores page payloads in the browser and lasts for the duration of a session. Pages are automatically invalidated after a specific time—5 minutes for static routes or 30 seconds for dynamic routes. You can also manually force a page refresh using `router.refresh()` to invalidate the cache.
-
-```javascript
-import { useRouter } from 'next/router';
-const router = useRouter();
-router.refresh();
-```
-
-These caching strategies ensure efficient data fetching and page rendering while allowing for flexible control over how content is delivered.
+In summary, Next.js uses **data cache** to optimize API fetching, **full route cache** to improve static and dynamic page loading, and **router cache** to enhance client-side navigation for a better user experience. These strategies, when used effectively, improve the overall performance and scalability of a Next.js application.
 
 #### 1.8 Static and Dynamic Rendering
 

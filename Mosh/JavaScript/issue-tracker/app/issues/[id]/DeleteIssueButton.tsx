@@ -4,6 +4,7 @@ import { Spinner } from "@/app/components";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 interface Props {
   issueId: number;
@@ -13,6 +14,8 @@ function DeleteIssueButton({ issueId }: Props) {
   const router = useRouter();
   const [error, setError] = useState(false);
   const [isDeleting, setDeleting] = useState(false);
+
+  const { data: session } = useSession();
 
   const deleteIssue = async () => {
     try {
@@ -30,7 +33,7 @@ function DeleteIssueButton({ issueId }: Props) {
     <>
       <AlertDialog.Root>
         <AlertDialog.Trigger>
-          <Button color="red" disabled={isDeleting}>
+          <Button color="red" disabled={isDeleting || session === null}>
             Delete Issue{isDeleting && <Spinner></Spinner>}
           </Button>
         </AlertDialog.Trigger>
