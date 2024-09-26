@@ -167,8 +167,6 @@ export default async function ServerDataComponent() {
 
 #### 1.7 Caching
 
-# 
-
 Next.js uses three primary caching strategies to optimize performance: **data cache**, **full route cache**, and **router cache**. These caching mechanisms are essential for improving both static and dynamic content delivery across server-side rendering (SSR), client-side rendering (CSR), and static site generation (SSG).
 
 1. **Data Cache**: 
@@ -177,6 +175,21 @@ Next.js uses three primary caching strategies to optimize performance: **data ca
    ```javascript
    fetch('https://api.example.com/data', { cache: "no-store" });
    fetch('https://api.example.com/data', { next: { revalidate: 3600 } });
+   ```
+   
+   The `cache()` function improves the data caching strategy by allowing asynchronous data-fetching functions to store their results for reuse during rendering. This means that if the same data is requested multiple times, it can be fetched from the cache instead of making a new network request.
+   
+   ```javascript
+   import { cache } from 'react';
+   
+   // Create a cached function to fetch data from a specific API endpoint
+   const fetchData = cache((endpoint) => fetch(`https://api.example.com/data/${endpoint}`));
+   
+   // Example function to use the cached data
+   const ExampleFunction = async (endpoint) => {
+     const data = await fetchData(endpoint); // Fetch the data using the cached function
+     console.log(data); // Process the fetched data
+   };
    ```
 
 2. **Full Route Cache**: 
@@ -369,9 +382,11 @@ In this example, visiting `/app/123/456` would display "Route Parameters: 123, 4
 
 #### 3.4 Accessing Query String Parameters in Next.js
 
-In Next.js, you can access query string parameters by defining a `Props` interface that includes a `searchParams` property, which stores an object containing the query parameters. These parameters can then be used to render dynamic content based on the query values.
+In Next.js, query string parameters can be accessed on both the server and client sides, allowing developers to build dynamic pages that respond to URL changes. This can be done through a server-side approach by passing query parameters to components via `props`, or using the `useSearchParams` hook for client-side handling.
 
-To navigate to a route with query parameters, use the `Link` component, setting the `href` to a URL with query strings (e.g., `/list?query=value`). Unlike standard React applications that use client-side state, this approach leverages server-side handling of query parameters, allowing state to be passed and managed on the server.
+###### 3.4.1 Server-Side Access of Query Parameters
+
+When handling query parameters on the server side in Next.js, a `Props` interface can be defined to include a `searchParams` object. This object stores the query parameters from the URL and can be passed to components for rendering dynamic content. This approach is useful in server-rendered pages where query parameters affect what is displayed to the user.
 
 ```tsx
 // Example: /app/list/page.tsx
@@ -388,18 +403,72 @@ const ListPage = ({ searchParams }: Props) => {
 export default ListPage;
 ```
 
+###### 3.4.2 Client-Side Access of Query Parameters
+
+Next.js also offers the `useSearchParams` hook to work with query parameters on the client side. This hook returns an API for reading and updating URL query strings, ideal for use cases like filtering, search functionality, or pagination.
+
 ```tsx
-// Example of linking to the route with query params
-import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
-const HomePage = () => {
-  return <Link href="/app/list?query=example">Go to List with Query</Link>;
-};
+function ProductsPage() {
+  const searchParams = useSearchParams();
 
-export default HomePage;
+  // Access specific query parameters
+  const category = searchParams.get('category');
+  const page = searchParams.get('page');
+
+  return (
+    <div>
+      <h1>Products</h1>
+      <p>Category: {category}</p>
+      <p>Page: {page}</p>
+    </div>
+  );
+}
 ```
 
-This approach allows for handling query string parameters on the server, offering more flexibility compared to client-side state management.
+###### 3.4.3 Managing Query Parameters With `URLSearchParams`
+
+The `URLSearchParams` API, combined with Next.js's `useSearchParams` hook, is a powerful solution for handling query string parameters in dynamic page navigation. This setup is especially useful for building features like pagination, filtering, or search where the URL reflects the current state of the application.
+
+`useSearchParams` is used to access query parameters directly from the URL, while `URLSearchParams` allows developers to manipulate these parameters, making it easier to update the URL when necessary (e.g., changing the page number). Together with `router.push()`, this approach ensures seamless navigation without a full page reload, improving the user experience.
+
+```javascript
+'use client';
+
+import { useSearchParams, useRouter } from 'next/navigation';
+
+export default function PaginationComponent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  // Retrieve the current page number from the query string, defaulting to 1 if not present
+  const currentPage = searchParams.get('page') || 1;
+
+  // Function to handle page changes
+  const handlePageChange = (newPage) => {
+    const params = new URLSearchParams(searchParams); // Initialize with current params
+    params.set('page', newPage); // Update the 'page' parameter
+
+    // Navigate to the new page with updated query string
+    router.push(`?${params.toString()}`);
+  };
+
+  return (
+    <div>
+      <p>Current Page: {currentPage}</p>
+      <button onClick={() => handlePageChange(Number(currentPage) - 1)} disabled={currentPage <= 1}>
+        Previous
+      </button>
+      <button onClick={() => handlePageChange(Number(currentPage) + 1)}>
+        Next
+      </button>
+    </div>
+  );
+}
+```
+
+In this example, `URLSearchParams` allows you to modify the `page` parameter in the query string, while `router.push()` updates the URL dynamically, making this method ideal for navigation scenarios like pagination.
 
 #### 3.5 Layouts
 
