@@ -355,9 +355,11 @@ describe('Database Tests', () => {
 
 ## 3. Breacking Dependencies With Mocks
 
-#### 3.1 Creating and Using Mock Functions
+#### 3.1 Understanding Mocks for Breaking Dependencies
 
-A **mock function** simulates the behavior of a real function and is essential for testing a unit in isolation. For instance, if you have a function \( A \) that depends on another function \( B \), you can decouple them during testing by replacing \( B \) with a controllable mock function. This allows you to test \( A \) without relying on the actual implementation of \( B \).
+A **mock function** imitates the behavior of a real function, allowing units to be tested in isolation by decoupling dependencies. For example, if function \( A \) relies on function \( B \), you can replace \( B \) with a mock to test \( A \) without depending on \( B \)’s actual implementation. While mocks are valuable for breaking dependencies and focusing tests on specific units, they can introduce risks if the original implementation of the mocked function changes, as the mock may not reflect those updates, leading to inaccurate tests. Therefore, mocks should be used sparingly, primarily for external dependencies like services or APIs, and not overused, as this can make tests overly dependent on implementation details and fragile.
+
+#### 3.2 Creating and Using Mock Functions
 
 In Vitest, the `vi` object is used to create and manage mock functions. Here’s how you can do it step by step:
 
@@ -414,7 +416,7 @@ In Vitest, the `vi` object is used to create and manage mock functions. Here’s
     expect(myMockFunction).toHaveBeenCalledOnce();
     ```
 
-#### 3.2 Mocking Modules
+#### 3.3 Mocking Modules
 
 In Vitest, you can use the `vi.mock()` method to mock a specific module by passing the module's path. When this function is executed, Vitest automatically replaces all exported functions of the specified module with mock functions. By default, these mock functions do not have any behavior, so you'll need to define their behavior within your test.
 
@@ -460,7 +462,7 @@ describe('Calculator Tests', () => {
 });
 ```
 
-#### 3.3 Interaction Testing with Mock Functions
+#### 3.4 Interaction Testing with Mock Functions
 
 Interaction testing focuses on verifying how different units or functions interact with each other. Mock functions play a key role in this process by allowing you to simulate and control these interactions. In Vitest, mock functions serve two main purposes: they help retrieve specific return values during testing, and they enable you to test whether functions were called, how often they were invoked, and with what arguments.
 
@@ -503,4 +505,339 @@ describe('getUserDetails', () => {
 });
 ```
 
+#### 3.5 Partial Mocking
 
+Partial mocking allows you to mock only specific functions in a module while leaving others unchanged, which is useful when certain functions, such as input validators or constants, should retain their original implementation during testing. To achieve partial mocking in Vitest, you can use the `vi.mock()` method with a custom implementation that selectively overrides the desired functions.
+
+To do this, call `vi.mock()` with two arguments. The first argument is the path to the module, while the second is an asynchronous function that receives the `importOriginal` method. This method imports the original module, and from there, you can selectively mock specific functions. Using the spread operator, you can retain the functions that don't need to be mocked, ensuring that only the necessary parts of the module are replaced with mock functions. This approach provides flexibility in testing without altering the behavior of valid dependencies that don't need mocking.
+
+```javascript
+// file: mathUtils.js
+export const add = (a, b) => a + b;
+export const multiply = (a, b) => a * b;
+export const isPositive = (n) => n > 0;
+
+// file: math.test.js
+import { describe, it, expect, vi } from 'vitest';
+import * as mathUtils from './mathUtils';
+
+// Partially mock the module
+vi.mock('./mathUtils', async (importOriginal) => {
+  const originalModule = await importOriginal();
+
+  return {
+    ...originalModule, // Retain all original exports
+    multiply: vi.fn().mockReturnValue(10), // Mock only the `multiply` function
+  };
+});
+
+describe('mathUtils partial mocking', () => {
+  it('should mock multiply but keep add and isPositive unchanged', () => {
+    // Test the mocked multiply function
+    expect(mathUtils.multiply(2, 3)).toBe(10);
+
+    // Test the original add function
+    expect(mathUtils.add(2, 3)).toBe(5);
+
+    // Test the original isPositive function
+    expect(mathUtils.isPositive(-1)).toBe(false);
+  });
+});
+```
+
+#### 3.6 Spying on Functions
+
+Spying allows you to observe and track the behavior of functions during test execution, collecting information about function calls, arguments, and results. In Vitest, you can create a spy using the `vi.spyOn()` method, which enables you to monitor how a particular function or method behaves without altering its implementation.
+
+To create a spy, call `vi.spyOn()` with two arguments: the first is the object containing the method you want to spy on, and the second is a string representing the name of the method to monitor. Once a spy is set up, you can access information like the return value of the function using `spy.mock.results[0].value`. This is particularly useful in partial mocking, where you need to verify that the spied function is being called correctly, for example, by using assertions such as `toHaveBeenCalledWith()`.
+
+```javascript
+// Example of spying on a method
+const userService = {
+  getUser: (id) => ({ id, name: 'Eli' })
+};
+
+// Create a spy on the getUser method
+const spy = vi.spyOn(userService, 'getUser');
+
+// Call the method
+userService.getUser(1);
+
+// Check the return value of the first call
+console.log(spy.mock.results[0].value);  // Output: { id: 1, name: 'Eli' }
+
+// Assert that the method was called with specific arguments
+expect(spy).toHaveBeenCalledWith(1);
+```
+
+#### 3.7 Clearing, Resetting, and Restoring Mocks
+
+When using mock functions in Vitest, it's important to clear them between tests to avoid unintended side effects caused by lingering information, such as the number of times a mock function was called. Mock objects accumulate data across tests, which can lead to inaccurate test results if not properly cleared. To ensure a clean state for each test, use the `mockClear()` method to clear individual mock functions.
+
+```javascript
+beforeEach(() => {
+  vi.mocked(originalFunction).mockClear();
+});
+```
+
+Alternatively, to clear all mocks at once in a test suite, use:
+
+```javascript
+beforeEach(() => {
+  vi.clearAllMocks();
+});
+```
+
+By incorporating these practices, you ensure that your mock functions are reset between tests, helping maintain reliable and accurate test results.
+
+#### 3.7 Mocking System Time
+
+For tests to be trustworthy, they must be deterministic—producing the same result every time they run. To achieve this, tests should not depend on random data, current date/time, or global state. When testing functions that rely on the current date or time, it's important to mock the system date to simulate consistent scenarios.
+
+Vitest provides the `vi.setSystemTime()` method, which allows you to set a mock date and time. You can pass a date string, such as `"2024-01-01 12:00"`, to this method, ensuring that any functions relying on the system time will use this mock value. This guarantees that tests involving date/time dependencies will always run under the same conditions.
+
+```javascript
+import { describe, it, expect, vi } from 'vitest';
+
+describe('Date-dependent function', () => {
+  beforeAll(() => {
+    // Mock the system time to a specific date
+    vi.setSystemTime(new Date('2024-01-01 12:00'));
+  });
+
+  it('should return correct result for the mocked date', () => {
+    const result = myDateFunction(); // function using current date
+    expect(result).toBe('Expected result for 2024-01-01 12:00');
+  });
+
+  afterAll(() => {
+    // Restore original system time
+    vi.useRealTimers();
+  });
+});
+```
+
+By mocking the system time, you ensure consistent and reliable tests that aren't affected by real-time changes.
+
+## 4. Improving Code Quality With Static Analysis Tools
+
+Static analysis tools examine source code without executing it, identifying potential issues early in the development process. These tools help enforce coding standards and best practices, enhancing code quality and ensuring consistency across the team.
+
+#### 4.1 Formatting Code With Prettier
+
+**Prettier** is  a widely-used code formatter that supports multiple programming languages. Prettier enforces a uniform code style, making code more readable and minimizing formatting-related discussions during code reviews. To integrate Prettier into your project, install it as a development dependency:
+
+```bash
+npm i -D prettier
+```
+
+Next, configure Prettier in your `package.json` by adding a script under the `scripts` section:
+
+```json
+"scripts": {
+  "format": "prettier . --write"
+}
+```
+
+Now, you can format your entire project by running:
+
+```bash
+npm run format
+```
+
+For further customization, create a `.prettierrc.json` file to define specific formatting rules. Additionally, editors like VS Code offer a Prettier extension, enabling features like **Format on Save**, which automatically formats your code each time you save a file.
+
+```json
+{
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "tabWidth": 2
+}
+```
+
+#### 4.2 Listing Code With ESLint
+
+**ESLint** is a popular tool for ensuring code quality in JavaScript. It helps catch common mistakes early, enforces coding standards, and improves consistency and readability across projects. To add ESLint to a project, you can initialize it with the following command:
+
+```bash
+npm init @eslint/config@latest
+```
+
+During installation, ESLint will prompt you to configure various options, such as:
+
+- **Checking for Syntax, Problems, and Style**: Choose whether ESLint should only check syntax, identify problems, or enforce code style.
+- **Module Type**: Specify whether you're using **JavaScript Modules (ESM)** or **CommonJS**.
+- **Framework**: Indicate if your project uses a framework like **React** or **Vue**.
+- **TypeScript**: Specify whether the project includes TypeScript.
+- **Environment**: Choose between **Node.js** or **browser** for the project runtime.
+- **Style Guide**: Select or customize a coding style guide.
+- **Configuration File Format**: Choose JSON, JavaScript, or YAML for ESLint configuration.
+- **Package Manager**: Choose between **npm** or **yarn** for managing dependencies.
+
+After completing the setup, ESLint will install and generate a `.eslintrc.json` file in your project, which you can modify to customize ESLint's rules.
+
+To lint your code, run:
+
+```bash
+npx eslint .
+```
+
+This will display any coding issues found. To automatically fix them, run:
+
+```bash
+npx eslint . --fix
+```
+
+For convenience, you can add this command to your `package.json` scripts:
+
+```json
+"scripts": {
+  "lint": "eslint . --fix"
+}
+```
+
+Now, you can simply run:
+
+```bash
+npm run lint
+```
+
+Additionally, in code editors like **VS Code**, you can install the ESLint extension, which highlights errors directly in your code files, improving real-time feedback and workflow. This makes it easier to maintain clean, error-free code throughout development.
+
+#### 4.3 Catching Type Errors With TypeScript
+
+**TypeScript** is a statically-typed superset of JavaScript, designed to catch type-related issues at compile time. By explicitly defining types for variables, function parameters, and return values, TypeScript improves code quality, documentation, and makes refactoring easier. Its use leads to a stronger codebase with fewer runtime errors.
+
+To get started with TypeScript, install it as a development dependency using the following command:
+
+```bash
+npm i -D typescript
+```
+
+Once installed, initialize a TypeScript configuration file by running:
+
+```bash
+npx tsc --init
+```
+
+This will generate a `tsconfig.json` file, where you can configure various options for TypeScript’s type checking and compilation behavior. TypeScript files should use the `.ts` extension.
+
+In TypeScript, you should explicitly define types for variables, constants, function parameters, and return types, although TypeScript can infer types in many cases. If a type is missing or incorrect, TypeScript will flag it in the code editor, making it easier to catch potential errors early. For example:
+
+```typescript
+let name: string = 'Alice';
+let age: number = 30;
+
+function greet(name: string): string {
+  return `Hello, ${name}`;
+}
+```
+
+This type safety reduces the need for runtime type checks, making unit testing simpler. Before running TypeScript code, it must be compiled into JavaScript. You can add a script to your `package.json` file to compile TypeScript code:
+
+```json
+"scripts": {
+  "check-types": "tsc"
+}
+```
+
+Now, running `npm run check-types` will compile your TypeScript code into JavaScript, ensuring all type-related issues are resolved beforehand.
+
+#### 4.4 Configuring ESLint to Work with TypeScript
+
+When compiling TypeScript to JavaScript, the generated JavaScript files can raise ESLint errors. Since these files are machine-generated, it's unnecessary to lint them. Instead, linting should focus on your original TypeScript code. To avoid linting the compiled JavaScript files, you can configure TypeScript to output these files to a separate directory and instruct ESLint to ignore them.
+
+In the `tsconfig.json` file, set the `outDir` option to move compiled files to a specific directory, such as `./dist`:
+
+```json
+{
+  "compilerOptions": {
+    "outDir": "./dist"
+  }
+}
+```
+
+Next, in your ESLint configuration file (`.eslintrc.json`), instruct ESLint to ignore the compiled files by using the `ignorePatterns` property:
+
+```json
+{
+  "ignorePatterns": ["dist/**"]
+}
+```
+
+By default, ESLint doesn't check TypeScript files, so you'll need to install the necessary ESLint and TypeScript plugins. Run the following command to install the required packages:
+
+```bash
+npm install --save-dev eslint @eslint/js @types/eslint__js typescript typescript-eslint
+```
+
+After installing these dependencies, create an ESLint configuration file (`eslint.config.mjs`) in the root of your project. Populate it with the following code to enable TypeScript linting:
+
+```javascript
+// eslint.config.mjs
+// @ts-check
+
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config(
+  eslint.configs.recommended,
+  ...tseslint.configs.recommended
+);
+```
+
+This configuration ensures that when running ESLint, it will check your TypeScript code without generating errors for the compiled JavaScript files.
+
+#### 4.5 Automating Code Quality Checks With Husky
+
+# 
+
+Husky is a popular tool that automates Git hooks, helping enforce code quality and styling guidelines during the Git workflow. By integrating Husky, you can automate tasks like code formatting and linting before code is committed to your repository.
+
+To install Husky, run the following command:
+
+```bash
+npm install --save-dev husky
+```
+
+This creates a `.husky` folder in your project. Inside this folder, you'll find a `pre-commit` file, a shell script that runs before every commit. To ensure only staged files are formatted and linted, you'll need to install `lint-staged` as an additional dependency:
+
+```bash
+npm install --save-dev lint-staged
+```
+
+In the `pre-commit` file, add the following script to run `lint-staged`:
+
+```bash
+#!/user/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx lint-staged
+```
+
+This ensures that the pre-commit hook triggers `lint-staged` to check only the files that are staged for commit, rather than the entire project.
+
+Next, create a `.lintstagedrc.json` file to define how to handle staged files. For JavaScript and TypeScript files, the following configuration runs Prettier and ESLint:
+
+```json
+{
+  "*.+(js|ts)": [
+    "prettier --write",
+    "eslint"
+  ]
+}
+```
+
+With this setup, whenever you commit code with Git, only the staged files will be automatically formatted and linted. This ensures consistent code quality while minimizing unnecessary checks across the entire project.
+
+#### 4.6 Automating Unit Tests with Husky Pre-Push Hook
+
+Husky can also be used to automatically run unit tests before each Git push, ensuring that only tested code is pushed to the repository. To set this up, you can add a pre-push hook that triggers the test command.
+
+Use the following command to add a pre-push script:
+
+```bash
+npx husky add .husky/pre-push "npm test"
+```
+
+This will create a `pre-push` script inside the `.husky` folder, which executes the unit tests using the `npm test` command (which can be configured to run your Vitest tests). If the tests fail, the push operation will be aborted, preventing untested or failing code from being pushed.
