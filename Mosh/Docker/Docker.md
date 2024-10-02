@@ -163,6 +163,8 @@ docker build -t application-name .
 You can list all images on your machine using:
 
 ```bash
+# Both commands produce same result
+docker images
 docker image ls
 ```
 
@@ -504,7 +506,33 @@ docker rm container
 
 This completely deletes the container from your system.
 
-#### 3.7. Persisting Data with Docker Volumes
+#### 3.7 Cleaning Up Docker Workspace
+
+To clear all containers and images from your Docker workspace in one go, start by listing all container IDs, including both stopped and running ones, using:
+
+```bash
+docker container ls -aq
+```
+
+Then, forcefully remove all containers by passing this list to the `docker container rm -f` command:
+
+```bash
+docker container rm -f $(docker container ls -aq)
+```
+
+After removing the containers, list all image IDs with:
+
+```bash
+docker image ls -q
+```
+
+Finally, remove all images by passing this list to the `docker image rm -f` command:
+
+```bash
+docker image rm -f $(docker image ls -q)
+```
+
+#### 3.8 Persisting Data with Docker Volumes
 
 Storing data directly inside a container is not recommended, as it will be lost when the container is removed. To persist data, Docker provides volumes, which store data outside the container, either on the host or in the cloud.
 
@@ -528,7 +556,7 @@ docker run -v local-volume:/app/data application
 
 Ensure that the directory inside the container has the appropriate permissions for the user defined in the Dockerfile. Volumes allow containers to be removed without losing data and enable data sharing across multiple containers.
 
-#### 3.8 Copying Files Between Host and Docker Container
+#### 3.9 Copying Files Between Host and Docker Container
 
 To transfer files between the host system and a Docker container, you can use the `docker cp` command. This allows you to copy files from a running container to the host or vice versa. For example, to copy a file from the container to the host system, use:
 
@@ -544,7 +572,7 @@ docker cp file.txt container:/app/
 
 This is useful for sharing files or retrieving logs and data from the container without stopping or restarting it.
 
-#### 3.9 Binding Host Directories to Containers for Development
+#### 3.9 Synchronizing Host Directories to Containers for Development
 
 In development, it's inefficient to rebuild a Docker image for every change made to the application. Instead, you can create a binding between a directory on the host and a directory inside the container. This way, changes made on the host are immediately reflected in the container.
 
@@ -555,3 +583,183 @@ docker run -v $(pwd):/app/ application-image
 ```
 
 This allows you to develop on the host while seeing changes instantly within the container without rebuilding the image. In production, however, always build a new Docker image for updates to ensure consistency and isolation across deployments.
+
+## 4. Running Multi-Container Applications
+
+#### 4.1 Managing Multi-Container Applications with Docker Compose
+
+Docker Compose simplifies the orchestration of multi-container applications by allowing you to define and manage multiple services (e.g., frontend, backend, database) in a single `docker-compose.yml` file. To verify Docker Compose is installed, use:
+
+```bash
+docker-compose --version
+```
+
+In the `docker-compose.yml`, you define each service with a `build` context, specifying the directory of the service's Dockerfile or an existing image. You also define port mappings, environment variables, and volumes for persistent storage. Here's an example:
+
+```yaml
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - 3000:3000
+  backend:
+    build: ./backend
+    ports:
+      - 3001:3001
+    environment:
+      - DB_URL=mysql://root:password@localhost:3306/application
+  database:
+    image: mysql:8.0.39-debian
+    ports:
+      - 3306:3306
+    volumes:
+      - data:/data/db
+
+volumes:
+  data:
+```
+
+Once your `docker-compose.yml` is set up, build the services:
+
+```bash
+docker-compose build
+```
+
+To run the application:
+
+```bash
+docker-compose up
+```
+
+Use the `-d` flag to run it in detached mode:
+
+```bash
+docker-compose up -d
+```
+
+You can monitor running containers with:
+
+```bash
+docker-compose ps
+```
+
+To stop and remove the containers while keeping the images:
+
+```bash
+docker-compose down
+```
+
+#### 4.2 Docker Networking in Docker Compose
+
+When you run an application using Docker Compose, Docker automatically creates a network for all the services defined in the `docker-compose.yml` file. This network allows the containers to communicate with each other by service name, eliminating the need to manually configure IP addresses. To view all Docker networks on your machine, use:
+
+```bash
+docker network ls
+```
+
+Docker sets up an embedded DNS server that stores the names and IP addresses of the containers in this network. Each container has a built-in DNS resolver that communicates with the DNS server, allowing containers to reference each other by their service names. For instance, if a backend container needs to connect to a database service, it can do so using the service name (`database` in this case), instead of an IP address. 
+
+For example, in a `docker-compose.yml` file:
+
+```yaml
+services:
+  backend:
+    build: ./backend
+    ports:
+      - 3001:3001
+  database:
+    image: mysql:8.0.39-debian
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+```
+
+The backend service can connect to the database using `database:3306`, which Docker automatically resolves through its internal DNS.
+
+If you need to inspect the details of a specific network, including which containers are connected to it and their IP addresses, use:
+
+```bash
+docker network inspect <network_name>
+```
+
+This built-in networking simplifies inter-service communication within a Docker Compose application, making it easier to scale and manage multi-container apps.
+
+#### 4.3 Viewing Logs in Docker Compose
+
+To view logs from all containers in a multi-container Docker Compose application in one place, use:
+
+```bash
+docker-compose logs
+```
+
+This command aggregates logs from all services running in the application, making it easier to monitor and troubleshoot. If you're interested in viewing logs from a specific container, you can use the `docker logs` command with the container name or ID:
+
+```bash
+docker logs container-name
+```
+
+This allows you to focus on the output of a single container, which is useful for debugging individual services.
+
+#### 4.4 Synchronizing Code Changes in Multi-Container Applications
+
+To avoid rebuilding a multi-container application every time you make changes, you can map a service directory on your host machine to a directory inside the container. This allows changes made on the host to reflect directly within the container.
+
+In the `docker-compose.yml` file, under the relevant service, you can use the `volumes` property to map the directories. For example:
+
+```yaml
+services:
+  backend:
+    build: ./backend
+    ports:
+      - 3001:3001
+    volumes:
+      - ./backend:/app/
+```
+
+This configuration maps the `./backend` directory from the host to the `/app/` directory inside the backend service container. This ensures that any code changes are instantly shared between the host and the container, streamlining the development process without the need to rebuild.
+
+#### 4.5 Ensuring Service Readiness for Database Migrations
+
+When deploying an application, especially one dependent on a database, it's important to ensure the services are started and ready before any dependent services begin. This is crucial for processes like database migrations, where the database must be fully operational before applying migration scripts. Docker-Compose, by default, only waits for containers to start but does not ensure they are ready to accept connections, which can cause issues.
+
+To manage this, you can use the `depends_on` condition attribute to define the state in which a service is considered ready. Common conditions include:
+
+- **`service_started`**: The container has started running.
+- **`service_healthy`**: The service must pass a health check, defined by a `healthcheck` block, before dependent services start.
+- **`service_completed_successfully`**: The service must complete before starting any dependent services.
+
+For instance, in the following configuration, the backend service depends on the database being healthy before starting:
+
+```yaml
+services:
+  backend:
+    build: ./backend
+    ports:
+      - 3001:3001
+    depends_on:
+      database:
+        condition: service_healthy
+        restart: true
+
+  database:
+    image: mysql:8.0.39-debian
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+```
+
+In this setup, the `healthcheck` ensures the database is fully ready before the backend starts, by testing its availability using `pg_isready`. The backend service will only start after the database passes the health check. This setup prevents potential timing issues in multi-container applications during startup.
+
+## 5. Deploying Applications
+
+#### 5.1 Single-Host vs. Cluster Deployment for Dockerized Applications
+
+When deploying a Dockerized application, you have two primary options: **single-host deployment** and **cluster deployment**. A single-host deployment is simpler and more convenient but comes with limitations. If the server goes down, the application becomes inaccessible, and as traffic grows, a single server may not handle the increasing load.
+
+In contrast, **cluster deployment** involves distributing the application across multiple servers, providing both high availability and scalability. This setup requires orchestration tools, such as **Docker Swarm** or the more widely preferred **Kubernetes**, which manage clusters of servers. While Kubernetes offers powerful features for scalability and resilience, it has a steeper learning curve. A common approach is to start with a single-host deployment and later transition to a cluster-based setup if needed.
+
+For more follow this guide: https://docs.docker.com/guides/language/ .
