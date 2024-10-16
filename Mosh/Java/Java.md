@@ -6,7 +6,7 @@ Java programs are composed of various building blocks, with the smallest being f
 
 #### 1.1 Defining Functions
 
-###### 1.1 Basic Function Definition
+###### 1.1.1 Basic Function Definition
 
 To define a function in Java, you start by specifying the return type. The return type indicates the kind of value the function will return, such as a number, a date, a time, etc. If a function does not return any value, it is defined with the keyword `void`. Following the return type is the function's name, which should be descriptive and meaningful. Next, you include a pair of parentheses where parameters, if any, are specified. The function body is enclosed in curly braces `{}`. The opening curly brace `{` appears on the same line as the function declaration, and the closing curly brace `}` is placed at the end of the function.
 
@@ -64,7 +64,7 @@ Java has specific naming conventions for classes and methods to maintain consist
   }
   ```
 
-###### 1.5 Organizing Code in Java with Methods
+###### 1.1.5 Organizing Code in Java with Methods
 
 In Java, the `Main` class contains the `main` method, which serves as the entry point for your program. While it's possible to write all your code within the `main` method, this approach is only suitable for very small programs. For larger programs, it's preferable to break down the code into smaller, reusable subpieces called methods. Methods help avoid code repetition and make your programs more modular and manageable.
 
