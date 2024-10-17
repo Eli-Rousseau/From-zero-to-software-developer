@@ -6,11 +6,11 @@
 
 Python is a high-level, interpreted, and general-purpose programming language known for its simplicity, readability, and versatility. It was created by Guido van Rossum and first released in 1991. Python emphasizes code readability and follows a clean and easy-to-understand syntax, making it suitable for beginners as well as experienced developers.
 
-#### 1.2 Python Implementation
+#### 1.2 Python implementation
 
 Python is a language specification that defines the syntax and rules for writing Python code, with several implementations available to execute that code. The most popular implementation is CPython, written in C, but alternatives like Jython (in Java), IronPython (for .NET), and PyPy (focused on speed) also exist. These implementations combine elements of compiled and interpreted languages: Python code is first compiled into bytecode, a platform-independent, low-level representation, which is then executed by the Python Virtual Machine (PVM). The PVM interprets the bytecode and translates it into machine-specific instructions, offering the flexibility of an interpreted language with the benefits of intermediate compilation.
 
-#### 1.3 Setting Up a Python Project
+#### 1.3 Setting up a Python project
 
 1. **Install Python**
 - Download Python: Go to [python.org](http://python.org) and download the latest version of Python for your operating system.
@@ -59,7 +59,7 @@ Python is a language specification that defines the syntax and rules for writing
 - Auto Formatting: Tools like `autopep8` and `black` are supported in VS Code to format code automatically according to PEP 8 guidelines. You can enable these through the Python extension settings.
 - Unit Testing: VS Code supports unit testing frameworks such as `unittest` and `pytest`. You can set up and run tests directly from the IDE.
 
-#### 1.4 Debugging with VS Code's Python Extension
+#### 1.4 Debugging with VS Code's Python extension
 
 VS Code’s Python extension offers robust debugging tools to help identify and fix errors in your code. When debugging a Python project for the first time, you can create a `launch.json` file by going to the Debug panel in VS Code. This file, stored in the `.vscode` folder, defines your debugging configuration and rarely needs modification after setup.
 
@@ -777,6 +777,34 @@ is_even = lambda x: True if x % 2 == 0 else False
 print(is_even(4))  # Output: True
 ```
 
+#### 8.8 Decorators
+
+Decorators in Python are a powerful and flexible way to modify or enhance the behavior of functions or methods without changing their actual code. They are typically used to add functionality such as logging, access control, caching, or instrumentation. Decorators are functions that take another function as an argument and return a new function that usually extends or alters the behavior of the original function. A function decorator is defined as a wrapper function that adds some functionality to the original function. Below is a simple example:
+
+```python
+def my_decorator(func):
+    def wrapper():
+        print("Something is happening before the function is called.")
+        func()
+        print("Something is happening after the function is called.")
+    return wrapper
+
+@my_decorator
+def say_hello():
+    print("Hello!")
+
+# Calling the decorated function
+say_hello()
+```
+
+Output:
+
+```
+Something is happening before the function is called.
+Hello!
+Something is happening after the function is called.
+```
+
 ## 9. Lists
 
 #### 9.1 What is a list?
@@ -1284,6 +1312,30 @@ def process_input(value):
     # Continue processing...
 ```
 
+#### 15.5 Creating custom exceptions
+
+In Python, custom exceptions are created by defining a new class that inherits from the built-in `Exception` class or any of its subclasses. This allows you to define specific error types that can provide clearer error handling in your programs. To create a custom exception, you simply define a new class and can optionally add an `__init__` method to customize the initialization, such as accepting an error message.
+
+```python
+class MyCustomError(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+
+# Raising the custom exception
+def my_function(value):
+    # Validate condition
+    raise MyCustomError("Value must be non-negative!")
+    # Function body
+    # Perform computations, manipulate data, etc.
+    # ...
+
+# Handling the exception
+try:
+    result = my_function("text")
+except MyCustomError as e:
+    print(f"An error occurred: {e}")
+```
+
 ## 16. Object-oriented programming
 
 #### 16.1 What is object-oriented programming?
@@ -1498,7 +1550,7 @@ class Parent:
 class Child:
     def __init__(self, parent):
         self.parent = parent  # Composition: Child has a Parent
-    
+
     def speak(self):
         self.parent.speak()  # Call the Parent's speak method
         print("Child speaks")
@@ -1506,655 +1558,122 @@ class Child:
 parent = Parent()
 child = Child(parent)
 child.speak()
-
 ```
 
+#### 16.10 Extending built-in types
 
+In Python, you can use inheritance to extend the functionality of built-in types like `list`, `dict`, `str`, etc., by creating a subclass of these types. This allows you to add new methods, override existing ones, or customize their behavior while retaining all the functionality of the built-in type. By subclassing these built-in types, you can modify or enhance their capabilities to suit specific use cases.
 
+```python
+# Extending the built-in list type
+class MyList(list):
+    def sum(self):
+        return sum(self)  # Custom method to calculate the sum of elements
 
+# Using the extended list
+my_list = MyList([1, 2, 3, 4])
+print(my_list.sum())  # Output: 10
+```
 
-## <u>17. Modules</u>
+In this example, `MyList` extends the built-in `list` type by adding a `sum()` method that calculates the sum of the elements in the list. This allows you to use all standard list operations while adding custom functionality.
+
+#### 16.11 Abstract classes and polymorphism
+
+An abstract class in Python serves as a blueprint for other classes, and its primary purpose is to define common methods or attributes that must be implemented by its subclasses. Abstract classes cannot be instantiated directly, meaning you cannot create objects from them. Instead, they define methods that are meant to be overridden by subclasses. Python supports abstract classes using the `ABC` (Abstract Base Class) and `abstractmethod` decorators from the `abc` module.
+
+```python
+from abc import ABC, abstractmethod
+
+# Abstract class
+class Person(ABC):
+    @abstractmethod
+    def work(self):
+        pass
+
+# Subclasses implementing the abstract method
+class Doctor(Person):
+    def work(self):
+        return "Treats patients"
+
+class Engineer(Person):
+    def work(self):
+        return "Builds solutions"
+```
+
+Polymorphism is a concept that allows objects of different classes to be treated as objects of a common parent class, enabling flexibility and the ability to handle different object types in a uniform manner. Abstract classes support polymorphism by allowing subclasses to implement the abstract methods in their own way, while still being treated as instances of the abstract class.
+
+```python
+# Polymorphism in action
+people = [Doctor(), Engineer()]
+for person in people:
+    print(person.work())
+```
+
+## 17. Modules
 
 #### 17.1 What is a module?
 
-Modules are files containing Python code that can be used to organize and reuse functionality. They can include functions, classes, and variables that can be accessed from other Python programs.
+In real-world applications, programs are typically split across multiple files rather than being stored in a single file. These files are known as modules, which are used to organize and reuse code. A module is essentially a file that contains Python code, including functions, classes, and variables, which can be imported and accessed by other Python programs. Each module should group together closely related objects to ensure clear organization and maintainability.
 
-#### 17.2 Import modules
+#### 17.2 Create a custom module
+
+To create your own modules, simply make a Python file with a `.py` extension. Inside this file, you can define functions, classes, or variables that can be imported and used in other programs. By convention, module names are written in lowercase, and multiple words are separated by underscores (`_`) using "snake_case" style. To use a custom module, place it in the same directory as your program and import it by referencing the filename, without including the `.py` extension.
+
+#### 17.3 Import modules
 
 To use a module in your Python program, you can import it using the `import` statement. For example, to import the `math` module, you would write `import math`.
 
 ```python
-> import math
-> result = math.sqrt(4)
+import math
+result = math.sqrt(4)
 ```
 
 You can import a module with a different name using the `as` keyword. For example, `import math as m` allows you to refer to the `math` module as `m` in your code.
 
 ```python
-> import math as m
-> result = m.sqrt(4)
+import math as m
+result = m.sqrt(4)
 ```
 
 The `from...import` statement allows you to import specific functions, classes, or variables from a module directly into your code. For example, `from math import sqrt` imports only the `sqrt()` function from the `math` module, allowing you to use it without referencing the module name.
 
 ```python
-> from math import sqrt
-> result = sqrt(4)
+from math import sqrt
+result = sqrt(4)
 ```
 
-#### 17.3 Listing methods and attributes in modules
+#### 17.4 Cached modules and performance
+
+When a module is used in a program, its compiled version is stored in the `__pycache__` directory with a `.pyc` file extension. This caching process helps improve performance by speeding up the loading of modules in future imports. Since the module has already been compiled, Python can skip the compilation step, leading to faster module imports.
+
+#### 17.5 Listing methods and attributes in modules
 
 To list all the methods and attributes available in a module, you can use the `dir()` function. It returns a list of valid names that can be accessed on the module. For example, `dir(math)` lists all the methods and attributes in the `math` module.
 
 ```python
-> import math
-> print(dir(math)))
+import math
+print(dir(math)))
 ```
 
-#### 17.4 Installing an external module
+#### 17.6 Using the `__name__` attribute for module execution
 
-The Python Standard Library comes with built-in modules that offer various functionalities and can be imported without additional installation. These modules cover tasks like file operations, mathematics, networking, and more. They are readily available upon installing Python. On the other hand, external or third-party modules are not part of the Standard Library and require separate installation before they can be imported and used in Python programs. These modules provide additional features beyond what the built-in modules offer.
-
-#### 17.5 Create a custom module
-
-You can create your own modules by creating a Python file with a `.py` extension. In this file, you can define functions, classes, or variables that can be imported and used in other programs. To use the custom module, you can place it in the same directory as your program and import it using the module's filename (without the `.py` extension). For example, if you have a module called `my_module.py`, you can import it using `import my_module`.
-
-#### 17.6 Packages
-
-###### 17.6.1 What is a package?
-
-A package is essentially a directory that contains one or more Python module files (with the `.py` extension) and can also include sub-packages, which are additional directories containing their own modules or sub-packages. This hierarchical structure allows for a logical organization of code, making it easier to locate and maintain related functionality. By using packages, you can create a modular and scalable codebase. You can group related modules together based on their functionality or purpose, making it easier to reuse, distribute, and collaborate on code.
-
-###### 17.6.2 Initialization of a package
-
-Packages are denoted by the presence of a special file called `__init__.py` within the directory. This file can be empty or can contain initialization code that is executed when the package is imported. Moreover, each sub-package should also have its own `__init__.py` file.
-
-###### 17.6.3 Using a package
-
-To use modules from a package, you can import them using the dot notation. For example, if you have a package called `my_package` with a module called `my_module` inside it, you can import it like this: `import my_package.my_module`. You can then access the functionality within the module using dot notation, such as `my_package.my_module.my_function()`.
-
-###### 17.6.4 Package manager
-
-Certainly! `pip` is a package manager for Python that allows you to easily install, manage, and uninstall external packages or modules from the Python Package Index (PyPI) and other repositories. In most cases, `pip` is  included by default with your Python installation.
-
-To install a package using `pip`, open a terminal or command prompt and run the following command:
-
-```powershell
-> pip install package_name
-```
-
-You can also install a specific version of a package by appending the version number after the package name, like this:
-
-```powershell
-> pip install package_name==version
-```
-
-To upgrade a package to the latest version, you can use the `--upgrade` flag when installing, like this: 
-
-```powershell
-> pip install --upgrade package_name
-```
-
-You can list all installed packages by running `pip list` in the terminal. This will display the names and versions of all the installed packages.
-
-```powershell
-> pip uninstall package_name
-```
-
-## <u>19. File handling</u>
-
-#### 19.1 Opening a file
-
-###### 19.1.1 Open syntax
-
-To open a file, you can use the `open()` function. It takes two parameters: the file name (or path) and the mode in which you want to open the file (`"r"` for reading, `"w"` for writing, `"a"` for appending, and more). 
+Python automatically assigns a special built-in magic attribute called `__name__` to reference the name of the current module. When a module is run as the main program, this attribute is set to `"__main__"`. This feature allows a Python file to be used both as an importable module and as an executable script, enabling conditional code execution depending on whether the file is imported or directly run.
 
 ```python
-> file = open("example.txt", "r")
+# my_module.py
+
+def greet():
+    print("Hello from the module!")
+
+if __name__ == "__main__":
+    # This block only runs if the file is executed directly
+    print("Executing as the main script")
+    greet()
+else:
+    # This block runs if the module is imported
+    print("my_module has been imported")
 ```
 
-This function returns a file object, which is referred to as a file handle. The file handle provides methods and attributes that allow you to interact with the opened file, such as reading data, writing data, and closing the file.
+#### 17.7 Packages
 
-###### 19.1.2 With open syntax
-
-The `with` statement in Python provides a convenient way to automatically handle resources, such as files, in a clean and exception-safe manner. When used with file handling, the `with open` syntax ensures that the file is properly closed, even if an exception occurs during the file operations.
-
-Here's the syntax for using the `with open` statement:
-
-```python
-> with open(file_name, mode) as file: 
-    # File operations
-```
-
-#### 19.2 Reading a file
-
-After opening the file in the `"r"` mode, you can use the `read()` method of the file handle. It reads the contents of the file as a string. 
-
-```python
-> with open(file_name, "r") as file: 
-    content = file.read()
-```
-
-An alternative is to use the `readlines()` function that causes a list to be formed in which each item represents one of the lines in order.
-
-```python
- > with open(file_name, "r") as file: 
-    content = file.readlines()
-```
-
-#### 19.3 Writing a file
-
-After opening the file in the `"w"` or `"a"` mode, you can use the `write()` method of the file handle. It writes a string of data to the file. 
-
-```python
-> with open(file_name, "w") as file: 
-    file.write("Hello, World!")
-```
-
-An alternative is to use the `writelines()` function that is used to write a list of lines to the file.
-
-```python
-> with open(file_name, "w") as file: 
-    file.writelines(["Hello \n", "world!"])
-```
-
-#### 19.4 Closing a file
-
-It is important to close the file handle after you finish working with the file. You can use the `close()` method of the file handle to close the file and release any system resources associated with it. For example, `file.close()` closes the file.
-
-```python
-> file.close()
-```
-
-## <u>20. Working with directories</u>
-
-#### 20.1 The os module
-
-The `os` module in Python provides a way to interact with the operating system, allowing you to perform various directory and file operations. It provides functions to manipulate paths, list directory contents, create and remove directories, and more.
-
-#### 20.2 Display current working directory
-
-To display the current working directory, you can use the `os.getcwd()` function. It returns a string representing the current working directory path.
-
-```python
-> import os
-> os.getcwd()
-```
-
-#### 20.3 Changing current working directory
-
-To change the current working directory, you can use the `os.chdir()` function. It takes a path as an argument and sets the current working directory to the specified path.
-
-```python
-> import os
-> os.chdir('path/to/directory')
-```
-
-#### 20.4 Listing directory contents
-
-The `os.listdir()` function is used to list the contents of a directory. It returns a list of file and directory names present in the specified directory. 
-
-```python
-> import os
-> os.listdir('path/to/directory')
-```
-
-#### 20.5 Creating a directory
-
-The `os.mkdir()` function is used to create a directory. It takes a path as an argument and creates a directory with the specified name. 
-
-```python
-> import os
-> os.mkdir('path/to/new_directory')
-```
-
-#### 20.6 Removing a directory
-
-To remove a directory, you can use the `os.rmdir()` function. It removes the directory specified by the path if it is empty.
-
-```python
-> import os
-> os.rmdir('path/to/directory')
-```
-
-#### 20.7 Renaming a directory
-
-To rename a directory in Python using the `os` module, you can use the `os.rename()` function.
-
-```python
-> import os
-> os.rename("path/to/old_directory", "path/to/new_directory")
-```
-
-## <u>21. Interacting with the system </u>
-
-#### 21.1 The sys module
-
-The `sys` module is a built-in module in Python provides access to various system-specific parameters and functions.
-
-#### 21.2 Accessing the command line arguments
-
-The `sys.argv` is a system specific parameter that contains a list of the command-line arguments passed to the Python script. At index `0` the script name is stored, at index `1` the first argument, at index `2` the second argument, and so on.
-
-```python
-> import sys
-> my_arguments = sys.argv 
-```
-
-#### 21.3 Writing on the output and error streams
-
-The `sys.stdout` object represents the standard output stream, which is the default stream used for normal output. By using the `write()` function on `sys.stdout`, you can write a message or data directly to the standard output stream.
-
-```python
-> import sys
-> sys.stdout.write('Hello, World!')
-```
-
-The `sys.stderr` object represents the standard error stream, which is typically used for error messages or any output that should be separated from the standard output. By using the `write()` function on `sys.stderr`, you can write an error message or data directly to the standard error stream.
-
-```python
-> import sys
-> sys.stderr.write('Error: File not found.')
-```
-
-#### 21.4 Terminate a program
-
-The `sys.exit()` is a system level function that is used to terminate the current program with an optional exit code. Exit codes can have different meanings, but generally, an exit code of zero (`0`) represents success or a successful execution. Non-zero exit codes (`1`, `2`, `3`, ...) indicate various types of errors or failures, with different codes representing different error conditions.
-
-```python
-> import sys
-> sys.exit(0)
-```
-
-#### 21.5 Import a custom module
-
-The `sys.path` is a list that contains the directories that the Python interpreter searches for modules. Modifying `sys.path` can be useful in scenarios where you have custom modules or packages located in non-standard locations. By adding the relevant directories to `sys.path`, you ensure that Python can find and import the modules or packages from those locations.
-
-```python
-> import sys
-
-# Print the current sys.path
-> print(sys.path)
-
-# Add a directory to sys.path
-> sys.path.append('/path/to/my_module')
-
-# Print the modified sys.path
-> print(sys.path)
-```
-
-## <u>22. Iterators</u>
-
-#### 22.1 What is an iterator?
-
-In Python, an iterator is an object that follows the iterator protocol, enabling iteration over elements in a sequence or collection. It provides a consistent approach to access and retrieve individual elements from a sequence without needing to access the entire sequence at once. To qualify as an iterator, an object must implement two methods: `__iter__()` and `__next__()`. 
-
-Iterators offer the advantage of lazy evaluation, generating elements as they are needed, rather than upfront. This approach is valuable when dealing with extensive datasets or infinite sequences as it conserves memory by generating and processing elements incrementally.
-
-#### 22.2 Creating an iterable object
-
-In Python, an iterable object is an object that can be iterated over, meaning it can be looped through or traversed. An iterable object must implement the `__iter__()` method, which returns an iterator. 
-
-```python
-> my_iterator = my_object.__iter__()
-```
-
-A possible alternative notation is also to use the built-in `iter()` function.
-
-```python
-> my_iterator = iter(my_object)
-```
-
-#### 22.3 Iterating over elements
-
-An iterator is an object that implements the `__next__()` method, which is responsible for returning the next element in the iteration. The `__next__()` method raises a `StopIteration` exception when there are no more elements to be returned.
-
-```python
-> first_element = my_iterator.__next__()
-> second_element = my_iterator.__next__()
-...
-# Iterates over all elements, and raises StopIteration exception
-```
-
-A possible alternative notation is also to use the built-in `next()` function.
-
-```python
-> first_element = next(my_iterator)
-> second_element = next(my_iterator)
-...
-# Iterates over all elements, and raises StopIteration exception
-```
-
-#### 22.4 Internal implementation of a for loop
-
-In Python, for loops are internally implemented using a while loop and iterators. The for loop automatically iterates over an iterable object by repeatedly calling `next()` on the iterator until the `StopIteration` exception is raised.
-
-```python
-> while True:
-    try:
-        element = next(my_iterator)
-    except StopIteration:
-        break
-```
-
-#### 22.5 Creating a custom iterator
-
-###### 22.5.1 Iterator defined by a class
-
-To create a custom iterator in Python, you need to define a class that implements the iterator protocol, in which you have to make sure that the `__iter__()` method return the iterator object itself and the `__next__()` method retrieves the next element in the iteration. Here's an example:
-
-```python
-> class MyIterator:
-    def __init__(self, data):
-        self.data = data
-        self.index = 0
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self.index >= len(self.data):
-            raise StopIteration
-        element = self.data[self.index]
-        self.index += 1
-        return element
-```
-
-In this example,  the `MyIterator` class initializes the iterator with data and an initial index of 0. The class becomes iterable by defining the `__iter__()` method, which returns the iterator object. The `__next__()` method retrieves the next element in the iteration. If the index has reached the end of the data, it raises a `StopIteration` exception to mark the end. Otherwise, it retrieves the element at the current index, increments the index, and returns the element.
-
-Here's how you can use the custom iterator:
-
-```python
-> my_data = [1, 2, 3, 4, 5]
-> my_iterator = MyIterator(my_data)
-> for element in my_iterator:
-    print(element)
-```
-
-In this example, `my_data` is a list containing some data. An instance of `MyIterator` is created, passing the data as an argument. The `for` loop iterates over the custom iterator, and each element is printed.
-
-###### 22.5.2 Iterator defined by a function (generator)
-
-In Python, a generator is a special type of iterator that is defined using a function rather than a class. It allows you to generate a sequence of values on-the-fly, using the `yield` keyword, and provides a convenient and concise way to create custom iterators. Here's an example:
-
-```python
-def my_generator():
-    n = 0
-    while True:
-        yield n
-        n += 1
-```
-
-In this example, the `my_generator()` function is defined as a generator. It initializes a variable `n` with a value of 0. Inside the `while` loop, the `yield` statement is used to yield the current value of `n`. When the generator is iterated over, it will yield the current value and then pause its execution, allowing the calling code to retrieve the value. After yielding the value, the `n` variable is incremented by 1, ensuring that the generator produces the next value in the sequence when it is iterated over again. By using an infinite `while` loop, the generator continues indefinitely, producing an infinite sequence of numbers.
-
-To use the generator and iterate over its elements, you can do the following:
-
-```python
-> gen = my_generator()
-> print(next(gen))  # Output: 1
-> print(next(gen))  # Output: 2
-> print(next(gen))  # Output: 3
-```
-
-In this code, the `my_generator()` function is called, and it returns a generator object `gen`. The `next()` function is then used to retrieve the next element from the generator in each successive call.
-
-## <u>23. Date and time</u>
-
-The `datetime` module in Python provides classes and functions for working with dates, times, and combinations of both. It offers various functionalities to perform date and time calculations, format dates and times, and extract specific components from date objects. 
-
-#### 23.1 Date class
-
-The `date()` class from the `datetime` module is used to manipulate data objects that contain attributes like year, month, and day.
-
-###### 23.1.1 Creating a date object
-
-To create a date object, you can use the `date()` class constructor from the `datetime` module. It takes the year, month, and day as arguments.
-
-```python
-> import datetime
-> my_date = datetime.date(2023, 1, 31)
-```
-
-###### 23.1.2 Obtaining the current date
-
-To obtain the current date, you can use the `date.today()` method. It returns a date object representing the current local date.
-
-```python
-> import datetime
-> current_date = datetime.date.today()
-```
-
-###### 23.1.3 Accessing date attributes
-
-To access the year, month, and day attributes of a date object, you can use the corresponding attributes: `year`, `month`, and `day`.
-
-```python
-> year = my_date.year
-> month = my_date.month
-> day = my_date.day
-```
-
-#### 23.2 Time class
-
-The `time()` class from the `datetime` module is used to manipulate time objects that contain attributes like hours, minutes, seconds, and microseconds.
-
-###### 23.2.1 Creating a time object
-
-To create a time object, you can use the `time()` class constructor from the `datetime` module. It takes the hour, minute, second, and microsecond as arguments (all optional with default values of 0).
-
-```python
-> import datetime
-> my_time = datetime.time(12, 30, 45)
-```
-
-###### 23.2.2 Accessing time attributes
-
-To access the attributes of a time object, you can use the following attributes: `hour`, `minute`, `second`, and `microsecond`.
-
-```python
-> hour = my_time.hour
-> minute = my_time.minute
-> second = my_time.second
-> microsecond = my_time.microsecond
-```
-
-#### 23.3 Datetime class
-
-The `datetime()` class from the `datetime` module is used to manipulate objects that have both the attributes from a date object and time object.
-
-###### 23.3.1 Creating a datetime object
-
-To create a `datetime` object, you can use the `datetime()` class constructor from the `datetime` module. It takes the year, month, day, hour, minute, second, and microsecond as arguments (all optional with default values of 0).
-
-```python
-> import datetime
-> my_datetime = datetime.datetime(2023, 1, 31, 12, 30, 45)
-```
-
-###### 23.3.2 Getting the current date and time
-
-To obtain the current date and time, you can use the `datetime.datetime.now()` method. It returns the current local date and time as a `datetime` object.
-
-```python
-> import datetime
-> current_datetime = datetime.datetime.now()
-```
-
-###### 23.3.3 Accessing date and time attributes
-
-To access the attributes of a `datetime` object, you can use the following attributes: `date`, `year`, `month`, `day`, `time`, `hour`, `minute`, `second`, and `microsecond`.
-
-```python
-# Date attributes
-> date = my_datetime.date
-year = my_datetime.year
-month = my_datetime.month
-day = my_datetime.day
-
-# Time attributes
-> time = my_datetime.time
-> hour = my_datetime.hour
-> minute = my_datetime.minute
-> second = my_datetime.second
-> microsecond = my_datetime.microsecond
-```
-
-#### 23.4 Timedelta
-
-A `timedelta` object in the `datetime` module represents the difference between two dates or times.
-
-```python
-> time_difference = datetime_object1 - datetime_object2
-```
-
-#### 23.5 Strings and dates
-
-###### 23.5.1 Convert date into string
-
-The `strftime()` method is used to format a `datetime` object into a string representation based on a specified format. It takes a format string as an argument and returns a formatted string representing the date and time.
-
-The format string consists of various format codes that represent different components of the date and time. For example, `%Y` represents the four-digit year, `%m` represents the month, `%d` represents the day, `%H` represents the hour, `%M` represents the minute, `%S` represents the second, and so on.
-
-Here's an example that demonstrates the usage of `strftime()`:
-
-```python
-> import datetime
-> current_datetime = datetime.datetime.now()
-> formatted_date = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
-> print("Formatted Date:", formatted_date)
-```
-
-###### 23.5.2 Convert string into date
-
-The `strptime()` method is used to parse a string representing a date and time into a `datetime` object based on a specified format. It takes the string and the format string as arguments and returns a `datetime` object representing the parsed date and time.
-
-The format string should match the format of the string being parsed, including the same format codes as used in `strftime()`. The method will extract the relevant components from the string and create a `datetime` object accordingly.
-
-Here's an example that demonstrates the usage of `strptime()`:
-
-```python
-> import datetime
-> date_string = "2023-01-31"
-> parsed_date = datetime.datetime.strptime(date_string, "%Y-%m-%d")
-> print("Parsed Date:", parsed_date)
-```
-
-## <u>24. Decorators</u>
-
-#### 24.1 Closure
-
-###### 24.1.1 What is a closure?
-
-In Python, a closure is a function object that remembers values in its enclosing scope, even if they are no longer present in memory. It "closes over" the variables it references, encapsulating them within its own scope. This allows the function to access and manipulate those variables, even after the enclosing scope has finished executing. In simpler terms, a closure is a function that retains access to variables from its parent scope, even after that scope has completed execution. 
-
-###### 24.1.2 Closure example
-
-Here's an example to illustrate the concept of a closure:
-
-```python
-> def outer_function(x):
-    def inner_function(y):
-        return x + y
-    return inner_function
-
-> closure = outer_function(10)
-> result = closure(5)
-> print(result)  # Output: 15
-```
-
-In this example, we have a function called `outer_function` that takes a parameter `x`. Inside `outer_function`, there is another function called `inner_function` which takes a parameter `y` and returns the sum of `x` and `y`. When `outer_function` is called with a value of 10, it returns the `inner_function`, creating a closure. This closure retains a reference to the variable `x` from the outer function, even after `outer_function` has finished executing. Thus, when the closure is invoked with a value of 5, it adds the captured `x` value of 10 with `y` as 5, resulting in a sum of 15. The closure essentially "remembers" the value of `x` from its enclosing scope, allowing it to perform calculations using that value even when the original scope is no longer active.
-
-#### 24.2 Decorator
-
-###### 24.2.1 What is a decorator?
-
-In Python, a decorator is a function or a class that takes in another function as input and that allows you to modify or enhance the behavior of a function or class without directly changing its source code. When the decorated function or class is called, the decorator function is invoked and can perform additional actions, such as adding functionality, modifying inputs or outputs, or handling exceptions. Decorators provide a convenient and reusable way to extend the behavior of functions or classes without modifying their core implementation, making code more modular and flexible.
-
-###### 24.2.2 Importance of a closure
-
-Closures play an important role in decorators as they enable decorators to maintain access to variables or functions defined in their enclosing scope. This allows decorators to capture and utilize additional context or state information when modifying the behavior of a decorated function. Closures provide the mechanism for decorators to retain and reference such captured values or functions, enabling them to enhance the functionality of the decorated code effectively.
-
-###### 24.2.3 Decorator example
-
-Here's an example to illustrate the implementation of a decorator using closures:
-
-```python
-> def decorator(func):
-    def wrapper():
-        print("Before function execution")
-        func()
-        print("After function execution")
-    return wrapper
-
-> def hello():
-    print("Hello, world!")
-
-> closure = decorator(hello)
-> result = closure()
-```
-
-In this example, the `decorator` function takes another function as input and returns a closure that adds extra behavior before and after the execution of the original function. The `hello` function is defined separately and represents the function to be decorated. By calling the `decorator` function with `hello` as an argument, a closure named `closure` is created, which encapsulates the modified version of the `hello` function. Invoking `closure()` executes the decorated function, and the additional behavior specified in the decorator is applied. Overall, the code showcases how decorators can dynamically extend and modify the behavior of functions in Python without directly altering their source code.
-
-###### 24.2.4 Decorator syntax
-
-Python provides an alternative notation for decorators using the `@` symbol. Instead of placing the decorator directly above the function definition, you can explicitly apply the decorator.
-
-```python
-> def decorator(func):
-    def wrapper():
-        print("Before function execution")
-        func()
-        print("After function execution")
-    return wrapper
-
-> @decorator
-> def hello():
-    print("Hello, world!")
-
-> hello()
-```
-
-By using the `@decorator` syntax, the `hello` function is automatically decorated with the behavior defined in the `decorator` function. The `decorator` function is called with `hello` as an argument, and the resulting closure is then assigned to `hello`. This means that when `hello()` is invoked, it executes the modified version of the function defined in the `wrapper` closure.
-
-###### 24.2.5 Chaining decorators
-
-In Python, decorators can be chained by applying multiple decorators to a single function in a specific order. This allows you to stack multiple decorators on top of each other, with each decorator modifying the behavior of the function. The order in which the decorators are applied determines the order in which they are executed.
-
-Here's an example to illustrate how decorators can be chained:
-
-```python
-> def decorator1(func):
-    def wrapper():
-        print("Decorator 1: Before function execution")
-        func()
-        print("Decorator 1: After function execution")
-    return wrapper
-
-> def decorator2(func):
-    def wrapper():
-        print("Decorator 2: Before function execution")
-        func()
-        print("Decorator 2: After function execution")
-    return wrapper
-
-> @decorator1
-> @decorator2
-> def hello():
-    print("Hello, world!")
-
-> hello()
-```
-
-In this example, two decorators, `decorator1` and `decorator2`, are defined. Each decorator contributes its own functionality before and after the execution of the function. The `@decorator1` syntax is used to apply `decorator1` to the `hello` function, making `hello` the closure returned by `decorator1`. Subsequently, the `@decorator2` syntax is used to apply `decorator2` to the modified `hello` function. When `hello()` is called, the decorators execute in the order they were applied, resulting in their combined effects on the function.
-
-Output:
-
-```python
-Decorator 1: Before function execution
-Decorator 2: Before function execution
-Hello, world!
-Decorator 2: After function execution
-Decorator 1: After function execution
-```
-
-As you can see, the decorators are executed from the top-down order in which they were applied. Each decorator adds its own behavior before and after the execution of the function, resulting in a stacked effect.
+A Python package is a directory that contains one or more module files (`.py`) and may include sub-packages, which are additional directories with their own modules. This hierarchical structure organizes code logically, promoting modularity and scalability. Related modules can be grouped together for easier reuse and collaboration. Packages are identified by an `__init__.py` file, which can be empty or contain initialization code that runs when the package is imported. Sub-packages should also have their own `__init__.py` files. To use a module from a package, the dot notation is used. For example, `import my_package.my_module` allows access to the module's functionality through `my_package.my_module.my_function()`.
