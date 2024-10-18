@@ -304,5 +304,3 @@ Semantic container elements in HTML are designed to provide meaningful structure
 | `<aside></aside>`           | Contains content that is tangentially related to the main content, such as sidebars or ads. | Often used for supplementary information.          |
 | `<nav></nav>`               | Represents a navigation section with links to other parts of the website or related pages.  | Helps in organizing navigation menus.              |
 | `<section></section>`       | Divides a webpage into thematic sections, often with headings.                              | Useful for grouping related content together.      |
-
-
