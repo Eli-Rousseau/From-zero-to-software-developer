@@ -849,21 +849,6 @@ if (conditionFails) {
 
 JavaScript provides several built-in error types for handling specific issues. Common ones include `RangeError` for numbers outside valid ranges, `ReferenceError` for accessing undefined references, `SyntaxError` for code with invalid syntax, and `TypeError` when variables or parameters are of the wrong type. These specialized errors help developers identify and address different problems effectively. For more details, refer to the [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error).
 
-#### 11.4 Creating custom exceptions
-
-Custom exceptions allow you to define error types specific to your application's needs. You can create custom exceptions by defining your own `Error` class or by extending the built-in `Error` object.
-
-```javascript
-class CustomError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "CustomError"; // Set custom error name
-  }
-}
-
-throw new CustomError("Something went wrong!");
-```
-
 ## 12. Asynchronous programming
 
 #### 12.1 Synchronous code
