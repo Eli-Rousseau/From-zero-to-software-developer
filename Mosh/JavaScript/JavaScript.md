@@ -934,13 +934,162 @@ myPromise
   .catch(error => console.log(error));    // If rejected, logs "Task failed!"
 ```
 
-## 13. Object-oriented programming
+## 13. Modules
 
-#### 13.1 Prototypical inheritance
+#### 13.1 What are modules?
+
+Modules in JavaScript allow you to break up your code into smaller, manageable files. Each module can export certain functions, objects, or variables and allow other parts of your application to import and use them. This separation of concerns makes code easier to maintain, test, and reuse. Modules also allow you to encapsulate code, hiding the internal logic while exposing only the parts that are needed by other modules.
+
+#### 13.2 CommonJS modules
+
+###### 13.2.1 Creating a CommonJS module
+
+CommonJS is the module system traditionally used in Node.js. In CommonJS, each file is considered a module, and you can export functionality from a file using `module.exports`:
+
+```javascript
+// mathModule.js
+const add = (a, b) => a + b;
+const subtract = (a, b) => a - b;
+
+module.exports = {
+  add,
+  subtract
+};
+```
+
+###### 13.2.2 Importing a CommonJS module
+
+To import a CommonJS module, use the `require` function:
+
+```javascript
+// main.js
+const math = require('./mathModule');
+
+console.log(math.add(5, 3));      // Output: 8
+console.log(math.subtract(10, 6));  // Output: 4
+```
+
+#### 13.3 ES6 modules
+
+###### 13.3.1 Named exports in ES6 modules
+
+ES6 Modules (also known as ECMAScript Modules or ESM) are the modern standard for JavaScript modules. They are natively supported in browsers and Node.js (from version 12 and later). ES6 modules use `export` to expose functions, variables:
+
+```javascript
+// mathModule.js
+export const add = (a, b) => a + b;
+export const subtract = (a, b) => a - b;
+```
+
+To import specific exports, use the `import` keyword:
+
+```javascript
+// main.js
+import { add, subtract } from './mathModule.js';
+
+console.log(add(5, 3));         // Output: 8
+console.log(subtract(10, 6));   // Output: 4
+```
+
+###### 13.3.2 Default exports in ES6 modules
+
+ES6 modules also allow you to specify a default export, which is useful when a module exports a single main function or object. Default exports can be imported with any name.
+
+```javascript
+// utils.js
+const logger = (message) => {
+  console.log(`Log: ${message}`);
+};
+
+export default logger;
+```
+
+When importing a default export, you can give it any name:
+
+```javascript
+// main.js
+import log from './utils.js';
+
+log('Hello World');  // Output: Log: Hello World
+```
+
+###### 13.3.3 Importing All Exports
+
+You can also import all of the exports from a module at once using `* as` syntax:
+
+```javascript
+// main.js
+import * as math from './mathModule.js';
+
+console.log(math.add(2, 3));       // Output: 5
+console.log(math.subtract(7, 4));  // Output: 3
+```
+
+## 14. Tools for modern JavaScript development
+
+#### 14.1 Essential tools
+
+When developing web applications with modern JavaScript (ES6), it’s crucial to ensure compatibility across different browsers. Two essential tools for this are a transpiler and a bundler.
+
+1. Transpiler: is a tool that converts modern ES6 JavaScript code into a version that all browsers can understand. Babel is the most commonly used transpiler for this purpose, enabling developers to write cutting-edge JavaScript while ensuring compatibility with older browsers.
+
+2. Bundler: is a tool that consolidates multiple JavaScript files into a single file, known as a bundle. The most popular bundler is Webpack, which also optimizes the bundle by removing unnecessary whitespace, comments, and renaming variables for efficiency.
+
+#### 14.2 Setting up Webpack and Babe
+
+To use Webpack and Babel, you first need to install Node.js, which provides access to the npm (Node Package Manager). npm is used to install third-party libraries and tools, including Webpack and Babel.
+
+Here's a step-by-step guide to setting up Webpack and Babel:
+
+1. Install Webpack Globally: Open your terminal in the project directory and run:
+   
+   ```bash
+   npm i -g webpack-cli
+   ```
+   
+   This installs Webpack globally, making it accessible from any project.
+
+2. Initialize Webpack: In your project folder, run:
+   
+   ```bash
+   webpack-cli init
+   ```
+   
+   This command creates a Webpack configuration file and sets up the environment.
+
+3. Set Up npm: Run the following command to create a `package.json` file:
+   
+   ```bash
+   npm init --yes
+   ```
+   
+   Then, add a build script to the `package.json` file:
+   
+   ```json
+   "scripts": {
+     "build": "webpack -w"
+   }
+   ```
+   
+   This script will automate the bundling process whenever changes are detected.
+
+4. Adjust Dependencies: Move all relevant packages to the `devDependencies` section in `package.json` to indicate they are only needed during development.
+
+5. Build the Project: Run the following command to bundle your JavaScript files:
+   
+   ```bash
+   npm run build
+   ```
+   
+   Webpack, with the help of Babel, will transpile and bundle the code into a single JavaScript file located in the output directory. This bundled file can then be included in your HTML file via a `<script>` tag.
+
+## 15. Object-oriented programming
+
+#### 15.1 Prototypical inheritance
 
 Prototypes are essential to JavaScript's inheritance model, enabling objects to inherit properties and methods directly from other objects through prototypical inheritance. Each object has a single prototype, serving as its parent, with all objects ultimately inheriting from the base object. This mechanism allows for multiple levels of inheritance and facilitates code reuse. Every function in JavaScript has a prototype, allowing objects created from a constructor to inherit from that function's prototype. The introduction of ES6 classes improved the syntax for managing inheritance, acting as syntactic sugar over the prototype-based system, yet a solid grasp of prototypical inheritance remains crucial, as classes are built on these foundational principles.
 
-#### 13.2 Classes
+#### 15.2 Classes
 
 Classes in JavaScript are introduced with the `class` keyword and allow you to create blueprints for objects. A class typically includes a `constructor` method for initializing object properties and additional methods for functionality. JavaScript classes are syntactic sugar over its prototype-based inheritance system, making the code more readable and easier to manage.
 
@@ -959,7 +1108,7 @@ let obj = new ExampleClass('Sample');
 obj.display();  // Output: Data: Sample
 ```
 
-#### 13.3 Static methods
+#### 15.3 Static methods
 
 Static methods are class-level methods that cannot be called on instances of the class but can be called directly on the class itself. They are typically used for utility or helper functions that don’t require access to instance-specific data.
 
@@ -973,7 +1122,7 @@ class UtilityClass {
 console.log(UtilityClass.utilityMethod(2, 3));  // Output: 5
 ```
 
-#### 13.4 Private properties and methods
+#### 15.4 Private properties and methods
 
 Symbols can be used in JavaScript to create private properties and methods, as they are unique identifiers that are not accessible outside the class. This enables data encapsulation, hiding implementation details from users of the class.
 
@@ -1000,7 +1149,7 @@ instance.publicMethod();  // Output: Secret
 console.log(instance.privateKey);  // Output: undefined
 ```
 
-#### 13.5 Property getters and setters
+#### 15.5 Property getters and setters
 
 Getters and setters in JavaScript allow controlled access to properties of a class. Getters retrieve the property values, while setters modify them. They are useful for adding validation or additional logic when accessing or setting class properties.
 
@@ -1032,7 +1181,7 @@ instance.value = 20;
 console.log(instance.value);  // Output: 20
 ```
 
-#### 13.6 Inheritance and composition
+#### 15.6 Inheritance and composition
 
 In JavaScript, inheritance is achieved using the `extends` keyword, allowing one class to inherit properties and methods from another. The `super` keyword calls the parent class’s constructor or methods. Inheritance is useful for creating hierarchical relationships, allowing shared functionality between classes.
 
@@ -1095,151 +1244,120 @@ let composed = new ComposedClass();
 composed.execute();  // Output: Method from Component A, Method from Component B
 ```
 
-## 14. Modules
+## 16. Functional programming
 
-#### 14.1 What are modules?
+#### 16.1 What is functional programming?
 
-Modules in JavaScript allow you to break up your code into smaller, manageable files. Each module can export certain functions, objects, or variables and allow other parts of your application to import and use them. This separation of concerns makes code easier to maintain, test, and reuse. Modules also allow you to encapsulate code, hiding the internal logic while exposing only the parts that are needed by other modules.
+Functional programming (FP) is a declarative programming paradigm that emphasizes computation through the evaluation of mathematical functions while avoiding mutable data and state changes. Rooted in Lambda Calculus, FP is utilized in areas like data processing, web development, and concurrent computing. Its key benefits include modularity for easier maintenance, predictability from pure functions producing consistent outputs, and improved testability and concurrency support due to immutability and the absence of side effects.
 
-#### 14.2 CommonJS modules
+#### 16.2 Pure functions
 
-###### 14.2.1 Creating a CommonJS module
-
-CommonJS is the module system traditionally used in Node.js. In CommonJS, each file is considered a module, and you can export functionality from a file using `module.exports`:
+In functional programming, pure functions are functions that consistently produce the same output for the same input and have no side effects, meaning they do not modify any external state. This predictability makes them easier to test and reason about. In JavaScript, a pure function can be implemented by ensuring it relies solely on its input parameters without altering any external variables.
 
 ```javascript
-// mathModule.js
-const add = (a, b) => a + b;
-const subtract = (a, b) => a - b;
+function pureFunction(x, y) {
+    return x + y; // Returns the sum of x and y
+}
 
-module.exports = {
-  add,
-  subtract
-};
+const result = pureFunction(3, 4); // Always returns 7 for inputs 3 and 4
 ```
 
-###### 14.2.2 Importing a CommonJS module
+#### 16.3 First-class and higher-order functions
 
-To import a CommonJS module, use the `require` function:
+In functional programming, first-class functions treat functions as first-class citizens, allowing them to be assigned to variables, passed as arguments, or returned from other functions. Higher-order functions (HOFs) are functions that either take other functions as arguments or return a function, enabling more flexible and reusable code. In JavaScript, both concepts can be implemented seamlessly.
 
 ```javascript
-// main.js
-const math = require('./mathModule');
+// Higher-order function example
+function higherOrderFunction(func, value) {
+    return func(value);
+}
 
-console.log(math.add(5, 3));      // Output: 8
-console.log(math.subtract(10, 6));  // Output: 4
+// First-class function assigned to a variable
+const simpleFunction = (value) => value * 2;
+
+const result = higherOrderFunction(simpleFunction, 5); // Returns 10 (2 * 5)
 ```
 
-#### 14.3 ES6 modules
+#### 16.4 Immutability
 
-###### 14.3.1 Named exports in ES6 modules
-
-ES6 Modules (also known as ECMAScript Modules or ESM) are the modern standard for JavaScript modules. They are natively supported in browsers and Node.js (from version 12 and later). ES6 modules use `export` to expose functions, variables:
+Immutability in functional programming refers to the principle that data cannot be modified after it is created. Instead of changing existing data structures, new ones are returned when transformations are needed, reducing side effects and making code easier to reason about. In JavaScript, immutability can be achieved using methods that create copies of data structures rather than modifying them directly.
 
 ```javascript
-// mathModule.js
-export const add = (a, b) => a + b;
-export const subtract = (a, b) => a - b;
+// Function to create an immutable update of an object
+function updateObject(original, newValue) {
+    return { ...original, value: newValue }; // Returns a new object with updated value
+}
+
+const originalObject = { value: 1 };
+const newObject = updateObject(originalObject, 2);
+
+console.log(originalObject); // Outputs: { value: 1 } (unchanged)
+console.log(newObject); // Outputs: { value: 2 } (new object)
 ```
 
-To import specific exports, use the `import` keyword:
+#### 16.5 Recursion
+
+Recursion in functional programming is a technique where a function calls itself to solve smaller instances of a problem until it reaches a base case, allowing complex problems to be broken down into simpler ones. This approach often replaces traditional looping constructs and leads to cleaner, more concise code. In JavaScript, recursion can be implemented by defining a function that includes a conditional statement to handle the base case and recursive calls for other scenarios.
 
 ```javascript
-// main.js
-import { add, subtract } from './mathModule.js';
+function recursiveFunction(n) {
+    if (n === 0) {
+        return 0; // Base case
+    }
+    return n + recursiveFunction(n - 1); // Recursive call
+}
 
-console.log(add(5, 3));         // Output: 8
-console.log(subtract(10, 6));   // Output: 4
+const result = recursiveFunction(5); // Returns the sum 5 + 4 + 3 + 2 + 1 + 0 = 15
 ```
 
-###### 14.3.2 Default exports in ES6 modules
+#### 16.6 Closures
 
-ES6 modules also allow you to specify a default export, which is useful when a module exports a single main function or object. Default exports can be imported with any name.
+Closures are an essential concept in functional programming, particularly in JavaScript, where inner functions can access variables from their outer functions even after the outer function has finished executing. This behavior enables the inner function to retain access to its enclosing scope, allowing for the creation of private variables and encapsulated state. Closures facilitate managing state and controlling access to variables, promoting modular and flexible programming patterns.
 
 ```javascript
-// utils.js
-const logger = (message) => {
-  console.log(`Log: ${message}`);
-};
+function outerFunction(value) {
+    return function innerFunction() {
+        return value * 2; // innerFunction accesses 'value' from outerFunction
+    };
+}
 
-export default logger;
+const closure = outerFunction(5);
+const result = closure(); // Returns 10 (5 * 2)
 ```
 
-When importing a default export, you can give it any name:
+#### 16.7 Function composition
+
+Function composition is the process of combining two or more functions to create a new function, where the output of one function serves as the input to another. This technique promotes modularity and code reuse, allowing complex operations to be constructed from simpler functions. In JavaScript, function composition can be implemented by defining a function that takes two or more functions as arguments and returns a new function that applies them in sequence.
 
 ```javascript
-// main.js
-import log from './utils.js';
+// Function composition implementation
+function compose(f, g) {
+    return function(x) {
+        return f(g(x)); // Applies g first, then f to the result
+    };
+}
 
-log('Hello World');  // Output: Log: Hello World
+const addTwo = (x) => x + 2;
+const multiplyByThree = (x) => x * 3;
+
+const composedFunction = compose(addTwo, multiplyByThree);
+const result = composedFunction(5); // First multiplies by 3 (15), then adds 2 (17)
 ```
 
-###### 14.3.3 Importing All Exports
+#### 16.8 Currying functions
 
-You can also import all of the exports from a module at once using `* as` syntax:
+Currying is a functional programming technique that transforms a function that takes multiple arguments into a series of nested functions, each taking a single argument, enabling partial application of those arguments. Partial functions allow you to create new functions by fixing a few arguments of an existing function while leaving the remaining arguments to be provided later. In JavaScript, both concepts can be implemented by returning a chain of functions that capture the arguments progressively.
 
 ```javascript
-// main.js
-import * as math from './mathModule.js';
+// Currying function
+function curriedMultiply(a) {
+    return function(b) {
+        return function(c) {
+            return a * b * c; // Multiplies 'a', 'b', and 'c'
+        };
+    };
+}
 
-console.log(math.add(2, 3));       // Output: 5
-console.log(math.subtract(7, 4));  // Output: 3
+const multiplyByTwo = curriedMultiply(2)(3); // Fixing 2 and 3
+const result = multiplyByTwo(4); // Returns 24 (2 * 3 * 4)
 ```
-
-## 15. Tools for modern JavaScript development
-
-#### 15.1 Essential tools
-
-When developing web applications with modern JavaScript (ES6), it’s crucial to ensure compatibility across different browsers. Two essential tools for this are a transpiler and a bundler.
-
-1. Transpiler: is a tool that converts modern ES6 JavaScript code into a version that all browsers can understand. Babel is the most commonly used transpiler for this purpose, enabling developers to write cutting-edge JavaScript while ensuring compatibility with older browsers.
-
-2. Bundler: is a tool that consolidates multiple JavaScript files into a single file, known as a bundle. The most popular bundler is Webpack, which also optimizes the bundle by removing unnecessary whitespace, comments, and renaming variables for efficiency.
-
-#### 15.2 Setting up Webpack and Babe
-
-To use Webpack and Babel, you first need to install Node.js, which provides access to the npm (Node Package Manager). npm is used to install third-party libraries and tools, including Webpack and Babel.
-
-Here's a step-by-step guide to setting up Webpack and Babel:
-
-1. Install Webpack Globally: Open your terminal in the project directory and run:
-   
-   ```bash
-   npm i -g webpack-cli
-   ```
-   
-   This installs Webpack globally, making it accessible from any project.
-
-2. Initialize Webpack: In your project folder, run:
-   
-   ```bash
-   webpack-cli init
-   ```
-   
-   This command creates a Webpack configuration file and sets up the environment.
-
-3. Set Up npm: Run the following command to create a `package.json` file:
-   
-   ```bash
-   npm init --yes
-   ```
-   
-   Then, add a build script to the `package.json` file:
-   
-   ```json
-   "scripts": {
-     "build": "webpack -w"
-   }
-   ```
-   
-   This script will automate the bundling process whenever changes are detected.
-
-4. Adjust Dependencies: Move all relevant packages to the `devDependencies` section in `package.json` to indicate they are only needed during development.
-
-5. Build the Project: Run the following command to bundle your JavaScript files:
-   
-   ```bash
-   npm run build
-   ```
-   
-   Webpack, with the help of Babel, will transpile and bundle the code into a single JavaScript file located in the output directory. This bundled file can then be included in your HTML file via a `<script>` tag.

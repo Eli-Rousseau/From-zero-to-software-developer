@@ -1336,13 +1336,82 @@ except MyCustomError as e:
     print(f"An error occurred: {e}")
 ```
 
-## 16. Object-oriented programming
+## 16. Modules
 
-#### 16.1 What is object-oriented programming?
+#### 16.1 What is a module?
+
+In real-world applications, programs are typically split across multiple files rather than being stored in a single file. These files are known as modules, which are used to organize and reuse code. A module is essentially a file that contains Python code, including functions, classes, and variables, which can be imported and accessed by other Python programs. Each module should group together closely related objects to ensure clear organization and maintainability.
+
+#### 16.2 Create a custom module
+
+To create your own modules, simply make a Python file with a `.py` extension. Inside this file, you can define functions, classes, or variables that can be imported and used in other programs. By convention, module names are written in lowercase, and multiple words are separated by underscores (`_`) using "snake_case" style. To use a custom module, place it in the same directory as your program and import it by referencing the filename, without including the `.py` extension.
+
+#### 16.3 Import modules
+
+To use a module in your Python program, you can import it using the `import` statement. For example, to import the `math` module, you would write `import math`.
+
+```python
+import math
+result = math.sqrt(4)
+```
+
+You can import a module with a different name using the `as` keyword. For example, `import math as m` allows you to refer to the `math` module as `m` in your code.
+
+```python
+import math as m
+result = m.sqrt(4)
+```
+
+The `from...import` statement allows you to import specific functions, classes, or variables from a module directly into your code. For example, `from math import sqrt` imports only the `sqrt()` function from the `math` module, allowing you to use it without referencing the module name.
+
+```python
+from math import sqrt
+result = sqrt(4)
+```
+
+#### 16.4 Cached modules and performance
+
+When a module is used in a program, its compiled version is stored in the `__pycache__` directory with a `.pyc` file extension. This caching process helps improve performance by speeding up the loading of modules in future imports. Since the module has already been compiled, Python can skip the compilation step, leading to faster module imports.
+
+#### 16.5 Listing methods and attributes in modules
+
+To list all the methods and attributes available in a module, you can use the `dir()` function. It returns a list of valid names that can be accessed on the module. For example, `dir(math)` lists all the methods and attributes in the `math` module.
+
+```python
+import math
+print(dir(math)))
+```
+
+#### 16.6 Using the `__name__` attribute for module execution
+
+Python automatically assigns a special built-in magic attribute called `__name__` to reference the name of the current module. When a module is run as the main program, this attribute is set to `"__main__"`. This feature allows a Python file to be used both as an importable module and as an executable script, enabling conditional code execution depending on whether the file is imported or directly run.
+
+```python
+# my_module.py
+
+def greet():
+    print("Hello from the module!")
+
+if __name__ == "__main__":
+    # This block only runs if the file is executed directly
+    print("Executing as the main script")
+    greet()
+else:
+    # This block runs if the module is imported
+    print("my_module has been imported")
+```
+
+#### 16.7 Packages
+
+A Python package is a directory that contains one or more module files (`.py`) and may include sub-packages, which are additional directories with their own modules. This hierarchical structure organizes code logically, promoting modularity and scalability. Related modules can be grouped together for easier reuse and collaboration. Packages are identified by an `__init__.py` file, which can be empty or contain initialization code that runs when the package is imported. Sub-packages should also have their own `__init__.py` files. To use a module from a package, the dot notation is used. For example, `import my_package.my_module` allows access to the module's functionality through `my_package.my_module.my_function()`.
+
+## 17. Object-oriented programming
+
+#### 17.1 What is object-oriented programming?
 
 Object-Oriented Programming (OOP) is a programming paradigm that structures code around objects, representing real-world concepts with properties and behaviors. It revolves around classes, which serve as blueprints defining the characteristics and actions of objects. OOP enhances code modularity and reusability, streamlines organization and maintenance, and aids in modeling intricate systems. Python and numerous other programming languages employ OOP to develop scalable and manageable software applications.
 
-#### 16.2 Creating a class and instance
+#### 17.2 Creating a class and instance
 
 A class in Python is a blueprint for creating objects that encapsulate data and functionality, allowing for the organization and reuse of code. To create a class, you use the `class` keyword followed by the class name, which typically follows the PascalCase convention. Once a class is defined, you can create instances (or objects) of that class by calling it as if it were a function. Each instance will have its own unique state, and you can interact with it through its defined attributes and methods. 
 
@@ -1360,7 +1429,7 @@ You can verify if an object is an instance of a specific class (or its subclass)
 isinstance(person, Person) # Output: True
 ```
 
-#### 16.3 Class constructors
+#### 17.3 Class constructors
 
 A class constructor method in Python, defined using the `__init__` method, is a special function that initializes an instance of a class when it is created. This method allows you to set up initial values for attributes and perform any necessary setup tasks. To create a constructor, you define the `__init__` method within your class, and it typically takes `self` as its first parameter, along with any other parameters you want to initialize the object with. When you create an instance of the class, the constructor is automatically called, allowing you to pass in arguments to initialize the object's state.
 
@@ -1374,7 +1443,7 @@ class Person:
 person = Person("Eli", 24)
 ```
 
-#### 16.4 Class vs. instance attributes
+#### 17.4 Class vs. instance attributes
 
 In Python, attributes can be categorized as class attributes and instance attributes based on their scope and usage. 
 
@@ -1406,7 +1475,7 @@ print(person1.species)     # Output: Homo Sapiens
 print(person2.species)     # Output: Homo Sapiens
 ```
 
-#### 16.5 Class vs. instance methods
+#### 17.5 Class vs. instance methods
 
 In Python, methods within a class can be categorized as class methods and instance methods, each serving different purposes and having distinct behaviors. 
 
@@ -1439,7 +1508,7 @@ print(person1.instance_method())  # Output: Eli is 24 years old.
 print(Person.class_method())       # Output: All persons belong to the species: Human.
 ```
 
-#### 16.6 Magic methods
+#### 17.6 Magic methods
 
 Magic methods in Python are special methods that are defined with double underscores at the beginning and end of their names. These methods are automatically called by the Python interpreter based on specific operations performed on class instances, allowing developers to customize the behavior of their objects. Below is a concise summary of some commonly used magic methods:
 
@@ -1465,7 +1534,7 @@ Magic methods in Python are special methods that are defined with double undersc
 
 There is a wide array of other magic methods available that enable various functionalities, all of which are documented in detail [here](https://rszalski.github.io/magicmethods/).
 
-#### 16.7 Private class members
+#### 17.7 Private class members
 
 In Python, private class members are attributes and methods that are intended to be inaccessible from outside the class. This is achieved by prefixing the member name with double underscores (`__`), which triggers name mangling. This means that the Python interpreter changes the name of the member to include the class name, making it harder to access accidentally from outside the class. 
 
@@ -1489,7 +1558,7 @@ print(person.get_name())  # Output: Eli
 print(person.get_age())   # Output: 24
 ```
 
-#### 16.8 Class properties
+#### 17.8 Class properties
 
 In Python, class properties provide a way to define getter and setter methods for class attributes while allowing for a more concise and elegant syntax. By using the `@property` decorator, you can create a method that acts like an attribute, enabling you to access it without needing parentheses. This approach enhances encapsulation and allows for controlled access to class attributes.
 
@@ -1522,7 +1591,7 @@ class Person:
         self.__age = new_age
 ```
 
-#### 16.9 Inheritance and composition
+#### 17.9 Inheritance and composition
 
 Inheritance is a fundamental concept in OOP that allows a child class to inherit attributes and methods from a parent class, promoting code reuse and hierarchical structuring. In Python, inheritance is achieved by defining a subclass that passes the parent class as a parameter. All classes implicitly inherit from the base `object` class, which provides essential features like the `__init__` method. Child classes can override methods from their parents, and the original methods can still be accessed using `super()`. Python also supports multiple inheritanc, where a class can inherit from more than one parent, though this introduces complexity if there are conflicts in method or attribute names. Python resolves this through the Method Resolution Order (MRO).
 
@@ -1560,7 +1629,7 @@ child = Child(parent)
 child.speak()
 ```
 
-#### 16.10 Extending built-in types
+#### 17.10 Extending built-in types
 
 In Python, you can use inheritance to extend the functionality of built-in types like `list`, `dict`, `str`, etc., by creating a subclass of these types. This allows you to add new methods, override existing ones, or customize their behavior while retaining all the functionality of the built-in type. By subclassing these built-in types, you can modify or enhance their capabilities to suit specific use cases.
 
@@ -1577,7 +1646,7 @@ print(my_list.sum())  # Output: 10
 
 In this example, `MyList` extends the built-in `list` type by adding a `sum()` method that calculates the sum of the elements in the list. This allows you to use all standard list operations while adding custom functionality.
 
-#### 16.11 Abstract classes and polymorphism
+#### 17.11 Abstract classes and polymorphism
 
 An abstract class in Python serves as a blueprint for other classes, and its primary purpose is to define common methods or attributes that must be implemented by its subclasses. Abstract classes cannot be instantiated directly, meaning you cannot create objects from them. Instead, they define methods that are meant to be overridden by subclasses. Python supports abstract classes using the `ABC` (Abstract Base Class) and `abstractmethod` decorators from the `abc` module.
 
@@ -1609,71 +1678,175 @@ for person in people:
     print(person.work())
 ```
 
-## 17. Modules
+## 18. Functional programming
 
-#### 17.1 What is a module?
+#### 18.1 What is functional programming?
 
-In real-world applications, programs are typically split across multiple files rather than being stored in a single file. These files are known as modules, which are used to organize and reuse code. A module is essentially a file that contains Python code, including functions, classes, and variables, which can be imported and accessed by other Python programs. Each module should group together closely related objects to ensure clear organization and maintainability.
+Functional programming (FP) is a declarative programming approach where computation is handled by evaluating mathematical functions, avoiding changes in state and mutable data. Rooted in mathematical theory, FP has become popular due to its ability to produce predictable, maintainable, and bug-free code. It is widely used in data processing, web development, and concurrent computing. FP offers key advantages like modularity, making code easier to maintain; predictability, as pure functions always give the same output for the same input; and better testability and concurrency support, thanks to immutability and the lack of side effects.
 
-#### 17.2 Create a custom module
+#### 18.2 Pure functions
 
-To create your own modules, simply make a Python file with a `.py` extension. Inside this file, you can define functions, classes, or variables that can be imported and used in other programs. By convention, module names are written in lowercase, and multiple words are separated by underscores (`_`) using "snake_case" style. To use a custom module, place it in the same directory as your program and import it by referencing the filename, without including the `.py` extension.
-
-#### 17.3 Import modules
-
-To use a module in your Python program, you can import it using the `import` statement. For example, to import the `math` module, you would write `import math`.
+In functional programming, pure functions are functions that always produce the same output for the same input and have no side effects, meaning they don’t modify any external state. This makes them predictable, easy to test, and ideal for concurrent programming. In Python, a pure function can be implemented by ensuring the function relies solely on its input parameters and does not alter any variables or data outside its scope.
 
 ```python
-import math
-result = math.sqrt(4)
+def pure_function(x, y):
+    return x + y
+
+result = pure_function(3, 4)  # Always returns 7 for inputs 3 and 4
 ```
 
-You can import a module with a different name using the `as` keyword. For example, `import math as m` allows you to refer to the `math` module as `m` in your code.
+#### 18.3 First-class and higher-order functions
+
+In functional programming, first-class functions treat functions as first-class citizens, meaning they can be assigned to variables, passed as arguments, or returned from other functions. Higher-order functions are functions that either take other functions as arguments or return a function. This allows for more flexible, reusable, and modular code.
 
 ```python
-import math as m
-result = m.sqrt(4)
+# Higher-order function example
+def higher_order_func(func, value):
+    return func(value)
+
+# First-class function assigned to a variable
+def simple_func(value):
+    return value * 2
+
+result = higher_order_func(simple_func, 5)  # Returns 10
 ```
 
-The `from...import` statement allows you to import specific functions, classes, or variables from a module directly into your code. For example, `from math import sqrt` imports only the `sqrt()` function from the `math` module, allowing you to use it without referencing the module name.
+#### 18.4 Immutability
+
+Immutability in functional programming refers to the concept that data cannot be changed once it is created. Instead of modifying existing data, new data structures are returned when transformations are needed, reducing the risk of unintended side effects and making programs easier to reason about. In Python, immutability can be enforced using immutable data types like `tuple` or by avoiding changes to mutable objects like lists.
 
 ```python
-from math import sqrt
-result = sqrt(4)
+# Using a tuple for immutability
+def immutable_function(data):
+    return data + (4,)  # Returns a new tuple
+
+original_data = (1, 2, 3)
+new_data = immutable_function(original_data)
+
+# original_data remains unchanged
 ```
 
-#### 17.4 Cached modules and performance
+#### 18.5 Declarative style and lambda functions
 
-When a module is used in a program, its compiled version is stored in the `__pycache__` directory with a `.pyc` file extension. This caching process helps improve performance by speeding up the loading of modules in future imports. Since the module has already been compiled, Python can skip the compilation step, leading to faster module imports.
-
-#### 17.5 Listing methods and attributes in modules
-
-To list all the methods and attributes available in a module, you can use the `dir()` function. It returns a list of valid names that can be accessed on the module. For example, `dir(math)` lists all the methods and attributes in the `math` module.
+Declarative style focuses on describing *what* should be done rather than *how* to do it, emphasizing simplicity and clarity. Lambda functions in functional programming are anonymous, inline functions often used for short, single-expression operations. Python provides built-in functions like map, filter, and reduce to apply functions to sequences and aggregate results for data transformation applications (see section 8.7). They complement declarative programming by providing a clean, concise way to express logic without the overhead of defining named functions.
 
 ```python
-import math
-print(dir(math)))
+# Declarative style using a lambda function
+data = [1, 2, 3, 4]
+transformed_data = list(map(lambda x: x * 2, data))  # Multiplies each element by 2
 ```
 
-#### 17.6 Using the `__name__` attribute for module execution
+#### 18.6 Recursion
 
-Python automatically assigns a special built-in magic attribute called `__name__` to reference the name of the current module. When a module is run as the main program, this attribute is set to `"__main__"`. This feature allows a Python file to be used both as an importable module and as an executable script, enabling conditional code execution depending on whether the file is imported or directly run.
+Recursion in functional programming is a technique where a function calls itself to solve smaller instances of a problem until a base condition is met. It replaces traditional looping by breaking tasks into smaller, similar sub-tasks, often leading to more elegant and readable solutions.
 
 ```python
-# my_module.py
+def recursive_function(n):
+    if n == 0:
+        return 0
+    return n + recursive_function(n - 1)
 
-def greet():
-    print("Hello from the module!")
-
-if __name__ == "__main__":
-    # This block only runs if the file is executed directly
-    print("Executing as the main script")
-    greet()
-else:
-    # This block runs if the module is imported
-    print("my_module has been imported")
+result = recursive_function(5)  # Returns the sum 5 + 4 + 3 + 2 + 1 + 0 = 15#### 
 ```
 
-#### 17.7 Packages
+#### 18.7 Closures
 
-A Python package is a directory that contains one or more module files (`.py`) and may include sub-packages, which are additional directories with their own modules. This hierarchical structure organizes code logically, promoting modularity and scalability. Related modules can be grouped together for easier reuse and collaboration. Packages are identified by an `__init__.py` file, which can be empty or contain initialization code that runs when the package is imported. Sub-packages should also have their own `__init__.py` files. To use a module from a package, the dot notation is used. For example, `import my_package.my_module` allows access to the module's functionality through `my_package.my_module.my_function()`.
+Closures are an essential concept in functional programming, allowing inner functions to access variables from their outer functions even after the outer function has finished executing. This behavior enables the inner function to retain access to its enclosing scope, facilitating the creation of private variables and encapsulated state. Closures promote modular and flexible programming patterns by enabling effective management of state and controlled access to variables.
+
+```python
+def outer_function(value):
+    def inner_function():
+        return value * 2  # inner_function accesses 'value' from outer_function
+    return inner_function
+
+closure = outer_function(5)
+result = closure()  # Returns 10 (5 * 2)
+print(result)  # Outputs: 10
+```
+
+#### 18.8 Function composition
+
+Function composition is the process of combining two or more functions to produce a new function, where the output of one function becomes the input of another. This promotes modularity and code reuse in functional programming by building complex operations from simpler ones.
+
+```python
+def func1(x):
+    return x + 2
+
+def func2(x):
+    return x * 3
+
+def compose(f, g):
+    return lambda x: f(g(x))
+
+composed_function = compose(func1, func2)
+result = composed_function(5)  # First applies func2 (5 * 3 = 15), then func1 (15 + 2 = 17)
+```
+
+#### 18.9 Partial functions
+
+Partial functions allow you to fix a certain number of arguments to a function, creating a new function with fewer parameters. This is useful for customizing functions and improving code reuse by pre-applying specific arguments. In Python, partial functions can be implemented using `functools.partial`.
+
+```python
+from functools import partial
+
+def multiply(x, y):
+    return x * y
+
+# Create a partial function that multiplies by 2
+double = partial(multiply, 2)
+
+result = double(5)  # Returns 10 (2 * 5)
+```
+
+#### 18.10 Memoization (caching)
+
+Memoization is an optimization technique that caches the results of expensive function calls and returns the cached result when the same inputs are used again. In functional programming, `functools.lru_cache` implements this by optimizing recursive or repetitive calls, improving performance without altering the function's behavior.
+
+```python
+from functools import lru_cache
+
+@lru_cache(maxsize=None)  # Cache all results
+def expensive_function(n):
+    if n == 0:
+        return 0
+    if n == 1:
+        return 1
+    return expensive_function(n - 1) + expensive_function(n - 2)
+
+result = expensive_function(10)  # Caches results to improve performance on repeated calls
+```
+
+#### 18.11 Utilities for iterations
+
+The `itertools` module in Python offers a suite of functions that create iterators for efficient looping and functional programming operations. It provides tools for building complex iterators using simple building blocks, which can simplify data processing tasks by allowing you to chain operations and manage infinite sequences seamlessly. Common utilities include `count`, `cycle`, `repeat`, `chain`, `combinations`, and `filterfalse`, enabling operations such as generating sequences, creating combinations, and filtering data.
+
+```python
+import itertools
+
+# count: Generates an infinite sequence of numbers
+counter = itertools.count(start=0, step=1)
+for _ in range(5):
+    print(next(counter))  # Outputs: 0, 1, 2, 3, 4
+
+# cycle: Repeats eements indefinitely
+cycler = itertools.cycle(['A', 'B', 'C'])
+for _ in range(6):
+    print(next(cycler))  # Outputs: A, B, C, A, B, C
+
+# repeat: Repeats a single value indefinitely
+repeater = itertools.repeat('X', 3)
+for item in repeater:
+    print(item)  # Outputs: X, X, X
+
+# chain: Combines multiple iterables into one
+combined = itertools.chain(['1', '2'], ['3', '4'])
+print(list(combined))  # Outputs: ['1', '2', '3', '4']
+
+# combinations: Generates all combinations of a specified length
+combinations = itertools.combinations(['A', 'B', 'C'], 2)
+print(list(combinations))  # Outputs: [('A', 'B'), ('A', 'C'), ('B', 'C')]
+
+# filterfalse: Filters elements based on a predicate
+filtered = itertools.filterfalse(lambda x: x % 2 == 0, range(10))
+print(list(filtered))  # Outputs: [1, 3, 5, 7, 9]
+```
