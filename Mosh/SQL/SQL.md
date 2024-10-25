@@ -44,7 +44,9 @@ Steps for installing MySQL:
 
 ## 2. Retrieving data
 
-#### 2.1 SHOW clause
+#### 2.1 Query Fundamentals
+
+###### 2.1.1 SHOW clause
 
 The `SHOW` clause is used to display information about the MySQL server, databases, tables, or various settings. It helps retrieve metadata, like listing databases or showing table structures.
 
@@ -54,7 +56,7 @@ SHOW TABLES;
 SHOW COLUMNS FROM table_name;
 ```
 
-#### 2.2 USE clause
+###### 2.1.2 USE clause
 
 The `USE` clause selects a specific database for all subsequent queries in a session. After using the `USE` statement, all operations apply to the chosen database.
 
@@ -62,7 +64,7 @@ The `USE` clause selects a specific database for all subsequent queries in a ses
 USE database_name;
 ```
 
-#### 2.3 SELECT clause
+###### 2.1.3 SELECT clause
 
 The `SELECT` clause retrieves data from a database, allowing you to specify columns, perform arithmetic, use aliases, filter duplicates with `DISTINCT`, and more. It's the most commonly used query for extracting information.
 
@@ -86,7 +88,7 @@ SELECT column_name AS alias_name FROM table_name;
 SELECT DISTINCT column_name FROM table_name;
 ```
 
-#### 2.4 WHERE clause
+###### 2.1.4 WHERE clause
 
 The `WHERE` clause filters records in a query based on specified conditions using comparison, logical, and pattern-matching operators. It refines query results by applying rules on column values.
 
@@ -115,7 +117,7 @@ SELECT * FROM table_name WHERE column_name REGEXP '[a-z]';  -- Any lowercase let
 SELECT * FROM table_name WHERE column_name IS NULL;
 ```
 
-#### 2.5 ORDER BY clause
+###### 2.1.5 ORDER BY clause
 
 The `ORDER BY` clause sorts the results of a query based on one or more columns, allowing for ascending (`ASC`) or descending (`DESC`) order. It helps organize data output for better readability and analysis.
 
@@ -127,7 +129,7 @@ SELECT * FROM table_name ORDER BY column1 ASC;
 SELECT * FROM table_name ORDER BY column1 DESC, column2 ASC;
 ```
 
-#### 2.6 LIMIT clause
+###### 2.1.6 LIMIT clause
 
 The `LIMIT` clause restricts the number of rows returned by a query, making it useful for pagination and performance optimization. It can be used with or without an offset to control which subset of results to display.
 
@@ -137,6 +139,118 @@ SELECT * FROM table_name LIMIT 10;
 
 -- Limit with an offset
 SELECT * FROM table_name LIMIT 5 OFFSET 10;  -- Skip the first 10 rows and return the next 5
+```
+
+#### 2.2 Aggregating and grouping
+
+###### 2.2.1 Aggregate functions
+
+Aggregate functions in SQL perform calculations on multiple rows of data, returning a single result. Common functions include `MAX()` for the maximum value, `MIN()` for the minimum, `AVG()` for the average, `SUM()` for the total, and `COUNT()` for counting rows.
+
+```sql
+SELECT MAX(column1) AS max_value,
+       MIN(column1) AS min_value,
+       AVG(column2) AS average_value,
+       SUM(column2) AS total_value,
+       COUNT(*) AS total_count -- Counts the number of records
+FROM table_name
+WHERE condition
+GROUP BY column3;
+```
+
+###### 2.2.2 GROUP BY clause
+
+The `GROUP BY` clause in SQL organizes records into groups based on one or more columns, often paired with aggregate functions to summarize each group. It allows calculations like totals, averages, or counts within each group.
+
+```sql
+-- Grouping by one column
+SELECT column1, COUNT(*) AS count, SUM(column2) AS total
+FROM table_name
+GROUP BY column1;
+
+-- Grouping by multiple columns
+SELECT column1, column2, AVG(column3) AS average, MAX(column4) AS max_value
+FROM table_name
+GROUP BY column1, column2;
+```
+
+###### 2.1.3 HAVING clause
+
+The `HAVING` clause in SQL filters records after they’ve been grouped by the `GROUP BY` clause, allowing you to set conditions on aggregate results. While the `WHERE` clause filters rows before grouping, `HAVING` filters groups based on aggregate calculations.
+
+```sql
+-- Using WHERE to filter before grouping, and HAVING to filter after
+SELECT column1, SUM(column2) AS total
+FROM table_name
+WHERE column3 = 'condition'   -- Filter rows before grouping
+GROUP BY column1
+HAVING total > 100;           -- Filter groups after aggregation
+```
+
+#### 2.3 Subquery operations
+
+###### 2.3.1 Subqueries
+
+Subqueries in SQL are nested queries within a main query that provide intermediate results. They allow complex filtering and calculations, returning either a single value or multiple values for use in the outer query. Subqueries can be used in various clauses, like `WHERE`, `SELECT`, and even `FROM`.
+
+```sql
+-- Subquery returning a single value
+SELECT column1
+FROM table_a
+WHERE column2 = (SELECT MAX(column2) FROM table_b);
+
+-- Subquery returning multiple values with IN
+SELECT column1, column3
+FROM table_a
+WHERE column2 IN (SELECT column2 FROM table_b WHERE condition);
+```
+
+###### 2.3.2 Uncorrelated vs. correlated subqueries
+
+In SQL, an uncorrelated subquery runs independently of the outer query and returns a fixed result, while a correlated subquery depends on each row of the outer query, running repeatedly for each row. Correlated subqueries refer to columns from the outer query, making them suitable for row-by-row comparisons.
+
+```sql
+-- Uncorrelated subquery: Independent of the outer query
+SELECT column1
+FROM table_a
+WHERE column2 > (SELECT AVG(column2) FROM table_b);
+
+-- Correlated subquery: Dependent on each row in the outer query
+SELECT column1
+FROM table_a AS a
+WHERE column2 > (SELECT AVG(column2) FROM table_b AS b WHERE b.column3 = a.column3);
+```
+
+###### 2.3.3 ALL and ANY keywords
+
+In SQL, the `ALL` and `ANY` keywords allow comparisons against multiple values returned by a subquery. `ALL` requires the condition to be true for all returned values, while `ANY` requires the condition to be true for at least one value in the subquery result.
+
+```sql
+-- Using ALL to compare against all values in a subquery
+SELECT column1
+FROM table_a
+WHERE column2 > ALL (SELECT column2 FROM table_b WHERE condition);
+
+-- Using ANY to compare against any value in a subquery
+SELECT column1
+FROM table_a
+WHERE column2 < ANY (SELECT column2 FROM table_b WHERE condition);
+```
+
+###### 2.3.4 Exists operator
+
+The `EXISTS` operator in SQL checks if a subquery returns any results, making it more efficient than `IN` when handling large datasets. Unlike `IN`, which retrieves and compares all values, `EXISTS` stops once it finds a matching row, improving performance.
+
+```sql
+-- Using EXISTS for better performance
+SELECT column1
+FROM table_a AS a
+WHERE EXISTS (SELECT 1 FROM table_b AS b WHERE b.column2 = a.column2);
+
+-- Using IN (less efficient with large result sets)
+SELECT column1
+FROM table_a
+WHERE column2 IN (SELECT column2 FROM table_b);
 ```
 
 ## 3. Relationship operations
