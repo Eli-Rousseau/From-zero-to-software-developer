@@ -253,6 +253,96 @@ FROM table_a
 WHERE column2 IN (SELECT column2 FROM table_b);
 ```
 
+#### 2.4 Essential SQL functions
+
+###### 2.4.1 Numeric functions
+
+Numeric functions in SQL perform calculations and formatting on numeric data, including rounding, truncation, and absolute values.
+
+| **Function**     | **Description**                          | **Example**                  |
+| ---------------- | ---------------------------------------- | ---------------------------- |
+| `ROUND(x, d)`    | Rounds *x* to *d* decimal places         | `ROUND(3.1415, 2) → 3.14`    |
+| `TRUNCATE(x, d)` | Truncates *x* to *d* decimal places      | `TRUNCATE(3.1415, 2) → 3.14` |
+| `CEILING(x)`     | Rounds *x* up to the nearest integer     | `CEILING(3.2) → 4`           |
+| `FLOOR(x)`       | Rounds *x* down to the nearest integer   | `FLOOR(3.8) → 3`             |
+| `ABS(x)`         | Returns the absolute value of *x*        | `ABS(-5) → 5`                |
+| `RAND()`         | Generates a random floating-point number | `RAND() → 0.6723`            |
+
+###### 2.4.2 String functions
+
+String functions in SQL enable effective text manipulation and analysis.
+
+| **Function**                 | **Description**                          | **Example**                                     |
+| ---------------------------- | ---------------------------------------- | ----------------------------------------------- |
+| `LENGTH(str)`                | Returns the length of *str*              | `LENGTH('hello') → 5`                           |
+| `UPPER(str)`                 | Converts *str* to uppercase              | `UPPER('hello') → 'HELLO'`                      |
+| `LOWER(str)`                 | Converts *str* to lowercase              | `LOWER('HELLO') → 'hello'`                      |
+| `LTRIM(str)`                 | Removes leading spaces from *str*        | `LTRIM('  text') → 'text'`                      |
+| `RTRIM(str)`                 | Removes trailing spaces from *str*       | `RTRIM('text  ') → 'text'`                      |
+| `TRIM(str)`                  | Removes both leading and trailing spaces | `TRIM(' text ') → 'text'`                       |
+| `LEFT(str, n)`               | Returns the leftmost *n* characters      | `LEFT('example', 3) → 'exa'`                    |
+| `RIGHT(str, n)`              | Returns the rightmost *n* characters     | `RIGHT('example', 2) → 'le'`                    |
+| `SUBSTRING(str, start, len)` | Extracts substring from *str*            | `SUBSTRING('example', 2, 4) → 'xam'`            |
+| `LOCATE(substr, str)`        | Finds position of *substr* in *str*      | `LOCATE('a', 'example') → 2`                    |
+| `REPLACE(str, old, new)`     | Replaces *old* with *new* in *str*       | `REPLACE('example', 'a', 'o') → 'exomple'`      |
+| `CONCAT(str1, str2, ...)`    | Concatenates strings                     | `CONCAT('Hello', ' ', 'World') → 'Hello World'` |
+
+###### 2.4.3 Date/time formats and functions
+
+In SQL, dates and times follow specific formats and can be customized for various needs. SQL stores date values as `YYYY-MM-DD` (year-month-day) and time values as `HH:MM:SS` (hour-minute-second). SQL interprets these formats for calculations, comparisons, and formatting. Date and time functions in SQL are essential for handling and formatting timestamps.
+
+| **Function**                         | **Description**                     | **Example**                                             |
+| ------------------------------------ | ----------------------------------- | ------------------------------------------------------- |
+| `NOW()`                              | Current date and time               | `NOW() → '2023-10-25 10:32:00'`                         |
+| `CURDATE()`                          | Current date                        | `CURDATE() → '2023-10-25'`                              |
+| `CURTIME()`                          | Current time                        | `CURTIME() → '10:32:00'`                                |
+| `YEAR(date)`                         | Year component of *date*            | `YEAR('2023-10-25') → 2023`                             |
+| `MONTH(date)`                        | Month component of *date*           | `MONTH('2023-10-25') → 10`                              |
+| `DAY(date)`                          | Day component of *date*             | `DAY('2023-10-25') → 25`                                |
+| `HOUR(time)`                         | Hour from *time*                    | `HOUR('10:32:00') → 10`                                 |
+| `MINUTE(time)`                       | Minute from *time*                  | `MINUTE('10:32:00') → 32`                               |
+| `SECOND(time)`                       | Second from *time*                  | `SECOND('10:32:30') → 30`                               |
+| `DAYNAME(date)`                      | Name of the day                     | `DAYNAME('2023-10-25') → 'Wednesday'`                   |
+| `MONTHNAME(date)`                    | Name of the month                   | `MONTHNAME('2023-10-25') → 'October'`                   |
+| `EXTRACT(part FROM date)`            | Extracts specified part             | `EXTRACT(YEAR FROM '2023-10-25') → 2023`                |
+| `DATE_FORMAT(date, format)`          | Formats *date* in specified pattern | `DATE_FORMAT('2023-10-25', '%Y/%m/%d') → '2023/10/25'`  |
+| `TIME(date)`                         | Returns the time part of *date*     | `TIME('2023-10-25 10:32:00') → '10:32:00'`              |
+| `DATE_ADD(date, INTERVAL expr unit)` | Adds interval to date               | `DATE_ADD('2023-10-25', INTERVAL 5 DAY) → '2023-10-30'` |
+| `DATE_SUB(date, INTERVAL expr unit)` | Subtracts interval from date        | `DATE_SUB('2023-10-25', INTERVAL 5 DAY) → '2023-10-20'` |
+| `DATEDIFF(date1, date2)`             | Difference between two dates        | `DATEDIFF('2023-10-25', '2023-10-20') → 5`              |
+
+###### 2.4.4 Handling nulls
+
+In SQL, `IFNULL` and `COALESCE` functions help manage `NULL` values by returning alternative values when `NULL` is encountered. `IFNULL(expr1, expr2)` returns `expr2` if `expr1` is `NULL`; otherwise, it returns `expr1`. `COALESCE(expr1, expr2, ..., exprN)` returns the first non-`NULL` expression in the list, making it useful when dealing with multiple potential `NULL` values.
+
+```sql
+-- Using IFNULL to replace NULL values
+SELECT IFNULL(column1, 'default_value') AS column_alias
+FROM table_name;
+
+-- Using COALESCE with multiple expressions
+SELECT COALESCE(column1, column2, 'fallback_value') AS column_alias
+FROM table_name;
+```
+
+###### 2.4.5 Conditional logic
+
+The `IF` function and `CASE` operator in SQL are used to add conditional logic within queries. `IF(condition, true_result, false_result)` returns one value if the condition is met and another if not. The `CASE` operator allows for more complex conditions, checking multiple `WHEN ... THEN` statements, with an `ELSE` clause to specify a default result when no conditions match. 
+
+```sql
+-- Using IF function
+SELECT IF(column1 > 10, 'High', 'Low') AS result_alias
+FROM table_name;
+
+-- Using CASE operator for multiple conditions
+SELECT CASE 
+           WHEN column1 > 100 THEN 'High'
+           WHEN column1 > 50 THEN 'Medium'
+           ELSE 'Low'
+       END AS result_alias
+FROM table_name;
+```
+
 ## 3. Relationship operations
 
 #### 3.1 Inner join operations
@@ -504,4 +594,234 @@ WHERE column1 IN
    WHERE condition);
 ```
 
+## 5. Views
 
+#### 5.1 Creating and using views
+
+A view in SQL is a virtual table that stores a saved SQL query, allowing for simplified and reusable query structures without duplicating data. Views are created with `CREATE VIEW` and can contain complex joins, filters, or calculations, making data retrieval easier. Views can be queried like regular tables but do not store data themselves, so they always reflect the current data from the underlying tables. In addition, views allow to add a layer of abstraction by acting as virtual tables, enabling users to interact with complex queries as if they were simple tables. This abstraction helps minimize the impact of changes when underlying tables are modified.
+
+```sql
+-- Creating a view to show specific columns and filtered data
+CREATE VIEW view_name AS
+SELECT column1, column2
+FROM table_name
+WHERE column3 > 100;
+
+-- Using the view in a query
+SELECT * FROM view_name;
+```
+
+#### 5.2 Modifying and dropping views
+
+To update or delete views in SQL, `CREATE OR REPLACE VIEW` allows you to modify an existing view without needing to drop it first, while `DROP VIEW` removes a view entirely. This is useful for altering view definitions when table structures or filtering needs change. Typically, users save updated views using `CREATE OR REPLACE` to maintain consistency and avoid disrupting dependent queries.
+
+```sql
+-- Altering (replacing) an existing view
+CREATE OR REPLACE VIEW view_name AS
+SELECT column1, column2
+FROM table_name
+WHERE column3 < 50;
+
+-- Dropping a view
+DROP VIEW view_name;
+```
+
+#### 5.3 Updating records in views
+
+In SQL, views can often be used to `INSERT`, `UPDATE`, or `DELETE` records, provided the view meets certain criteria (like including only one base table and no complex joins or aggregations). When allowed, modifying data through a view updates the underlying table directly. Not all views support data modification; check view compatibility before attempting updates.
+
+```sql
+-- Inserting into a view
+INSERT INTO view_name (column1, column2)
+VALUES ('value1', 'value2');
+
+-- Updating records in a view
+UPDATE view_name
+SET column1 = 'new_value'
+WHERE column2 = 'condition_value';
+
+-- Deleting records through a view
+DELETE FROM view_name
+WHERE column1 = 'specific_value';
+```
+
+## 6. Stored procedures
+
+#### 6.1 Creating and using stored procedures
+
+A stored procedure is a set of SQL commands saved on the server to perform a specific task efficiently. It allows centralizing business logic and reduces redundant code. To ensure that an outdated procedure is removed before creating a new one, it’s common to include a `DROP PROCEDURE` statement before `CREATE PROCEDURE`. Adding `IF EXISTS` to the `DROP PROCEDURE` command prevents errors if the procedure doesn’t already exist, making it safer for cleanup and redefinition. 
+
+When defining a procedure, it’s recommended to change the default delimiter (`;`) temporarily (e.g., to `$$`), so the procedure block doesn’t end prematurely. Here’s how to define one:
+
+```sql
+-- Dropping a procedure if it exists
+DROP PROCEDURE IF EXISTS procedure_name;
+
+-- Set delimiter to avoid early termination
+DELIMITER $$ 
+
+-- Create stored procedure
+CREATE PROCEDURE procedure_name()
+BEGIN
+    SELECT * FROM table_name; -- Replace with desired SQL commands
+END;
+$$
+
+-- Reset delimiter to default
+DELIMITER ;
+```
+
+Once a stored procedure or function is created in SQL, it’s saved within the database’s schema and can be accessed and executed from any SQL query editor or session that has access to the database. This makes it possible to call the procedure or function from any query tab by simply using the `CALL` statement:
+
+```sql
+-- Call the stored procedure
+CALL procedure_name();
+```
+
+#### 6.2 Parameters in stored procedures
+
+Parameters in stored procedures allow for dynamic input, making the procedure adaptable to different data. Parameters are defined inside the `CREATE PROCEDURE` statement and can be used within the procedure body for filtering or calculations. To manage potential `NULL` values, the `IFNULL()` function can assign a default when needed.
+
+```sql
+-- Remove any existing version of the procedure
+DROP PROCEDURE IF EXISTS procedure_name;
+
+-- Creating a procedure with a parameter
+DELIMITER $$
+CREATE PROCEDURE procedure_name(param1 INT)
+BEGIN
+    SELECT * 
+    FROM table_name 
+    WHERE column_id = IFNULL(param1, 0); -- Handle NULL
+END;
+$$
+DELIMITER ;
+
+```
+
+Parameters are supplied when calling the procedure, either in the same session or from any SQL query tab once stored.
+
+```sql
+-- Calling the stored procedure with a value
+CALL procedure_name(1);
+```
+
+#### 6.3 Validating parameters in stored procedures
+
+Stored procedures can incorporate parameter validation using `IF` statements to ensure input values meet specified conditions. To handle invalid parameters, the `SIGNAL SQLSTATE` command raises custom error messages, interrupting procedure execution when validation fails. Using an appropriate `SQLSTATE` code helps indicate the type of error. Reference for codes can be found in the [IBM Documentation](https://www.ibm.com/docs/en/db2-for-zos/13?topic=codes-sqlstate-values-common-error).
+
+```sql
+DROP PROCEDURE IF EXISTS procedure_name;
+
+-- Creating a procedure with parameter validation
+DELIMITER $$
+CREATE PROCEDURE procedure_name(param1 INT)
+BEGIN
+    IF param1 IS NULL OR param1 < 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid parameter: param1 must be a non-negative number.';
+    ELSE
+        -- Procedure logic if validation passes
+        SELECT * FROM table_name WHERE column_id = param1;
+    END IF;
+END;
+$$
+DELIMITER ;
+```
+
+Once stored in the database schema, this procedure can be called from any SQL query tab by referencing the procedure name and providing parameters:
+
+```sql
+-- Calling the procedure
+CALL procedure_name(-5); -- Triggers the custom error due to validation failure
+```
+
+#### 6.4 Variables in stored procedures
+
+In SQL, variables serve as temporary data storage during the execution of a stored procedure, allowing for intermediate calculations, conditional logic, and data manipulation. In stored procedures, variables are declared with the `DECLARE` statement. Values can be assigned to variables using `SET`, or data can be copied into variables using `SELECT ... INTO ...`.
+
+```sql
+DROP PROCEDURE IF EXISTS procedure_name;
+
+DELIMITER $$
+CREATE PROCEDURE procedure_name()
+BEGIN
+    DECLARE total INT; -- Declare a variable
+    SET total = 0;     -- Assign an initial value
+    SELECT COUNT(*) INTO total FROM example_table; -- Copy query result into the variable
+END;
+$$
+DELIMITER ;
+```
+
+Once created in the database schema, this stored procedure can be invoked from any SQL query tab by simply calling it as shown below.
+
+```sql
+-- Calling the procedure
+CALL procedure_name();
+```
+
+The `total` variable’s usage is internal to the procedure and doesn’t persist beyond its execution.
+
+#### 6.5 Output parameters in stored procedures
+
+In SQL, output parameters allow stored procedures to send results back to the caller. By defining parameters with the `OUT` keyword, procedures can assign values to these parameters, which are accessible after the procedure execution. This feature enables storage of results in session-level global variables, which can then be referenced throughout the session.
+
+```sql
+DROP PROCEDURE IF EXISTS procedure_name;
+
+DELIMITER $$
+CREATE PROCEDURE procedure_name(OUT output_param INT)
+BEGIN
+    SELECT COUNT(*) INTO output_param FROM example_table; -- Assign value to output parameter
+END;
+$$
+DELIMITER ;
+```
+
+To execute this procedure, first declare a session variable to receive the output. Once created, the procedure can be called from any SQL tab within the same session.
+
+```sql
+SET @global_variable = 0;               -- Declare a session-level variable
+CALL procedure_name(@global_variable);   -- Execute the procedure, storing output in the variable
+SELECT @global_variable;                 -- Retrieve the stored output
+```
+
+#### 6.6 Functions
+
+Functions in SQL are routines that return a single calculated value based on input parameters. Unlike stored procedures, functions cannot return multiple rows or columns. To ensure an existing function is replaced without errors, the `DROP FUNCTION IF EXISTS` command is often used before creating a function.
+
+Functions may also include attributes like `DETERMINISTIC` (same input produces the same output), `READS SQL DATA` (indicates `SELECT` usage), and `MODIFIES SQL DATA` (for `INSERT`, `UPDATE`, or `DELETE` statements).
+
+```sql
+-- Dropping a procedure if it exists
+DROP FUNCTION IF EXISTS function_name;
+
+-- Set delimiter to avoid early termination
+DELIMITER $$
+
+-- Create function with input parameter
+CREATE FUNCTION function_name(param INT)
+
+-- Define the type of the return value
+RETURNS INT
+
+-- Define the function attributes
+DETERMINISTIC
+READS SQL DATA
+
+-- Statements inside the function body
+BEGIN
+    RETURN param * 2;
+END;
+$$
+
+-- Reset delimiter to default
+DELIMITER ;
+```
+
+Once stored in the database schema, the function can be called from any SQL query tab.
+
+```sql
+-- Call the function 
+SELECT function_name(5);
+```
