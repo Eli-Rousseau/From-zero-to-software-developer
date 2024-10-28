@@ -696,7 +696,6 @@ BEGIN
 END;
 $$
 DELIMITER ;
-
 ```
 
 Parameters are supplied when calling the procedure, either in the same session or from any SQL query tab once stored.
@@ -825,3 +824,181 @@ Once stored in the database schema, the function can be called from any SQL quer
 -- Call the function 
 SELECT function_name(5);
 ```
+
+## 7. Triggers and events
+
+#### 7.1 Creating triggers
+
+In SQL, a trigger is a block of code that executes automatically before or after `INSERT`, `UPDATE`, or `DELETE` operations, often used to enforce data consistency. To redefine a trigger safely, use `DROP TRIGGER IF EXISTS` before `CREATE TRIGGER`. Temporarily changing the default delimiter (e.g., to `$$`) allows complex syntax within the trigger definition. It’s recommended to name triggers in this format: (1) table name, (2) timing (before/after), (3) action type (insert/update/delete). The `OLD` and `NEW` keywords can access modified records within the trigger, and `SHOW TRIGGERS` displays all triggers.
+
+```sql
+-- Drop existing trigger if present
+DROP TRIGGER IF EXISTS table_name_before_insert;
+
+-- Set custom delimiter for the trigger definition
+DELIMITER $$
+
+-- Creating the trigger
+CREATE TRIGGER table_name_before_insert
+BEFORE INSERT ON table_name
+FOR EACH ROW
+
+-- Trigger body
+BEGIN
+    IF NEW.column_id IS NULL THEN -- Call attribute on NEW record
+        SET NEW.column_id = 0; -- Default value if column_id is NULL
+    END IF;
+END;
+$$
+
+-- Resetting delimiter back to default
+DELIMITER ;
+```
+
+Once created, this trigger will run automatically on specified actions and can be called from any SQL query tab within the database schema. To display all the triggers in the current database one can use the command:
+
+```sql
+-- Display all triggers in the database
+SHOW TRIGGERS;
+```
+
+Avoid triggering infinite loops by ensuring the trigger does not modify the table that initiates it.
+
+#### 7.2 Creating events
+
+An SQL event is a task (or block of SQL code) set to execute automatically based on a defined schedule, either once or at regular intervals. To use events in MySQL, the event scheduler must be enabled (`SET GLOBAL event_scheduler = ON;`). 
+
+```sql
+-- Enable the event scheduler
+SET GLOBAL event_scheduler = ON;
+```
+
+Temporarily changing the delimiter (e.g., `$$`) allows complex SQL within the event. Define single or repeated executions with `AT 'YYYY-MM-DD'` for one-time events or `EVERY` for recurring schedules. Display events with `SHOW EVENTS;` and manage their status using `ALTER EVENT` statements.
+
+```sql
+-- Drop existing trigger if present
+DROP EVENT IF EXISTS event_name;
+
+-- Set custom delimiter for the event definition
+DELIMITER $$
+
+-- Create an event
+CREATE EVENT IF NOT EXISTS event_name
+ON SCHEDULE EVERY 1 MONTH -- Recurring event
+DO
+BEGIN
+    INSERT INTO log_table (log_message) VALUES ('Event executed');
+END;
+$$
+
+-- Resetting delimiter back to default
+DELIMITER ;
+```
+
+To display all events that are programmed in the SQL database:
+
+```sql
+-- Show all events in the database
+SHOW EVENTS;
+```
+
+You can also programme events to be temporarily disabled and later re-enabled:
+
+```sql
+-- Disable an event
+ALTER EVENT event_name DISABLE;
+
+-- Enable an event
+ALTER EVENT event_name ENABLE;
+```
+
+This setup allows you to automatically schedule tasks for data updates, maintenance, and more, directly from any SQL editor.
+
+## 8. Transactions and concurrency
+
+#### 8.1 Creating transactions
+
+A transaction is a sequence of SQL statements treated as a single, unbreakable unit of work. It ensures the database maintains a consistent state, with the transaction succeeding fully or rolling back if any part fails. Transactions exhibit ACID properties: *atomicity* (all or nothing), *consistency* (preserving database rules), *isolation* (transactions don’t interfere), and *durability* (changes are permanent once committed).
+
+```sql
+-- Start a transaction
+START TRANSACTION;
+
+-- Execute SQL statements
+UPDATE table_name SET column_name = value WHERE condition;
+
+-- Commit transaction if successful
+COMMIT;
+
+-- Rollback transaction if an error occurs
+ROLLBACK;
+```
+
+#### 8.2 Concurrency and transaction isolation levels
+
+###### 8.2.1 Concurrency
+
+Concurrency in SQL involves multiple transactions accessing the database simultaneously, aiming for high performance but requiring isolation to avoid conflicts. This is crucial in multi-user systems where concurrent transactions may modify or read the same data, potentially causing issues like *lost updates*, *dirty reads*, *non-repeatable reads*, and *phantom reads*. SQL’s transaction isolation levels manage these problems by specifying how visible changes made by one transaction are to others. Each level balances concurrency, data consistency, and performance differently.
+
+###### 8.2.2 Concurrency problems
+
+1. Lost Updates: This occurs when two transactions update the same data simultaneously, resulting in one update overwriting the other. Using locks or higher isolation levels can prevent this.
+2. Dirty Reads: A transaction reads data that another transaction is currently changing. If that other transaction rolls back, the initially read data becomes invalid. Setting a higher isolation level like READ COMMITTED avoids this issue.
+3. Non-repeatable Reads: This happens when a transaction reads the same data twice but gets different results because another transaction has updated the data in between. Using the REPEATABLE READ isolation level ensures consistent results.
+4. Phantom Reads: A transaction retrieves a set of rows, but another transaction inserts or deletes rows in the meantime, leading to inconsistent results. The SERIALIZABLE isolation level prevents this by ensuring that transactions are processed one at a time, but it can impact performance.
+
+###### 8.2.3 Isolation levels
+
+1. READ UNCOMMITTED  
+   Allows reading uncommitted changes from other transactions. This level offers maximum concurrency but has no isolation, leading to *dirty reads*, *non-repeatable reads*, and *phantom reads*.  
+   
+   ```sql
+   SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+   ```
+
+2. READ COMMITTED  
+   Ensures that a transaction only sees committed changes by other transactions, preventing dirty reads but allowing non-repeatable reads and phantom reads. This level is suitable when dirty reads are unacceptable but occasional inconsistencies are tolerable.  
+   
+   ```sql
+   SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;
+   ```
+
+3. REPEATABLE READ  
+   MySQL's default level, preventing dirty reads and non-repeatable reads by locking read rows until the transaction completes. This means each read within the transaction remains consistent. Phantom reads, however, can still occur, which are avoided in most cases by row-level locking and gap-locking in MySQL’s InnoDB engine.
+   
+   ```sql
+   SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+   ```
+
+4. SERIALIZABLE  
+   Enforces full isolation by ensuring that each transaction executes sequentially, avoiding dirty reads, non-repeatable reads, and phantom reads. This level guarantees consistency but has a performance cost due to limited concurrency. Transactions can only be read or modified one at a time, making it appropriate for critical updates where maximum consistency is necessary.
+   
+   ```sql
+   SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+   ```
+
+###### 8.2.4 Balancing concurrency errors and performance
+
+Adjusting the transaction isolation level affects both concurrency and server performance, with higher levels like SERIALIZABLE ensuring data consistency but reducing concurrency and potentially leading to slower performance due to increased locking. Conversely, lower levels such as READ UNCOMMITTED enhance speed and concurrency but may result in data anomalies, making it crucial to balance performance needs with the risk of concurrency issues. The default REPEATABLE READ level is often recommended as it strikes a suitable balance for many applications, but adjustments may be necessary based on specific requirements.
+
+###### 8.2.5 Working with isolation levels
+
+To view the current isolation level:
+
+```sql
+SHOW VARIABLES LIKE 'transaction_isolation';
+```
+
+To set the isolation level for the session or globally:
+
+```sql
+-- Set isolation level for the current session
+SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+
+-- Set isolation level globally for all sessions
+SET GLOBAL TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+```
+
+###### 8.2.6 Deadlocks
+
+Deadlocks occur in SQL when two or more transactions are each waiting for the other to release locks, leading to a situation where none can proceed. Although they aren't a major issue if infrequent, they can cause performance problems if they happen often. To mitigate deadlocks, developers should design transactions to be short and avoid circular lock dependencies by acquiring locks in a consistent order. Implementing error handling that allows for automatic retries when a deadlock is detected can also help maintain smooth operation.
