@@ -1002,3 +1002,87 @@ SET GLOBAL TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 ###### 8.2.6 Deadlocks
 
 Deadlocks occur in SQL when two or more transactions are each waiting for the other to release locks, leading to a situation where none can proceed. Although they aren't a major issue if infrequent, they can cause performance problems if they happen often. To mitigate deadlocks, developers should design transactions to be short and avoid circular lock dependencies by acquiring locks in a consistent order. Implementing error handling that allows for automatic retries when a deadlock is detected can also help maintain smooth operation.
+
+## 9. Managing tables
+
+#### 9.1 Data types
+
+In SQL, data types specify the kind of data a column can hold. Here’s a summary of the most common types:
+
+| Category      | Data Type                          | Description                                                     |
+| ------------- | ---------------------------------- | --------------------------------------------------------------- |
+| **String**    | `CHAR(x)`, `VARCHAR(x)`            | Fixed/variable-length strings (up to 64KB for VARCHAR).         |
+|               | `TINYTEXT`, `TEXT`                 | Text fields (TINYTEXT up to 255B, TEXT up to 64KB).             |
+|               | `MEDIUMTEXT`, `LONGTEXT`           | Large text fields (up to 16MB and 4GB, respectively).           |
+| **Numeric**   | `TINYINT`, `SMALLINT`              | Small integers (-128 to 127 for TINYINT).                       |
+|               | `MEDIUMINT`, `INT`, `BIGINT`       | Medium to large integers (-2B to 9Z).                           |
+|               | `DECIMAL(p, s)`, `FLOAT`, `DOUBLE` | Precise decimal and floating-point numbers.                     |
+| **Boolean**   | `BOOL`, `BOOLEAN`                  | Represents TRUE or FALSE (often as 1 or 0).                     |
+| **Date/Time** | `DATE`, `TIME`                     | Date only or time only values.                                  |
+|               | `DATETIME`, `TIMESTAMP`            | Combined date and time values.                                  |
+| **Blob**      | `TINYBLOB`, `BLOB`                 | Binary data (up to 255B for TINYBLOB, 64KB for BLOB).           |
+|               | `MEDIUMBLOB`, `LONGBLOB`           | Larger binary data (up to 16MB and 4GB, respectively).          |
+| **JSON**      | `JSON`                             | Stores JSON objects as text, ideal for structured data storage. |
+
+Large binary (BLOB) and text types can impact performance and are often better stored outside the database when they exceed moderate size.
+
+#### 9.2 Keys
+
+In SQL, keys are attributes or sets of attributes used to uniquely identify rows and establish relationships between tables, maintaining data integrity:
+
+- Primary Keys: A primary key uniquely identifies each row, ensuring all records are distinct. It must be unique and non-null. When multiple columns combine to form a unique identifier, it's known as a composite primary key and is especially useful for many-to-many relationships.
+
+- Foreign Keys: A foreign key links tables by referencing the primary key of another table, establishing relationships across tables and maintaining data consistency.
+
+#### 9.3 Constraints
+
+SQL allows the application of constraints on foreign keys to manage dependent data behavior during `UPDATE` and `DELETE` operations:
+
+- RESTRICT: Prevents deletion or update if related records exist in another table, maintaining strict data integrity.
+- CASCADE: Automatically deletes or updates all related records in the foreign key table when the primary key row is removed or altered.
+- SET NULL: Sets the foreign key value to NULL if the referenced primary key row is deleted or updated, useful when data references become optional.
+- NO ACTION: Behaves similarly to `RESTRICT`, but the constraint is checked only after all other operations are completed, maintaining a less strict order.
+
+## 10. Designing databases
+
+#### 10.1 Essential steps
+
+Designing a database requires a structured approach to ensure data integrity, efficiency, and alignment with business needs. Here are the core steps with specific requirements for each:
+
+1. Requirement Analysis  
+   
+   - Define what data the database will store, who will access it, and the main use cases.
+   - Identify data security needs, performance expectations, and scalability requirements.
+
+2. Conceptual Modeling  
+   
+   - Identify core entities and their high-level relationships without worrying about technical details.
+   - Create an Entity-Relationship (ER) diagram or similar visual aid to map out major entities and their connections. 
+
+3. Logical Modeling  
+   
+   - Define entities more precisely, detailing each attribute's data type, and specify relationships (one-to-one, one-to-many, many-to-many).
+   - Identify constraints (e.g., unique fields, primary keys, foreign keys) and data validation rules.
+
+4. Physical Modeling  
+   
+   - Translate the logical model into a schema for the chosen database system, focusing on optimizing performance.
+   - Define indexing strategies, partitioning, and storage requirements, and establish a backup and recovery plan.
+
+These steps provide a comprehensive guide to creating a scalable, efficient, and user-oriented database design. Tools like MySQL Workbench or ERD tools like draw.io can support this process.
+
+#### 10.2 Database normalization
+
+Normalization is the process of organizing database tables to reduce redundancy, improve data integrity, and simplify update operations. Commonly, the first three normal forms (1NF, 2NF, 3NF) are sufficient to achieve these goals:
+
+- First Normal Form (1NF): Each cell must contain only a single value, with no repeated columns. This ensures atomicity by separating multi-valued attributes into linked tables.
+
+- Second Normal Form (2NF): In addition to meeting 1NF, each table should describe one entity, and all columns should directly relate to that entity. Non-relevant columns should be moved to separate tables, linking them back to maintain relationships.
+
+- Third Normal Form (3NF): Along with meeting 1NF and 2NF, no column should depend on another non-primary attribute. This avoids redundant information, keeping tables simple and reducing potential errors when data changes.
+
+#### 10.3 Forward and reverse engineering
+
+Forward Engineering is the process of creating a live database from a physical model, such as an ER diagram, in MySQL Workbench. By using the *Forward Engineer* option, users can select a connection, define export settings, and choose tables and other objects to convert the model into a database. Changes to the database should ideally be applied in the model to keep it consistent and shared among developers. The *Synchronize Model* feature can generate scripts to update the database with these changes.
+
+Reverse Engineering allows users to generate a physical model directly from an existing database. By selecting the *Reverse Engineer* option and choosing a connection, the Workbench imports the schema as an ER diagram, giving a visual representation of the database’s structure.
