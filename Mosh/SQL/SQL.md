@@ -1003,9 +1003,21 @@ SET GLOBAL TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 
 Deadlocks occur in SQL when two or more transactions are each waiting for the other to release locks, leading to a situation where none can proceed. Although they aren't a major issue if infrequent, they can cause performance problems if they happen often. To mitigate deadlocks, developers should design transactions to be short and avoid circular lock dependencies by acquiring locks in a consistent order. Implementing error handling that allows for automatic retries when a deadlock is detected can also help maintain smooth operation.
 
-## 9. Managing tables
+## 9. Managing databases and tables
 
-#### 9.1 Data types
+#### 9.1 Creating and dropping databases
+
+In SQL, you can create a database if it doesn’t already exist using `CREATE DATABASE IF NOT EXISTS`, and similarly, drop a database only if it exists with `DROP DATABASE IF EXISTS`. This helps prevent errors when running scripts multiple times.
+
+```sql
+-- Create a database only if it doesn’t already exist
+CREATE DATABASE IF NOT EXISTS sample_db;
+
+-- Drop a database only if it exists
+DROP DATABASE IF EXISTS sample_db;
+```
+
+#### 9.2 Data types
 
 In SQL, data types specify the kind of data a column can hold. Here’s a summary of the most common types:
 
@@ -1026,7 +1038,7 @@ In SQL, data types specify the kind of data a column can hold. Here’s a summar
 
 Large binary (BLOB) and text types can impact performance and are often better stored outside the database when they exceed moderate size.
 
-#### 9.2 Keys
+#### 9.3 Keys
 
 In SQL, keys are attributes or sets of attributes used to uniquely identify rows and establish relationships between tables, maintaining data integrity:
 
@@ -1034,7 +1046,43 @@ In SQL, keys are attributes or sets of attributes used to uniquely identify rows
 
 - Foreign Keys: A foreign key links tables by referencing the primary key of another table, establishing relationships across tables and maintaining data consistency.
 
-#### 9.3 Constraints
+#### 9.4 Creating and dropping tables
+
+In SQL, you can create a table if it doesn’t already exist using `CREATE TABLE IF NOT EXISTS`. Define columns with data types and apply constraints like `PRIMARY KEY`, `AUTO_INCREMENT`, `DEFAULT`, `NOT NULL`, and `UNIQUE` for more controlled data management. Dropping a table with `DROP TABLE IF EXISTS` allows safe removal.
+
+```sql
+-- Create a table only if it doesn’t already exist
+CREATE TABLE IF NOT EXISTS sample_table (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    age INT DEFAULT 18,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Drop a table only if it exists
+DROP TABLE IF EXISTS sample_table;
+```
+
+#### 9.5 Altering table columns
+
+In SQL, tables can be modified to add, update, or delete columns using the `ALTER TABLE` command. Common operations include:
+
+- ADD: Introduces a new column to the table.
+- MODIFY: Changes a column’s data type or constraints.
+- DROP: Deletes an existing column.
+
+```sql
+-- Altering multiple columns from of a table
+ALTER TABLE sample_table
+    -- Add a new column
+    ADD COLUMN new_column VARCHAR(50) AFTER first_column,
+    -- Modify an existing column's data type or constraints
+    MODIFY COLUMN new_column TEXT,
+    -- Drop a column if no longer needed
+    DROP COLUMN new_column;
+```
+
+#### 9.6 Constraints on foreign keys
 
 SQL allows the application of constraints on foreign keys to manage dependent data behavior during `UPDATE` and `DELETE` operations:
 
@@ -1042,6 +1090,55 @@ SQL allows the application of constraints on foreign keys to manage dependent da
 - CASCADE: Automatically deletes or updates all related records in the foreign key table when the primary key row is removed or altered.
 - SET NULL: Sets the foreign key value to NULL if the referenced primary key row is deleted or updated, useful when data references become optional.
 - NO ACTION: Behaves similarly to `RESTRICT`, but the constraint is checked only after all other operations are completed, maintaining a less strict order.
+
+#### 9.7 Creating relationships between tables
+
+When creating a table, foreign keys define relationships between tables, referencing the primary key in another table. Typically, the foreign key name follows the format `fk_<table>_<referenced_table>`. Constraints like `ON DELETE` or `ON UPDATE` set behaviors when referenced rows are altered, commonly using `CASCADE` (propagate changes), `SET NULL`, `NO ACTION`, or `RESTRICT` (prevent deletion).
+
+```sql
+CREATE TABLE table_one (
+    primary_key_column INT PRIMARY KEY,
+    foreign_key_column INT,
+    CONSTRAINT fk_table_one_table_two
+        FOREIGN KEY (foreign_key_column) REFERENCES table_two(primary_key_column)
+        ON DELETE NO ACTION 
+        ON UPDATE CASCADE
+);
+```
+
+#### 9.8 Modifying primary and foreign keys
+
+To alter primary and foreign keys in SQL, you can add or remove these constraints using `ALTER TABLE`. Primary keys are modified directly on columns, while foreign keys use the `ADD CONSTRAINT` or `DROP CONSTRAINT` syntax. Adding foreign keys requires specifying the referenced table and actions upon update or delete.
+
+```sql
+-- Add primary key
+ALTER TABLE table_one 
+ADD PRIMARY KEY (primary_key_column);
+
+-- Drop primary key
+ALTER TABLE table_one 
+DROP PRIMARY KEY;
+
+-- Add foreign key
+ALTER TABLE table_one 
+ADD CONSTRAINT fk_table_one_table_two 
+FOREIGN KEY (foreign_key_column) REFERENCES table_two (primary_key_column) 
+ON DELETE NO ACTION 
+ON UPDATE CASCADE;
+
+-- Drop foreign key
+ALTER TABLE table_one 
+DROP FOREIGN KEY fk_table_one_table_two;
+```
+
+#### 9.9 Character sets
+
+A character set in MySQL defines how characters are stored and represented, with `utf8` being the default that supports a wide range of universal characters using up to 3 bytes per character. In contrast, the `latin1` character set, optimized for Latin languages, uses only 1 byte per character. You can view all supported character sets with `SHOW CHARSET` and change the character set at both the database and table levels. Each character set is characterized by a collation that specifies how characters are sorted, and selecting an efficient character set can lead to significant memory savings.
+
+```sql
+ALTER DATABASE db_name CHARACTER SET latin1;
+ALTER TABLE table_name CHARACTER SET latin1;
+```
 
 ## 10. Designing databases
 
@@ -1086,3 +1183,183 @@ Normalization is the process of organizing database tables to reduce redundancy,
 Forward Engineering is the process of creating a live database from a physical model, such as an ER diagram, in MySQL Workbench. By using the *Forward Engineer* option, users can select a connection, define export settings, and choose tables and other objects to convert the model into a database. Changes to the database should ideally be applied in the model to keep it consistent and shared among developers. The *Synchronize Model* feature can generate scripts to update the database with these changes.
 
 Reverse Engineering allows users to generate a physical model directly from an existing database. By selecting the *Reverse Engineer* option and choosing a connection, the Workbench imports the schema as an ER diagram, giving a visual representation of the database’s structure.
+
+## 11. Indexing for high performance
+
+#### 11.1 Creating and dropping indexes
+
+Queries are commands used to retrieve, insert, update, or delete data in a database. They can be optimized to improve performance, particularly by using indexes, which are special data structures that allow the database to quickly locate records without scanning the entire table. Indexes should be created for columns frequently used in search conditions, and they are particularly beneficial for performance-critical queries.
+
+To create an index on a table column, you can use the following SQL command:
+
+```sql
+CREATE INDEX idx_column_name ON table_name (column_name);
+```
+
+To drop an index, the syntax is:
+
+```sql
+DROP INDEX idx_column_name ON table_name;
+```
+
+The `EXPLAIN` statement in SQL helps analyze query execution by displaying search types and record counts involved. A query with `type = ALL` indicates a full table scan, which can significantly slow down performance. Using indexes with `type = INDEX` is recommended to optimize these queries and reduce full scans.
+
+```sql
+EXPLAIN SELECT * FROM table_name WHERE column_name = 'value';
+```
+
+You can visualize the indexes on a table using the following command:
+
+```sql
+SHOW INDEX FROM table_name;
+```
+
+In SQL, a primary index is automatically created for the primary key of a table, ensuring unique identification of records, while a secondary index is any additional index created to improve search efficiency but does not enforce uniqueness. While indexes speed up data retrieval, they also require additional storage space and can slow down write operations, making it essential to design them based on query patterns rather than solely on table structure.
+
+#### 11.2 Prefix indexes
+
+When creating indexes on text columns (CHAR, VARCHAR, TEXT, BLOB), it's essential to manage disk space and performance by indexing only a portion of the data. Smaller indexes fit better in memory, leading to faster searches. When defining an index, specify the number of characters to include in parentheses; this is mandatory for TEXT and BLOB types and optional for CHAR and VARCHAR.
+
+```sql
+CREATE INDEX idx_sample ON sample_table (target_column(10));
+```
+
+An effective optimization technique involves analyzing the distinct values of substrings to determine the optimal character length for the index.
+
+```sql
+SELECT COUNT(DISTINCT target_column),
+       COUNT(DISTINCT LEFT(target_column, 1)),
+       COUNT(DISTINCT LEFT(target_column, 2)),  
+       COUNT(DISTINCT LEFT(target_column, 3)),  
+       COUNT(DISTINCT LEFT(target_column, 5)),  
+       COUNT(DISTINCT LEFT(target_column, 10))
+FROM table_name; 
+```
+
+#### 11.3 Full-text indexes
+
+Full-text indexes optimize text searching in databases by allowing efficient searches over large amounts of text data. Use the `CREATE FULLTEXT INDEX` command on text columns to enable full-text search capabilities. The `MATCH()` function checks for relevance of the search terms within specified columns, while `AGAINST()` provides the search query. This can consist of one or more unordered words. Results are ranked based on relevance scores, with higher scores indicating more relevant matches. When using `IN BOOLEAN MODE`, you can refine searches with operators: `+` (must contain), `-` (must not contain), `*` (wildcard), and `"query"` (matching the exact query). 
+
+```sql
+CREATE FULLTEXT INDEX idx_fulltext ON sample_table (text_column);
+
+-- REGULAR MODE
+SELECT * FROM sample_table 
+WHERE MATCH(text_column) AGAINST('search term');
+
+-- BOOLEAN MODE
+SELECT * FROM sample_table
+WHERE MATCH(text_column) AGAINST('+search t*' IN BOOLEAN MODE);
+```
+
+#### 11.4 Composite indexes
+
+Composite indexes in SQL are multi-column indexes that improve query performance when filtering across several columns. Unlike single-column indexes, composite indexes allow the SQL engine to utilize multiple columns in a search, thus optimizing retrieval. For efficient indexing, two principles are key: placing the most frequently queried columns at the start of the composite index and arranging columns with higher cardinality—those with more unique values—near the beginning. This arrangement improves selectivity, helping MySQL retrieve data with fewer scans.
+
+```sql
+-- Creating a composite index
+CREATE INDEX idx_composite ON sample_table (columnA, columnB);
+```
+
+To verify which index MySQL used in a query, you can use the `EXPLAIN` statement, which displays query execution details, including which indexes are accessed and the number of rows scanned. If you want MySQL to use a specific index, you can use the `USE INDEX` clause to enforce the selection of a particular index.
+
+```sql
+-- Verifying index usage with EXPLAIN
+EXPLAIN SELECT * FROM sample_table WHERE columnA = 'value' AND columnB = 'value';
+
+-- Forcing MySQL to use a specific index in a query
+SELECT * FROM sample_table USE INDEX (idx_composite) WHERE columnA = 'value' AND columnB = 'value';
+```
+
+#### 11.5 Sorting with Indexes in SQL
+
+In SQL, indexes can optimize sorting operations when sorting columns match the order of an index. MySQL’s `EXPLAIN` statement shows sorting efficiency in the "Extra" column, with "using index" for optimized sorts or "using filesort" for less efficient sorts. For composite indexes, column sort order matters: consistent ascending or descending sorting on all columns will use the index, while mixed orders may require filesorts. You can also gauge query efficiency with `SHOW STATUS LIKE 'last_query_cost';`.
+
+```sql
+-- Create index for sorting optimization
+CREATE INDEX idx_sort ON example_table (columnA, columnB);
+
+-- Optimized sorting query
+EXPLAIN SELECT * FROM example_table ORDER BY columnA ASC, columnB ASC;
+
+-- Query cost evaluation
+SHOW STATUS LIKE 'last_query_cost';
+```
+
+#### 11.6 Effective index design
+
+Designing efficient indexes is essential to optimize query performance. Here’s a simple guide to creating effective indexes:
+
+1. Prioritize WHERE and ORDER BY Columns: Start by indexing columns used in `WHERE` clauses to quickly filter search results, then add columns used in `ORDER BY` to prevent costly sort operations by leveraging indexes for efficient sorting.
+
+2. Covering Indexes for SELECT: Avoid using `SELECT *` in queries. Instead, index only the specific columns you need to retrieve, and consider creating a covering index that includes these columns. This way, MySQL can retrieve data directly from the index, reducing load by avoiding access to the full table data.
+
+3. Prefer Composite Indexes: Using composite indexes (multiple columns) is often better than multiple single-column indexes for frequently combined searches.
+
+4. Remove Redundant and Unused Indexes: Eliminate duplicate or redundant indexes to avoid wasted space. For instance, an index on `(A, B)` makes an index on `A` alone redundant.
+
+5. Optimize OR Conditions: If a slow query contains an `OR`, consider splitting it into multiple queries using `UNION`, each of which can then use separate indexes.
+
+## 12. Database security
+
+#### 12.1 User management and host access
+
+MySQL enables secure user management by allowing custom user accounts with specific privileges. While the initial `root` user has unrestricted access, additional users can be created with limited permissions for applications or services (e.g., read/write only without structural modification rights). The `CREATE USER` command sets up users, specifying both username and host (location) from which they can connect.
+
+The host component defines where the user can connect from, including:
+
+- `localhost` for connections only from the local machine,
+- an IP address (e.g., `192.168.0.1`) to restrict access to a specific network location,
+- a domain or subdomain (e.g., `'web_user'@'sub.example.com'`) for managed access from specific web addresses,
+- `%` for unrestricted access from any host (e.g., `'remote_user'@'%'`), though this is less secure.
+
+```sql
+-- Create a user with limited access from a specific host
+CREATE USER 'app_user'@'localhost' IDENTIFIED BY 'secure_password';
+
+-- View all user accounts and their hosts
+SELECT User, Host FROM mysql.user;
+
+-- Remove a user
+DROP USER 'app_user'@'localhost';
+```
+
+To update a user’s password securely:
+
+```sql
+SET PASSWORD FOR 'app_user'@'localhost' = 'new_secure_password';
+```
+
+#### 12.2 Managing user privileges
+
+Database privileges control the level of access users have, specifying allowed operations within MySQL. Privileges are granted using the `GRANT` command and can be tailored to individual tables or databases. For example, an application user may need limited permissions to perform `SELECT`, `INSERT`, `UPDATE`, `DELETE`, and `EXECUTE` on specific tables:
+
+```sql
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE 
+ON database_name.table_name 
+TO 'app_user'@'localhost';
+```
+
+Meanwhile, an admin may require full privileges across all databases and tables:
+
+```sql
+GRANT ALL PRIVILEGES 
+ON *.* 
+TO 'admin_user'@'localhost';
+```
+
+To check current privileges, use:
+
+```sql
+SHOW GRANTS FOR 'app_user'@'localhost';
+```
+
+Privileges can also be revoked when access needs change:
+
+```sql
+REVOKE SELECT, INSERT 
+ON database_name.table_name 
+FROM 'app_user'@'localhost';
+```
+
+Customizing user privileges based on roles helps secure sensitive data and protect database integrity.
